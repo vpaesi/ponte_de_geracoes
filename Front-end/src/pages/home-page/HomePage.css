@@ -1,0 +1,64 @@
+h2{
+  justify-self: center;
+  color: var(--highlight-color);
+}
+
+.row-1{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 200px;
+  padding: 0 60px;
+}
+.column text-column{
+  padding: 0;
+}
+.text-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+.text-column h1{
+  font-size: 35px;
+}
+
+.row1-link{
+  padding: 5px;
+  width: fit-content;
+  border: solid 1px var(--primary-color);
+  border-radius: 5px;
+  background-color: var(--highlight-color);
+  color: var(--secondary-color);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.row1-link:hover{
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  border-color: var(--highlight-color);
+  text-decoration: none;
+}
+
+.image-column img {
+  max-width: 20rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+ .carousel-item img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: scroll;
+  gap: 20px;
+}
