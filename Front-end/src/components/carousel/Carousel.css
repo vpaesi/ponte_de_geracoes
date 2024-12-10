@@ -13,6 +13,7 @@
     max-width: auto;
     max-height: 480px;
     padding: 0 40px;    
+    transition: transform 2s ease-in-out;
   }
 
 .carousel-item {
@@ -20,9 +21,7 @@
     box-shadow: 0 2px 12px rgba(183, 100, 66);
     padding: 10px;
     text-align: center;
-    transition: transform 0.3s ease-in-out;
   }
-
 
 .carousel-item.visible {
   opacity: 1;
