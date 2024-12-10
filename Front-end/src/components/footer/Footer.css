@@ -1,6 +1,9 @@
 .footer{
+    margin-top: 40px;
+    padding: 15px;
     display: grid;
     justify-items: center;
+    gap: 10px;
     background-color: var(--highlight-color);
     color: var(--secondary-color);
     font-size: 18px;
