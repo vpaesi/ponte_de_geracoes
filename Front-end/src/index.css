@@ -1,0 +1,27 @@
+:root {
+  font-family: "Source Sans 3", sans-serif;
+  background-color: #FAF3EF;
+  font-size: 28px;
+  --primary-color: #2C2C2C;
+  --secondary-color: #FFF8F5;
+  --highlight-color: #B76442;
+}
+
+body{
+  padding: 10px 60px;
+  color: var(--primary-color);
+}
+
+h1 {
+  color: var(--highlight-color);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+hr {
+  margin: 0;
+  border: none;
+  height: 2px;
+  background-color: var(--highlight-color)
+}
+
