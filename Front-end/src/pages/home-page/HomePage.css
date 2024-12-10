@@ -1,18 +1,14 @@
-h2{
-  justify-self: center;
-  color: var(--highlight-color);
-}
-
 .row-1{
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 200px;
-  padding: 0 60px;
+  padding: 0 80px;
 }
 .column text-column{
   padding: 0;
 }
+
 .text-column {
   display: flex;
   flex-direction: column;
@@ -49,16 +45,4 @@ h2{
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-}
-
- .carousel-item img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-}
-
-.carousel {
-  display: flex;
-  overflow-x: scroll;
-  gap: 20px;
 }

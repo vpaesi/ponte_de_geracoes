@@ -1,14 +1,15 @@
 :root {
   font-family: "Source Sans 3", sans-serif;
   background-color: #FAF3EF;
-  font-size: 28px;
+  font-size: 25px;
   --primary-color: #2C2C2C;
   --secondary-color: #FFF8F5;
   --highlight-color: #B76442;
 }
 
 body{
-  padding: 10px 60px;
+  margin: 0;
+  padding: 0 60px;
   color: var(--primary-color);
 }
 
@@ -18,10 +19,14 @@ h1 {
   font-weight: 700;
 }
 
-hr {
-  margin: 0;
-  border: none;
-  height: 2px;
-  background-color: var(--highlight-color)
+h2{
+  justify-self: center;
+  color: var(--highlight-color);
 }
 
+hr {
+  margin-top: 40px;
+  border: none;
+  height: 1px;
+  background-color: var(--highlight-color)
+}
