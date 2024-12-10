@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,5 +82,14 @@ public class HelperController {
             return ResponseEntity.ok(helperToUpdate);
         }).orElse(ResponseEntity.notFound().build());
     }
-    
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHelper(@PathVariable Long id){
+        if (helperRepository.existsById(id)){
+            helperRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
 }
