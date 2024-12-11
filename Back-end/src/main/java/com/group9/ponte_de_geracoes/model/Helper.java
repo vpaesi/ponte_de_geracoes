@@ -1,9 +1,13 @@
 package com.group9.ponte_de_geracoes.model;
 
+import java.time.LocalDate;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Helper {
@@ -11,12 +15,18 @@ public class Helper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    private Integer age;
+    private LocalDate birthDate;
+    private String rg;
+    private String cpf;
     private String email;
     private String phone;
-    private String address;
+    private String password;
     private String skills;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
 
     public Helper(){
     }
@@ -37,12 +47,28 @@ public class Helper {
         this.name = name;
     }
 
-    public Integer getAge() {
-        return age;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -61,12 +87,12 @@ public class Helper {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getSkills() {
@@ -76,5 +102,12 @@ public class Helper {
     public void setSkills(String skills) {
         this.skills = skills;
     }
-    
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
 }

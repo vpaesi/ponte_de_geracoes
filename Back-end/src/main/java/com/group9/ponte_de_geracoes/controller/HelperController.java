@@ -62,8 +62,8 @@ public class HelperController {
             if (requestHelper.getName() != null) {
                 helperToUpdate.setName(requestHelper.getName());
             }
-            if (requestHelper.getAge() != null){
-                helperToUpdate.setAge(requestHelper.getAge());
+            if (requestHelper.getBirthDate() != null){
+                helperToUpdate.setBirthDate(requestHelper.getBirthDate());
             }
             if (requestHelper.getEmail() != null){
                 helperToUpdate.setEmail(requestHelper.getEmail());
