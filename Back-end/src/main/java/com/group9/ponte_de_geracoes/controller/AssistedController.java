@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.group9.ponte_de_geracoes.model.Assisted;
 import com.group9.ponte_de_geracoes.repository.AssistedRepository;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,6 +83,15 @@ public class AssistedController {
             assistedRepository.save(assistedToUpdate);
             return ResponseEntity.ok(assistedToUpdate);
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAssisted(@PathVariable Long id){
+        if (assistedRepository.existsById(id)){
+            assistedRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
     
 }
