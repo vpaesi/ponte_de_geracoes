@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import "./RegisterPage.css";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import '../register-page/RegisterPage.css';
+import { useNavigate, useParams } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
 import { validateFields } from "../../utils/validate-fields/ValidateFields";
 
-const RegisterPage: React.FC = () => {
+const EditRegistrationPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
   const [name, setName] = useState<string>("");
   const [dob, setDob] = useState<string>("");
   const [rg, setRg] = useState<string>("");
@@ -15,16 +18,52 @@ const RegisterPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [address, setAddress] = useState<string>("");
-  const [complement, setComplement] = useState<string>("");
   const [neighborhood, setNeighborhood] = useState<string>("");
   const [cep, setCep] = useState<string>("");
+  const [complement, setComplement] = useState<string>("");
   const [userType, setUserType] = useState<string>("");
   const [about, setAbout] = useState<string>("");
   const [skillsNeeds, setSkillsNeeds] = useState<string>("");
+
   const [errors, setErrors] = useState<Record<string, boolean>>({});
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const fetchRegisteredData = async () => {
+      try {
+        const response = await fetch(`/registerd/${id}`);
+        if (!response.ok) {
+          throw new Error("Erro ao carregar dados do cadastro.");
+        }
+
+        const data = await response.json();
+        setName(data.name);
+        setDob(data.dob);
+        setRg(data.rg);
+        setCpf(data.cpf);
+        setEmail(data.email);
+        setPhone(data.phone);
+        setPassword(data.password);
+        setConfirmPassword(data.password);
+        setCity(data.city);
+        setAddress(data.address);
+        setNeighborhood(data.neighborhood);
+        setCep(data.cep);
+        setComplement(data.complement);
+        setUserType(data.userType);
+        setAbout(data.about);
+        setSkillsNeeds(data.skillsNeeds);
+      } catch (error) {
+        console.error(error);
+        alert("Ocorreu um erro ao carregar os dados do cadastro.");
+      }
+    };
+
+    fetchRegisteredData();
+  }, [id]);
+
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const formValues = {
       name,
       dob,
@@ -34,162 +73,149 @@ const RegisterPage: React.FC = () => {
       phone,
       password,
       confirmPassword,
-      cep,
-      city,
       address,
-      complement,
-      neighborhood,
+      city,
+      cep,
       userType,
     };
 
-    if (!validateFields(formValues, setErrors)) {
+    const isValid = validateFields(formValues, setErrors);
+
+    if (!isValid) {
       return;
-    };
+    }
 
     try {
-      const formData = {
+      const updatedData = {
         name,
         dob,
         rg,
         cpf,
         email,
         phone,
-        password,
         city,
         address,
-        complement,
         neighborhood,
+        cep,
+        complement,
         userType,
         about,
         skillsNeeds,
       };
 
-      // confirmar caminho da API
-      const response = await fetch("/registered", {
-        method: "POST",
+      const response = await fetch(`/registerd/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedData),
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao enviar os dados para o banco de dados");
+        throw new Error("Erro ao atualizar cadastro.");
       }
 
-      alert("Cadastro realizado com sucesso!");
+      alert("Cadastro atualizado com sucesso!");
+      navigate("/");
     } catch (error) {
-      alert(error);
+      console.error(error);
+      alert("Ocorreu um erro ao atualizar o cadastro.");
     }
   };
 
   return (
     <div className="cadastro-container">
       <section className="apresentacao">
-        <h1>CADASTRE-SE</h1>
-        <p>Já é cadastrado? <Link to='/login' className='login-link'>Entrar</Link></p>
+        <h1>EDITAR CADASTRO</h1>
+        <p>* Campos obrigatórios</p>
       </section>
-
-      <form onSubmit={handleSubmit} className="cadastro-form">
+      <form onSubmit={handleUpdate} className="cadastro-form">
         <fieldset>
           <legend>Dados Pessoais</legend>
           <div className="form-row">
             <div>
-              <p>Nome Completo</p>
+              <p>Nome Completo *</p>
               <input
                 type="text"
-                placeholder="Digite seu nome"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={errors.name ? "input-error" : ""}
+                className={errors.name ? "error" : ""}
               />
               {errors.name && <span className="error-message">Nome é obrigatório</span>}
-
             </div>
             <div>
-              <p>Email</p>
+              <p>Email *</p>
               <input
                 type="email"
-                placeholder="nome@exemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={errors.email ? "input-error" : ""}
+                className={errors.email ? "error" : ""}
               />
               {errors.email && <span className="error-message">Email é obrigatório</span>}
-
             </div>
           </div>
 
           <div className="form-row">
             <div>
-              <p>Data de nascimento</p>
+              <p>Data de nascimento *</p>
               <input
                 type="date"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
-                className={errors.dob ? "input-error" : ""}
+                className={errors.dob ? "error" : ""}
               />
               {errors.dob && <span className="error-message">Data de nascimento é obrigatória</span>}
-
             </div>
             <div>
-              <p>RG</p>
+              <p>RG *</p>
               <input
                 type="text"
-                placeholder="1234567891"
                 value={rg}
                 onChange={(e) => setRg(e.target.value)}
-                className={errors.rg ? "input-error" : ""}
+                className={errors.rg ? "error" : ""}
               />
               {errors.rg && <span className="error-message">RG é obrigatório</span>}
-
             </div>
             <div>
-              <p>CPF</p>
+              <p>CPF *</p>
               <input
                 type="text"
-                placeholder="12345678901"
                 value={cpf}
                 onChange={(e) => setCpf(e.target.value)}
-                className={errors.cpf ? "input-error" : ""}
+                className={errors.cpf ? "error" : ""}
               />
               {errors.cpf && <span className="error-message">CPF é obrigatório</span>}
-
-            </div>
+            </div>      
           </div>
-
+        
           <div className="form-row">
             <div>
-              <p>Celular</p>
+              <p>Celular *</p>
               <input
                 type="number"
-                placeholder="51999999999"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className={errors.phone ? "input-error" : ""}
+                className={errors.phone ? "error" : ""}
               />
               {errors.phone && <span className="error-message">Celular é obrigatório</span>}
-
             </div>
             <div>
-              <p>Senha</p>
+              <p>Senha *</p>
               <input
                 type="password"
-                placeholder="Digite a senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={errors.password ? "input-error" : ""}
+                className={errors.password ? "error" : ""}
               />
               {errors.password && <span className="error-message">Senha é obrigatória</span>}
             </div>
             <div>
-              <p>Confirme sua senha</p>
+              <p>Confirme sua senha *</p>
               <input
                 type="password"
-                placeholder="Digite novamente"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={errors.password ? "input-error" : ""}
+                className={errors.confirmPassword ? "error" : ""}
               />
               {errors.confirmPassword && <span className="error-message">As senhas não coincidem</span>}
             </div>
@@ -200,65 +226,58 @@ const RegisterPage: React.FC = () => {
           <legend>Endereço</legend>
           <div className="form-row">
             <div>
-              <p>CEP</p>
+              <p>CEP *</p>
               <input
                 type="text"
                 value={cep}
                 onChange={(e) => setCep(e.target.value)}
                 onBlur={() => handleCepBlur(cep, setAddress, setCity, setNeighborhood)}
-                className={errors.cep ? "input-error" : ""}
+                className={errors.cep ? "error" : ""}
               />
               {errors.cep && <span className="error-message">CEP é obrigatório</span>}
-
             </div>
             <div>
-              <p>Cidade</p>
+              <p>Cidade *</p>
               <input
                 type="text"
                 value={city}
-                readOnly
-                className={errors.city ? "input-error" : ""}
+                onChange={(e) => setCity(e.target.value)}
+                className={errors.city ? "error" : ""}
               />
               {errors.city && <span className="error-message">Cidade é obrigatória</span>}
-
             </div>
             <div>
-              <p>Bairro</p>
+              <p>Bairro *</p>
               <input
                 type="text"
-                placeholder="Digite seu bairro"
                 value={neighborhood}
-                readOnly
-                className={errors.neighborhood ? "input-error" : ""}
+                onChange={(e) => setNeighborhood(e.target.value)}
               />
-              {errors.neighborhood && <span className="error-message">Bairro é obrigatório</span>}
+                            {errors.neighborhood && <span className="error-message">Bairro é obrigatório</span>}
+
             </div>
           </div>
           <div className="form-row">
             <div>
-              <p>Logradouro</p>
+              <p>Logradouro *</p>
               <input
                 type="text"
-                placeholder="Avenida Exemplo de Rua"
                 value={address}
-                readOnly
-                className={errors.address ? "input-error" : ""}
+                onChange={(e) => setAddress(e.target.value)}
+                className={errors.address ? "error" : ""}
               />
               {errors.address && <span className="error-message">Logradouro é obrigatório</span>}
-
             </div>
             <div>
               <p>Número</p>
               <input
                 type="number"
-                placeholder="123"
               />
             </div>
             <div>
               <p>Complemento</p>
               <input
                 type="text"
-                placeholder="Casa 2, Bloco A"
                 value={complement}
                 onChange={(e) => setComplement(e.target.value)}
               />
@@ -292,30 +311,28 @@ const RegisterPage: React.FC = () => {
             <div>
               <p>Fale um pouco sobre você:</p>
               <textarea
-                placeholder="Escreva aqui..."
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
+                className={errors.about ? "error" : ""}
               />
             </div>
             <div>
-              <p>Habilidades/ Necessidades</p>
+              <p>Habilidades/ Necessidades: *</p>
               <textarea
-                placeholder="Máximo de 90 caracteres"
                 maxLength={90}
                 value={skillsNeeds}
                 onChange={(e) => setSkillsNeeds(e.target.value)}
-                className={errors.skillsNeeds ? "input-error" : ""}
               />
-              {errors.skillsNeeds && <span className="error-message">Campo obrigatório</span>}
+            {errors.skillsNeeds && <span className="error-message">Campo obrigatório</span>}
 
             </div>
           </div>
         </fieldset>
 
-        <button type="submit" className="submit-button">Finalizar cadastro</button>
+        <button type="submit" className="submit-button">Salvar Alterações</button>
       </form>
     </div>
   );
 };
 
-export default RegisterPage;
+export default EditRegistrationPage;

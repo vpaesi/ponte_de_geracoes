@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 import { Images } from "../../assets/Images";
 import { Link } from "react-router-dom";
@@ -6,6 +6,25 @@ import BenefitCard from "../../components/benefit-card/BenefitCard";
 import Carousel from "../../components/carousel/Carousel";
 
 const App: React.FC = () => {
+
+  const [helpers, setHelpers] = useState<any[]>([])
+
+  // Função assíncrona que faz a requisição GET à API para buscar os dados dos ajudantes. Depois, ela atualiza o estado helpers.
+  const fetchHelpers = async () => {
+    try {
+      // confirmar caminho da API
+      const response = await fetch("http://localhost:3001/helpers");
+      const data = await response.json();
+      setHelpers(data);
+    } catch (error) {
+      console.error("Erro ao buscar ajudantes:", error);
+    }
+  }
+
+  //chama o fetchHelpers() assim que o componente é montado, buscando os dados da API.
+  useEffect(() => {
+    fetchHelpers();
+  }, []);
 
   const benefitsForHelped = [
     {
@@ -73,6 +92,8 @@ const App: React.FC = () => {
     },
   ];
 
+  // excluir a const registered depois que a API estiver funcionando
+  // confirmar se a API tem name + age + imagens dos cadastrados + description
   const registered = [
     {
       name: "Mariana",
@@ -110,15 +131,15 @@ const App: React.FC = () => {
       img: Images.helper6,
       description: "Chef de cozinha apaixonado por ensinar receitas simples e práticas, além de oferecer companhia durante as refeições.",
     },
-  ]
+  ];
+
   return (
     <div className="home-page">
       <section className="row row-1">
         <div className="column text-column">
           <h1>Pontes que aproximam e transformam vidas.</h1>
           <p>
-            Ponte de Gerações é uma plataforma gaúcha que conecta idosos com
-            necessidades específicas a pessoas dispostas a ajudar.
+            Ponte de Gerações é uma plataforma gaúcha que conecta idosos com necessidades específicas a pessoas dispostas a ajudar.
           </p>
           <Link to='/register' className='row1-link'>Suba agora nessa ponte</Link>
         </div>
@@ -145,7 +166,9 @@ const App: React.FC = () => {
       <hr />
 
       <section className="row row-3">
-        <Carousel title="Conheça alguns dos nossos ajudantes" registered={registered} />
+        {/* se não tiver api de helpers, usar o {registered} */}
+        {/* <Carousel title="Conheça alguns dos nossos ajudantes" registered={registered} /> */}
+        <Carousel title="Conheça alguns dos nossos ajudantes" registered={helpers} />
       </section>
 
       <hr />

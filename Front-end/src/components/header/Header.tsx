@@ -24,7 +24,7 @@ const Header = () => {
 
 					{!isHomePage && !isRegisterPage && !isRegisteredPage && <Link to='/registered' className='header-link'>Cadastrados</Link>}
 
-					{!isHomePage && !isRegisterPage && !isLoginPage && !isEditRegistrationPage && !isRegisteredPage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
+					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
 
 					{!isLoginPage && !isRegisterPage && <Link to='/login' className='header-link'>Entrar</Link>}
 				</nav>
