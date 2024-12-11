@@ -3,6 +3,8 @@ package com.group9.ponte_de_geracoes.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.group9.ponte_de_geracoes.model.AssistanceLog;
@@ -53,6 +55,10 @@ public class AssistanceLogService {
             throw new EntityNotFoundException("Log not founded");
         }
         return assitanceLog.get();
+    }
+
+    public Page<AssistanceLog> findAll(Pageable pageable) {
+        return assistanceLogRepository.findAll(pageable);
     }
 }
 
