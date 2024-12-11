@@ -1,9 +1,14 @@
 package com.group9.ponte_de_geracoes.model;
 
+import java.time.LocalDate;
+
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Assisted {
@@ -12,13 +17,17 @@ public class Assisted {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name; 
-    private String cpf; 
-    private Integer age; 
-    private String email; 
-    private String phone; 
-    private String address;
+    private String name;
+    private LocalDate birthDate;
+    private String rg;
+    private String cpf;
+    private String email;
+    private String phone;
+    private String password;
     private String needs;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Address address;
 
     public Assisted() {
     }
@@ -39,20 +48,28 @@ public class Assisted {
         this.name = name;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getRg() {
+        return rg;
+    }
+
+    public void setRg(String rg) {
+        this.rg = rg;
+    }
+
     public String getCpf() {
         return cpf;
     }
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
     }
 
     public String getEmail() {
@@ -71,11 +88,19 @@ public class Assisted {
         this.phone = phone;
     }
 
-    public String getAddress() {
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
@@ -86,4 +111,7 @@ public class Assisted {
     public void setNeeds(String needs) {
         this.needs = needs;
     }
+
+    
+    
 }

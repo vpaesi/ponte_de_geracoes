@@ -64,8 +64,8 @@ public class AssistedController {
             if (requestAssisted.getName() != null) {
                 assistedToUpdate.setName(requestAssisted.getName());
             }
-            if (requestAssisted.getAge() != null){
-                assistedToUpdate.setAge(requestAssisted.getAge());
+            if (requestAssisted.getBirthDate() != null){
+                assistedToUpdate.setBirthDate(requestAssisted.getBirthDate());
             }
             if (requestAssisted.getEmail() != null){
                 assistedToUpdate.setEmail(requestAssisted.getEmail());
