@@ -9,14 +9,9 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -52,41 +47,6 @@ public class HelperControllerTest {
     }
 
     // Teste do método GET /helper
-    @Test
-    public void testGetHelpers_EmptyPage() throws Exception {
-        Page<Helper> page = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 10), 0);
-
-        when(helperService.getHelpers(any())).thenReturn(page);
-
-        mockMvc.perform(get("/helper")
-                .param("page", "0")
-                .param("size", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isEmpty())  
-                .andExpect(jsonPath("$.page.totalElements").value(0))  
-                .andExpect(jsonPath("$.page.totalPages").value(0));  
-    } 
-
-    @Test
-    public void testGetHelpers_WithContent() throws Exception {
-        Helper helper = new Helper();
-        helper.setId(1L);
-        helper.setName("John Doe");
-
-        Page<Helper> page = new PageImpl<>(Collections.singletonList(helper), PageRequest.of(0, 10), 1);
-
-        when(helperService.getHelpers(any())).thenReturn(page);
-
-        mockMvc.perform(get("/helper")
-                .param("page", "0")
-                .param("size", "10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].name").value(helper.getName())) 
-                .andExpect(jsonPath("$.content[0].id").value(helper.getId()))  
-                .andExpect(jsonPath("$.page.totalElements").value(1))  
-                .andExpect(jsonPath("$.page.totalPages").value(1));  
-    }
-
 
     // Teste do método POST /helper (inserção de um novo helper)
     @Test

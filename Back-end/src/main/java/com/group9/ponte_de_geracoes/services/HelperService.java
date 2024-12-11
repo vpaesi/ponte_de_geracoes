@@ -14,8 +14,16 @@ public class HelperService {
     @Autowired
     private HelperRepository helperRepository;
 
-    public Page<Helper> getHelpers(Pageable pageable) {
-        return helperRepository.findAll(pageable);
+    public Page<Helper> getHelpers(Boolean isAvailable, String city, String day, Pageable pageable) {
+        if (city != null && day != null) {
+            return helperRepository.findByAddress_CityAndIsAvailable(city, isAvailable, pageable);
+        } else if (day != null) {
+            return helperRepository.findByAvailableDaysContainsAndIsAvailable(day, isAvailable, pageable);
+        } else if (isAvailable != null) {
+            return helperRepository.findByIsAvailable(isAvailable, pageable);
+        } else {
+            return helperRepository.findAll(pageable);
+        }
     }
 
     public Helper insertNewHelper(Helper helper) {

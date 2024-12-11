@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,15 +39,21 @@ public class HelperController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Helper>> getHelpers(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
-        Page<Helper> page = helperService.getHelpers(pageable);
+    public ResponseEntity<Page<Helper>> getHelpers(
+            @PageableDefault(size = 10, sort = {"id"}) Pageable pageable,
+            @RequestParam(required = false) Boolean isAvailable,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String day
+    ) {
+        Page<Helper> page = helperService.getHelpers(isAvailable, city, day, pageable);
+        
         return ResponseEntity.ok(page);
     }
 
     @PostMapping
     public ResponseEntity<Helper> insertNewHelper(@RequestBody Helper helper) {
         if (helper == null || helper.getName() == null || helper.getName().isEmpty()) {
-            return ResponseEntity.badRequest().build(); // Pode retornar erro 400 para dados inválidos
+            return ResponseEntity.badRequest().build();
         }
         
         Helper insertedHelper = helperService.insertNewHelper(helper);

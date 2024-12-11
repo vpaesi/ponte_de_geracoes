@@ -26,6 +26,41 @@ public class Helper {
     private String phone;
     private String password;
     private String skills;
+    private boolean isAvailable;
+    private List<String> availableDays;
+    private String aboutYou;
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
+    public List<String> getAvailableDays() {
+        return availableDays;
+    }
+
+    public void setAvailableDays(List<String> availableDays) {
+        this.availableDays = availableDays;
+    }
+
+    public String getAboutYou() {
+        return aboutYou;
+    }
+
+    public void setAboutYou(String aboutYou) {
+        this.aboutYou = aboutYou;
+    }
+
+    public List<AssistanceLog> getAssistanceLogs() {
+        return assistanceLogs;
+    }
+
+    public void setAssistanceLogs(List<AssistanceLog> assistanceLogs) {
+        this.assistanceLogs = assistanceLogs;
+    }
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
