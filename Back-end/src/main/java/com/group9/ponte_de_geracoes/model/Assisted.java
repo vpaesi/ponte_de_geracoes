@@ -1,13 +1,14 @@
 package com.group9.ponte_de_geracoes.model;
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -28,6 +29,9 @@ public class Assisted {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
+
+    @OneToMany(mappedBy = "assisted")
+    private List<AssistanceLog> assistanceLogs;
 
     public Assisted() {
     }
@@ -111,7 +115,4 @@ public class Assisted {
     public void setNeeds(String needs) {
         this.needs = needs;
     }
-
-    
-    
 }
