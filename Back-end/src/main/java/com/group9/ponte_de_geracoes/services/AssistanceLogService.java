@@ -45,6 +45,15 @@ public class AssistanceLogService {
         }
         return assistanceLogRepository.save(log);
     }
+
+    public AssistanceLog findById(Long id) {
+        Optional<AssistanceLog> assitanceLog = assistanceLogRepository.findById(id);
+
+        if (assitanceLog.isEmpty()){
+            throw new EntityNotFoundException("Log not founded");
+        }
+        return assitanceLog.get();
+    }
 }
 
 
