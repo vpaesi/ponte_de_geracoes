@@ -45,6 +45,10 @@ public class HelperController {
 
     @PostMapping
     public ResponseEntity<Helper> insertNewHelper(@RequestBody Helper helper) {
+        if (helper == null || helper.getName() == null || helper.getName().isEmpty()) {
+            return ResponseEntity.badRequest().build(); // Pode retornar erro 400 para dados inválidos
+        }
+        
         Helper insertedHelper = helperService.insertNewHelper(helper);
         URI locator = createNewURIById(insertedHelper);
         return ResponseEntity.created(locator).body(insertedHelper);
