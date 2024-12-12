@@ -24,7 +24,7 @@ public class HelperService {
     @Autowired
     private HelperRepository helperRepository;
 
-    private final String uploadImagesDir = "./uploads/";
+    private final String uploadImagesDir = "./uploads/helper/";
 
     public Page<Helper> getHelpers(Boolean isAvailable, String city, String day, Pageable pageable) {
         if (city != null && day != null) {

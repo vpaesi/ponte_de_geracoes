@@ -24,7 +24,7 @@ public class AssistedService {
     @Autowired
     private AssistedRepository assistedRepository;
 
-    private final String uploadImagesDir = "./uploads/Assisted/";
+    private final String uploadImagesDir = "./uploads/assisted/";
 
     public Page<Assisted> getAssisteds(Boolean needsHelp, String city, String day, Pageable pageable) {
         if (city != null && day != null) {
@@ -69,7 +69,7 @@ public class AssistedService {
     
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
     
-        String fileUrl = "/uploads/Assisted/" + fileName;
+        String fileUrl = "/uploads/assisted/" + fileName;
     
         Assisted.setProfileImageUrl(fileUrl);
         assistedRepository.save(Assisted);
