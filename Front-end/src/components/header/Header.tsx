@@ -22,9 +22,9 @@ const Header = () => {
 
 					{!isRegisterPage && !isLoginPage && <Link to='/register' className='header-link'>Cadastre-se</Link>}
 
-					{!isHomePage && !isRegisterPage && !isRegisteredPage && <Link to='/registered' className='header-link'>Cadastrados</Link>}
+					{!isHomePage && !isRegisterPage && !isRegisteredPage && !isLoginPage && <Link to='/registered' className='header-link'>Cadastrados</Link>}
 
-					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
+					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && !isHomePage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
 
 					{!isLoginPage && !isRegisterPage && <Link to='/login' className='header-link'>Entrar</Link>}
 				</nav>

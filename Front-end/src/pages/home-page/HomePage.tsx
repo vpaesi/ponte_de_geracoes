@@ -13,13 +13,13 @@ const App: React.FC = () => {
   const fetchHelpers = async () => {
     try {
       // confirmar caminho da API
-      const response = await fetch("http://localhost:3001/helpers");
+      const response = await fetch('/helpers');
       const data = await response.json();
       setHelpers(data);
     } catch (error) {
       console.error("Erro ao buscar ajudantes:", error);
     }
-  }
+  };
 
   //chama o fetchHelpers() assim que o componente é montado, buscando os dados da API.
   useEffect(() => {
