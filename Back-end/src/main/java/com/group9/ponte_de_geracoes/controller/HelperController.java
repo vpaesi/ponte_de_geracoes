@@ -1,13 +1,17 @@
 package com.group9.ponte_de_geracoes.controller;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.group9.ponte_de_geracoes.model.Helper;
@@ -59,6 +63,18 @@ public class HelperController {
         Helper insertedHelper = helperService.insertNewHelper(helper);
         URI locator = createNewURIById(insertedHelper);
         return ResponseEntity.created(locator).body(insertedHelper);
+    }
+
+    @PostMapping("/helper-upload-image/{helperId}")
+    public ResponseEntity<?> uploadImage(@PathVariable Long helperId, @RequestParam("file") MultipartFile file) {
+        try {
+            String fileUrl = helperService.uploadImage(helperId, file);
+
+            return ResponseEntity.ok(Collections.singletonMap("url", fileUrl));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Falha ao carregar a imagem");
+        }
     }
 
     @PutMapping("/{id}")

@@ -31,6 +31,7 @@ public class Helper {
     private boolean isAvailable;
     private List<String> availableDays;
     private String aboutYou;
+    private String profileImageUrl;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
@@ -153,5 +154,14 @@ public class Helper {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
