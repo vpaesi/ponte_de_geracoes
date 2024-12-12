@@ -29,6 +29,7 @@ public class Assisted {
     private String password;
     private String needs;
     private Boolean needsHelp;
+    private String profileImageUrl;
     private List<String> availableDays;
 
     private String aboutYou;
@@ -153,5 +154,13 @@ public class Assisted {
 
     public void setNeedsHelp(Boolean needsHelp) {
         this.needsHelp = needsHelp;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }
