@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Arquivo de Uploads
+/uploads/
+
 # Diretórios de build do Maven
 /target/
 /.idea/
