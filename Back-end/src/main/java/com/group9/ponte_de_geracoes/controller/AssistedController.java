@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,8 +39,14 @@ public class AssistedController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Assisted>> getAssisteds(@PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
-        Page<Assisted> page = assistedService.getAssisteds(pageable);
+    public ResponseEntity<Page<Assisted>> getHelpers(
+            @PageableDefault(size = 10, sort = {"id"}) Pageable pageable,
+            @RequestParam(required = false) Boolean needsHelp,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String day
+    ) {
+        Page<Assisted> page = assistedService.getAssisteds(needsHelp, city, day, pageable);
+        
         return ResponseEntity.ok(page);
     }
 

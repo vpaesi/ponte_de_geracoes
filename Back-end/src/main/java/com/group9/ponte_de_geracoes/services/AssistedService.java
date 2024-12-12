@@ -14,8 +14,16 @@ public class AssistedService {
     @Autowired
     private AssistedRepository assistedRepository;
 
-    public Page<Assisted> getAssisteds(Pageable pageable) {
-        return assistedRepository.findAll(pageable);
+    public Page<Assisted> getAssisteds(Boolean needsHelp, String city, String day, Pageable pageable) {
+        if (city != null && day != null) {
+            return assistedRepository.findByAddress_CityAndNeedsHelp(city, needsHelp, pageable);
+        } else if (day != null) {
+            return assistedRepository.findByAvailableDaysContainsAndNeedsHelp(day, needsHelp, pageable);
+        } else if (needsHelp != null) {
+            return assistedRepository.findByNeedsHelp(needsHelp, pageable);
+        } else {
+            return assistedRepository.findAll(pageable);
+        }
     }
 
     public Assisted insertNewAssisted(Assisted assisted) {

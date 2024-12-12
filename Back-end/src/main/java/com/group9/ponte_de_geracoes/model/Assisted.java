@@ -3,6 +3,8 @@ package com.group9.ponte_de_geracoes.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,10 +28,15 @@ public class Assisted {
     private String phone;
     private String password;
     private String needs;
+    private Boolean needsHelp;
+    private List<String> availableDays;
+
+    private String aboutYou;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "assisted")
     private List<AssistanceLog> assistanceLogs;
 
@@ -114,5 +121,29 @@ public class Assisted {
 
     public void setNeeds(String needs) {
         this.needs = needs;
+    }
+
+    public boolean isNeedsHelp() {
+        return needsHelp;
+    }
+
+    public void setNeedsHelp(boolean needsHelp) {
+        this.needsHelp = needsHelp;
+    }
+
+    public List<String> getAvailableDays() {
+        return availableDays;
+    }
+
+    public void setAvailableDays(List<String> availableDays) {
+        this.availableDays = availableDays;
+    }
+
+    public String getAboutYou() {
+        return aboutYou;
+    }
+
+    public void setAboutYou(String aboutYou) {
+        this.aboutYou = aboutYou;
     }
 }
