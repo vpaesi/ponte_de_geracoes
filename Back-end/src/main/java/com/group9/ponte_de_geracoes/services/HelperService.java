@@ -51,9 +51,26 @@ public class HelperService {
             if (requestHelper.getSkills() != null) {
                 helperToUpdate.setSkills(requestHelper.getSkills());
             }
+            if (requestHelper.getRg() != null) {
+                helperToUpdate.setRg(requestHelper.getRg());
+            }
+            if (requestHelper.getCpf() != null) {
+                helperToUpdate.setCpf(requestHelper.getCpf());
+            }
+            if (requestHelper.getPassword() != null) {
+                helperToUpdate.setPassword(requestHelper.getPassword());
+            }
+            if (requestHelper.getAvailableDays() != null) {
+                helperToUpdate.setAvailableDays(requestHelper.getAvailableDays());
+            }
+            if (requestHelper.getAboutYou() != null) {
+                helperToUpdate.setAboutYou(requestHelper.getAboutYou());
+            }
+            helperToUpdate.setAvailable(requestHelper.isAvailable());
+    
             return helperRepository.save(helperToUpdate);
         }).orElse(null);
-    }
+    }    
 
     public boolean deleteHelper(Long id) {
         if (helperRepository.existsById(id)) {
