@@ -3,6 +3,7 @@ import '../register-page/RegisterPage.css';
 import { useNavigate, useParams } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
 import { validateFields } from "../../utils/validate-fields/ValidateFields";
+import urlFetch from "../../components/fetch/Fetch";
 
 const EditRegistrationPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,8 @@ const EditRegistrationPage: React.FC = () => {
   useEffect(() => {
     const fetchRegisteredData = async () => {
       try {
-        const response = await fetch(`/registerd/${id}`);
+        // verificar endpoint dos ajudantes+ajudados
+        const response = await fetch(`${urlFetch}/registerd/${id}`);
         if (!response.ok) {
           throw new Error("Erro ao carregar dados do cadastro.");
         }

@@ -1,0 +1,45 @@
+.d-flex justify-content-between mb-3{
+    border: 1px solid var(--highlight-color);
+}
+.btn-outline-primary{
+    --bs-btn-color: var(--primary-color) !important;
+    --bs-btn-active-border-color: var(--highlight-color) !important;
+    --bs-btn-border-color: var(--highlight-color) !important;
+}
+
+.btn-group{
+    position: relative;
+    margin-left: 1005px;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    margin-bottom: 12px;
+}
+
+.btn-group input[type="radio"]:checked + label{
+    background-color: var(--highlight-color);
+}
+
+.me-2{
+    border: none;
+}
+
+.btn-primary{
+    --bs-btn-bg: var(--highlight-color) !important;
+    --bs-btn-color: var(--secondary-color) !important;
+    --bs-btn-hover-bg: var(--secondary-color) !important;
+    --bs-btn-hover-color: var(--primary-color) !important;
+    --bs-btn-border-color: var(--secondary-color) !important;
+    --bs-btn-hover-border-color: var(--highlight-color)!important;
+    /* --bs-btn-active-color: var(--secondary-color) !important; */
+}
+
+.registered-row, .card-body {
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    height: fit-content;
+    /* CONFIRMAR SE VAI FICAR CERTO COM MAIS INFOS */
+}
+
+.g-4{
+    padding-bottom: 50px;
+}

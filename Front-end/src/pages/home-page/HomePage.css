@@ -73,3 +73,10 @@
   align-items: center;
   margin-left: 40px;
 }
+
+.row3-link{
+  display: flex;
+  justify-content: right;
+  margin-top: 20px ;
+  color: var(--highlight-color);
+}
