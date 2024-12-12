@@ -55,13 +55,14 @@ public class HelperController {
     }
 
     @PostMapping
-    public ResponseEntity<Helper> insertNewHelper(@RequestBody Helper helper) {
-        if (helper == null || helper.getName() == null || helper.getName().isEmpty()) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Helper> insertNewHelper(@RequestBody Helper helper) {     
+        if (helper != null && helper.getProfileImageUrl() == null){
+            helper.setProfileImageUrl("/uploads/generic-icon.jpg");
         }
-        
+
         Helper insertedHelper = helperService.insertNewHelper(helper);
         URI locator = createNewURIById(insertedHelper);
+
         return ResponseEntity.created(locator).body(insertedHelper);
     }
 
