@@ -51,9 +51,28 @@ public class AssistedService {
             if (requestAssisted.getNeeds() != null) {
                 assistedToUpdate.setNeeds(requestAssisted.getNeeds());
             }
+            if (requestAssisted.getNeedsHelp() != null) {
+                assistedToUpdate.setNeedsHelp(requestAssisted.getNeedsHelp());
+            }
+            if (requestAssisted.getRg() != null) {
+                assistedToUpdate.setRg(requestAssisted.getRg());
+            }
+            if (requestAssisted.getCpf() != null) {
+                assistedToUpdate.setCpf(requestAssisted.getCpf());
+            }
+            if (requestAssisted.getPassword() != null) {
+                assistedToUpdate.setPassword(requestAssisted.getPassword());
+            }
+            if (requestAssisted.getAvailableDays() != null) {
+                assistedToUpdate.setAvailableDays(requestAssisted.getAvailableDays());
+            }
+            if (requestAssisted.getAboutYou() != null) {
+                assistedToUpdate.setAboutYou(requestAssisted.getAboutYou());
+            }
+    
             return assistedRepository.save(assistedToUpdate);
         }).orElse(null);
-    }
+    }    
 
     public boolean deleteAssisted(Long id) {
         if (assistedRepository.existsById(id)) {

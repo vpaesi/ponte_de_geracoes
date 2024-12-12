@@ -146,4 +146,12 @@ public class Assisted {
     public void setAboutYou(String aboutYou) {
         this.aboutYou = aboutYou;
     }
+
+    public Boolean getNeedsHelp() {
+        return needsHelp;
+    }
+
+    public void setNeedsHelp(Boolean needsHelp) {
+        this.needsHelp = needsHelp;
+    }
 }
