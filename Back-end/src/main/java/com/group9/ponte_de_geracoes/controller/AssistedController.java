@@ -61,7 +61,7 @@ public class AssistedController {
         return ResponseEntity.created(locator).body(insertedAssisted);
     }
 
-    @PostMapping("/assisted-upload-image/{assistedId}")
+    @PostMapping("/upload-image/{assistedId}")
     public ResponseEntity<?> uploadImage(@PathVariable Long assistedId, @RequestParam("file") MultipartFile file) {
         try {
             String fileUrl = assistedService.uploadImage(assistedId, file);

@@ -65,7 +65,7 @@ public class HelperController {
         return ResponseEntity.created(locator).body(insertedHelper);
     }
 
-    @PostMapping("/helper-upload-image/{helperId}")
+    @PostMapping("/upload-image/{helperId}")
     public ResponseEntity<?> uploadImage(@PathVariable Long helperId, @RequestParam("file") MultipartFile file) {
         try {
             String fileUrl = helperService.uploadImage(helperId, file);
