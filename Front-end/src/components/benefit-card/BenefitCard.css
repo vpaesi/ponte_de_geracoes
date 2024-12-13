@@ -1,33 +1,32 @@
 .benefit-card {
-    margin: 0 60px;
-    gap: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     text-align: left;
-    padding: 10px;
     width: 100%;
     max-width: 300px;
 }
 
 .benefit-header {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 8px;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    margin: 8px 0;
 }
 
-.benefit-header h3, p{
-    margin: 0;
+.benefit-header h3{
+    margin: 5px 0;
+    text-wrap: nowrap;
 }
 
 .benefit-icon {
     width: 24px;
     height: 24px;
+    margin-right: 10px;
 }
 
 .benefit-description {
+    margin: 0;
     font-size: 25px;
 }
 

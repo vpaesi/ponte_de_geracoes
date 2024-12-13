@@ -10,7 +10,7 @@ const Footer = () => {
                 <p> &copy; 2024 Ponte de Gerações. Todos os direitos reservados.</p>
             </div>
         </footer>
-    )
-}
+    );
+};
 
 export default Footer;

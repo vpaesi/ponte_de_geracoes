@@ -3,15 +3,15 @@ import "./Carousel.css";
 
 interface RegisteredCarousel {
   name: string;
-  yo: number;
+  age: number;
   img: string;
   description: string;
-}
+};
 
 interface CarouselProps {
   title: string;
   registered: RegisteredCarousel[];
-}
+};
 
 const Carousel: React.FC<CarouselProps> = ({ title, registered }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -36,7 +36,7 @@ const Carousel: React.FC<CarouselProps> = ({ title, registered }) => {
         ...registered[(currentIndex + i) % totalItems],
       isVisible: i === 1,
       });
-    }
+    };
     return visible;
   };
 
@@ -54,7 +54,7 @@ const Carousel: React.FC<CarouselProps> = ({ title, registered }) => {
               key={index}
             >
               <img src={item.img} alt={`Foto de ${item.name}`} />
-              <h3>{`${item.name}, ${item.yo} anos`}</h3>
+              <h3>{`${item.name}, ${item.age} anos`}</h3>
               <p>{item.description}</p>
             </div>
           ))}
