@@ -1,45 +1,101 @@
-.d-flex justify-content-between mb-3{
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .header-registered {
+    display: flex;
+    gap: 20px;
+    text-align: left;
+    margin-bottom: 20px;
+  }
+  
+  .filter-group {
+    display: flex;
+    gap: 15px;
+    margin-left: 167px;
+    text-wrap: nowrap;
+  }
+  
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+  }
+  
+  .filter-item label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .filter-item select {
+    padding: 8px;
+    width: fit-content;
+    font-size: 1rem;
     border: 1px solid var(--highlight-color);
-}
-.btn-outline-primary{
-    --bs-btn-color: var(--primary-color) !important;
-    --bs-btn-active-border-color: var(--highlight-color) !important;
-    --bs-btn-border-color: var(--highlight-color) !important;
-}
-
-.btn-group{
-    position: relative;
-    margin-left: 1005px;
-    border: 1px solid var(--primary-color);
-    color: var(--primary-color);
-    margin-bottom: 12px;
-}
-
-.btn-group input[type="radio"]:checked + label{
+    border-radius: 5px;
+  }
+  
+  .cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .card {
+    border: 1px solid var(--highlight-color);
+    border-radius: 8px;
+    padding: 20px;
+    background-color: var(--secondary-color);
+  }
+  
+  .card-body {
+    text-align: left;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .page-button,
+  .footer-registered_btn {
     background-color: var(--highlight-color);
-}
-
-.me-2{
-    border: none;
-}
-
-.btn-primary{
-    --bs-btn-bg: var(--highlight-color) !important;
-    --bs-btn-color: var(--secondary-color) !important;
-    --bs-btn-hover-bg: var(--secondary-color) !important;
-    --bs-btn-hover-color: var(--primary-color) !important;
-    --bs-btn-border-color: var(--secondary-color) !important;
-    --bs-btn-hover-border-color: var(--highlight-color)!important;
-    /* --bs-btn-active-color: var(--secondary-color) !important; */
-}
-
-.registered-row, .card-body {
+    color: var(--secondary-color);
     border: 1px solid var(--primary-color);
-    border-radius: 10px;
-    height: fit-content;
-    /* CONFIRMAR SE VAI FICAR CERTO COM MAIS INFOS */
-}
-
-.g-4{
-    padding-bottom: 50px;
-}
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .page-button:hover,
+  .footer-registered_btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+  }
+  
+  .page-button {
+    padding: 10px 20px;
+    margin: 0 5px;
+  }
+  
+  .footer-registered {
+    display: flex;
+    text-align: left;
+    margin-top: 40px;
+  }
+  
+  .footer-registered_btn {
+    margin: 0 30px;
+    text-wrap: nowrap;
+    align-self: center;
+    padding: 10px;
+    text-decoration: none;
+  }

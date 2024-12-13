@@ -9,10 +9,6 @@ import RegisterPage from './pages/register-page/RegisterPage.tsx'
 import EditRegistrationPage from './pages/edit-registration/EditRegistrationPage.tsx'
 import LoginPage from './pages/login-page/LoginPage.tsx'
 import RegisteredPage from './pages/registered-page/RegisteredPage.tsx'
-<<<<<<< HEAD
-import 'bootstrap/dist/css/bootstrap.min.css';
-=======
->>>>>>> cc00fe2c49dbe8bc7dca93adb001bdec9cd922d5
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
