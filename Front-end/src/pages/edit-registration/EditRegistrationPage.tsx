@@ -31,7 +31,6 @@ const EditRegistrationPage: React.FC = () => {
   useEffect(() => {
     const fetchRegisteredData = async () => {
       try {
-        // verificar endpoint dos ajudantes+ajudados
         const response = await fetch(`${urlFetch}/registerd/${id}`);
         if (!response.ok) {
           throw new Error("Erro ao carregar dados do cadastro.");
