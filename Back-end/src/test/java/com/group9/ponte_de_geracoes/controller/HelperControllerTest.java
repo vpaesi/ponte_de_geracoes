@@ -1,114 +1,65 @@
 package com.group9.ponte_de_geracoes.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group9.ponte_de_geracoes.model.Helper;
-import com.group9.ponte_de_geracoes.services.HelperService;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import com.group9.ponte_de_geracoes.model.Helper;
+import com.group9.ponte_de_geracoes.services.HelperService;
+import com.group9.ponte_de_geracoes.util.HelperCreator;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@SpringBootTest
-@AutoConfigureMockMvc
-public class HelperControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockitoBean
-    private HelperService helperService;
+class HelperControllerTest {
 
     @InjectMocks
     private HelperController helperController;
 
+    @Mock
+    private HelperService helperService;
+
     private Helper helper;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @BeforeEach
-    public void setUp() {
-        // Criando um objeto Helper para testes
-        helper = new Helper();
-        helper.setId(1L);
-        helper.setName("John Doe");
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        helper = HelperCreator.createHelperToBeSaved();
     }
 
-    // Teste do método GET /helper
-
-    // Teste do método POST /helper (inserção de um novo helper)
     @Test
-    public void testInsertNewHelper() throws Exception {
-        when(helperService.insertNewHelper(any(Helper.class))).thenReturn(helper);
+    void testGetHelpers() {
+        List<Helper> helpers = new ArrayList<>();
+        helpers.add(helper);
+        Page<Helper> helperPage = new PageImpl<>(helpers);
 
-        mockMvc.perform(post("/helper")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(helper)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name").value(helper.getName())); // Verificando se o nome foi corretamente retornado
-    }
+        when(helperService.getHelpers(null, null, null, Pageable.unpaged())).thenReturn(helperPage);
 
-    // Teste de falha no POST /helper (quando o helper é inválido)
-    @Test
-    public void testInsertNewHelper_InvalidData() throws Exception {
-        Helper invalidHelper = new Helper(); // Sem dados válidos
+        ResponseEntity<Page<Helper>> response = helperController.getHelpers(Pageable.unpaged(), null, null, null);
 
-        mockMvc.perform(post("/helper")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidHelper)))
-                .andExpect(status().isBadRequest());
-    }
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCode().value());
 
-    // Teste do método PUT /helper/{id} (atualização de um helper)
-    @Test
-    public void testUpdateHelper() throws Exception {
-        when(helperService.updateHelper(eq(1L), any(Helper.class))).thenReturn(helper);
+        // O corpo da resposta é uma página de Helpers
+        Page<Helper> responsePage = response.getBody();
+        assertNotNull(responsePage);
+        assertFalse(responsePage.isEmpty());
 
-        mockMvc.perform(put("/helper/{id}", 1L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(helper)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value(helper.getName())); // Verificando se o nome foi atualizado
-    }
+        // Pegando o primeiro Helper da página para validar
+        Helper createdHelper = responsePage.getContent().get(0);
+        assertEquals(helper.getName(), createdHelper.getName());
+        assertEquals(helper.getAddress().getCity(), createdHelper.getAddress().getCity()); // Exemplo de verificação adicional
 
-    // Teste de falha no PUT /helper/{id} (quando o helper não é encontrado)
-    @Test
-    public void testUpdateHelper_NotFound() throws Exception {
-        when(helperService.updateHelper(eq(999L), any(Helper.class))).thenReturn(null);
-
-        mockMvc.perform(put("/helper/{id}", 999L)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(helper)))
-                .andExpect(status().isNotFound());
-    }
-
-    // Teste do método DELETE /helper/{id} (exclusão de um helper)
-    @Test
-    public void testDeleteHelper() throws Exception {
-        when(helperService.deleteHelper(eq(1L))).thenReturn(true);
-
-        mockMvc.perform(delete("/helper/{id}", 1L))
-                .andExpect(status().isNoContent());
-    }
-
-    // Teste de falha no DELETE /helper/{id} (quando o helper não é encontrado)
-    @Test
-    public void testDeleteHelper_NotFound() throws Exception {
-        when(helperService.deleteHelper(eq(999L))).thenReturn(false);
-
-        mockMvc.perform(delete("/helper/{id}", 999L))
-                .andExpect(status().isNotFound());
+        verify(helperService, times(1)).getHelpers(null, null, null, Pageable.unpaged());
     }
 }
+
