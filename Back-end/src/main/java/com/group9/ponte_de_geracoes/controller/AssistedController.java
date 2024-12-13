@@ -56,10 +56,6 @@ public class AssistedController {
 
     @PostMapping
     public ResponseEntity<Assisted> insertNewAssisted(@RequestBody Assisted assisted) {
-        if (assisted != null && assisted.getProfileImageUrl() == null){
-            assisted.setProfileImageUrl("/uploads/generic-icon.jpg");
-        }
-
         Assisted insertedAssisted = assistedService.insertNewAssisted(assisted);
         URI locator = createNewURIById(insertedAssisted);
 

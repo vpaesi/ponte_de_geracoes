@@ -40,6 +40,9 @@ public class AssistedService {
 
     public Assisted insertNewAssisted(Assisted assisted) {
         assisted.setId(null);
+        if (assisted != null && assisted.getProfileImageUrl() == null){
+            assisted.setProfileImageUrl("/uploads/generic-icon.jpg");
+        }
         return assistedRepository.save(assisted);
     }
 

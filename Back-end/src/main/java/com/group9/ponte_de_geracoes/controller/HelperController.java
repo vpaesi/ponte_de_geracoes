@@ -56,10 +56,6 @@ public class HelperController {
 
     @PostMapping
     public ResponseEntity<Helper> insertNewHelper(@RequestBody Helper helper) {     
-        if (helper != null && helper.getProfileImageUrl() == null){
-            helper.setProfileImageUrl("/uploads/generic-icon.jpg");
-        }
-
         Helper insertedHelper = helperService.insertNewHelper(helper);
         URI locator = createNewURIById(insertedHelper);
 

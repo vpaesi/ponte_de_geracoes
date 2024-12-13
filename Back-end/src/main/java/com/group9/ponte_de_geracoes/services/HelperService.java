@@ -40,6 +40,10 @@ public class HelperService {
 
     public Helper insertNewHelper(Helper helper) {
         helper.setId(null);
+        
+        if (helper != null && helper.getProfileImageUrl() == null){
+            helper.setProfileImageUrl("/uploads/generic-icon.jpg");
+        }
         return helperRepository.save(helper);
     }
 
