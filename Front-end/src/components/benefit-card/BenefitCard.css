@@ -1,35 +1,32 @@
 .benefit-card {
-    margin: 0 60px;
-    gap: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 10px;
-    border: 1px solid var(--highlight-color);
-    border-radius: 8px;
-    background-color: var(--secondary-color);
+    text-align: left;
+    width: 100%;
     max-width: 300px;
 }
 
 .benefit-header {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 8px;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: flex-start;
+    margin: 8px 0;
 }
 
-.benefit-header h3, p{
-    margin: 0;
+.benefit-header h3{
+    margin: 5px 0;
+    text-wrap: nowrap;
 }
 
 .benefit-icon {
     width: 24px;
     height: 24px;
+    margin-right: 10px;
 }
 
 .benefit-description {
+    margin: 0;
     font-size: 25px;
 }
 
@@ -37,10 +34,5 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
     gap: 20px;
-}
-
-.benefits-section > :nth-child(4),
-.benefits-section > :nth-child(5) {
-    grid-column: span 1;
-    justify-self: center;
+    justify-items: center;
 }

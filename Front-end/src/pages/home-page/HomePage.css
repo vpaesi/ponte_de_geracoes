@@ -1,6 +1,5 @@
-h2{
-  justify-self: center;
-  color: var(--highlight-color);
+.home-page{
+  padding: 0 60px;
 }
 
 .row-1{
@@ -10,9 +9,11 @@ h2{
   gap: 200px;
   padding: 0 60px;
 }
+
 .column text-column{
   padding: 0;
 }
+
 .text-column {
   display: flex;
   flex-direction: column;
@@ -44,21 +45,38 @@ h2{
   text-decoration: none;
 }
 
-.image-column img {
-  max-width: 20rem;
+.row-1 .image-column {
+  position: relative;
+}
+
+.row-1 .image-column img {
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border: 2px solid var(--highlight-color);
+  border-radius: 15px;
+  padding: 20px 0;
+  max-width: 23rem;
+  height: auto;
 }
 
- .carousel-item img {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+.row-1 .image-column::before {
+  content: "...";
+  font-size: 40px;
+  color: var(--highlight-color);
+  position: relative; 
+  top: 5px;
+  left: 10px;
+  font-weight: 700; 
 }
 
-.carousel {
+.row-2 h2, .row-4 h2{
+  align-items: center;
+  margin-left: 40px;
+}
+
+.row3-link{
   display: flex;
-  overflow-x: scroll;
-  gap: 20px;
+  justify-content: right;
+  margin-top: 20px ;
+  color: var(--highlight-color);
 }
