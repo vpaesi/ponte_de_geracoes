@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.group9.ponte_de_geracoes.dto.ErrorResponseDTO;
 import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
+import com.group9.ponte_de_geracoes.exception.ImageStorageException;
 
 
 @ControllerAdvice
@@ -16,6 +17,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleNotFoundEntityException(EntityNotFoundException ex){
+        ErrorResponseDTO response = new ErrorResponseDTO();
+        response.setStatus(HttpStatus.NOT_FOUND.value());
+        response.setMessage(ex.getMessage());
+        response.setTimestamp(LocalDateTime.now().toString());
+        response.setErrors(ex.getErrors());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ImageStorageException.class)
+    public ResponseEntity<ErrorResponseDTO> handleImageStorageException(ImageStorageException ex){
         ErrorResponseDTO response = new ErrorResponseDTO();
         response.setStatus(HttpStatus.NOT_FOUND.value());
         response.setMessage(ex.getMessage());
