@@ -1,4 +1,4 @@
-package com.group9.ponte_de_geracoes.services;
+package com.group9.ponte_de_geracoes.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
+import com.group9.ponte_de_geracoes.exception.ImageStorageException;
 import com.group9.ponte_de_geracoes.model.Helper;
 import com.group9.ponte_de_geracoes.repository.HelperRepository;
 
@@ -40,41 +43,50 @@ public class HelperService {
 
     public Helper insertNewHelper(Helper helper) {
         helper.setId(null);
+        
+        if (helper != null && helper.getProfileImageUrl() == null){
+            helper.setProfileImageUrl("/uploads/generic-icon.jpg");
+        }
         return helperRepository.save(helper);
     }
 
-    public String uploadImage(Long helperId, MultipartFile file) throws IOException {
-        Optional<Helper> optionalHelper = helperRepository.findById(helperId);
+    public String uploadImage(Long helperId, MultipartFile file) {
+        try {
+            Optional<Helper> optionalHelper = helperRepository.findById(helperId);
 
-        if (optionalHelper.isEmpty()){
-            throw new RuntimeException("Helper not founded");
-        }
-        if (file.isEmpty()) {
-            throw new IOException("The file is Empty");
-        }
-
-        Helper helper = optionalHelper.get();
-    
-        String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
-    
-        Path path = Paths.get(uploadImagesDir + fileName);
-        
-        File directory = new File(uploadImagesDir);
-        if (!directory.exists()) {
-            boolean dirCreated = directory.mkdirs();
-            if (!dirCreated) {
-                throw new IOException("Fail to create the Upload Directory");
+            if (optionalHelper.isEmpty()){
+                    throw new EntityNotFoundException("Helper not founded", List.of("O Ajudante informado não foi encontrado."));
             }
+            if (file.isEmpty()) {
+                throw new ImageStorageException("The file is Empty", List.of("O arquivo de imagem recebido está vázio."));
+            }
+
+            Helper helper = optionalHelper.get();
+        
+            String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
+        
+            Path path = Paths.get(uploadImagesDir + fileName);
+            
+            File directory = new File(uploadImagesDir);
+            if (!directory.exists()) {
+                boolean dirCreated = directory.mkdirs();
+                if (!dirCreated) {
+                    throw new ImageStorageException("Fail to upload the Image", List.of("Falha interna durante o armazenamento da imagem,"));
+                }
+            }
+        
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        
+            String fileUrl = "/uploads/helper/" + fileName;
+        
+            helper.setProfileImageUrl(fileUrl);
+            helperRepository.save(helper);
+        
+            return fileUrl;
         }
-    
-        Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-    
-        String fileUrl = "/uploads/helper/" + fileName;
-    
-        helper.setProfileImageUrl(fileUrl);
-        helperRepository.save(helper);
-    
-        return fileUrl;
+        catch (IOException e){
+            throw new ImageStorageException("Fail to upload the Image", List.of("Falha interna durante o armazenamento da imagem,"));
+        }
     }
 
     public Helper updateHelper(Long id, Helper requestHelper) {
