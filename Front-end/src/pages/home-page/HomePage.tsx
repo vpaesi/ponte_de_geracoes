@@ -17,7 +17,7 @@ const App: React.FC = () => {
       const response = await fetch(`${urlFetch}/helper`);
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);
-      }      
+      }
       const data = await response.json();
       setHelpers(data.content);
     } catch (error) {
@@ -54,14 +54,15 @@ const App: React.FC = () => {
       <hr />
 
       <section className="row row-3">
-        <Carousel 
-        title="Conheça alguns dos nossos ajudantes" 
-        registered={helpers.map(helper => ({
-          name: helper.name,
-          age: new Date().getFullYear() - new Date(helper.birthDate).getFullYear(),
-          img: Images.helper1, // TROCAR O CAMINHO DEPOIS QUE TIVER IMAGENS NO BANCO DE DADOS
-          description: helper.aboutYou
-        }))} />
+        <Carousel
+          title="Conheça alguns dos nossos ajudantes"
+          registered={helpers.map(helper => ({
+            name: helper.name,
+            age: new Date().getFullYear() - new Date(helper.birthDate).getFullYear(),
+            img: helper.profileImageUrl,
+            description: helper.aboutYou
+          }))}
+        />
         <Link to={'/registered'} className='row3-link'>Conheça mais ajudantes</Link>
       </section>
 
