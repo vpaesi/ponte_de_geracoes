@@ -1,4 +1,4 @@
-package com.group9.ponte_de_geracoes.services;
+package com.group9.ponte_de_geracoes.service;
 
 import java.io.File;
 import java.io.IOException;

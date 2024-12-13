@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.group9.ponte_de_geracoes.model.Assisted;
-import com.group9.ponte_de_geracoes.services.AssistedService;
+import com.group9.ponte_de_geracoes.service.AssistedService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

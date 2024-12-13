@@ -1,4 +1,4 @@
-package com.group9.ponte_de_geracoes.services;
+package com.group9.ponte_de_geracoes.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class HelperService {
             Optional<Helper> optionalHelper = helperRepository.findById(helperId);
 
             if (optionalHelper.isEmpty()){
-                    throw new EntityNotFoundException("Assisted not founded", List.of("O Ajudado informado não foi encontrado."));
+                    throw new EntityNotFoundException("Helper not founded", List.of("O Ajudante informado não foi encontrado."));
             }
             if (file.isEmpty()) {
                 throw new ImageStorageException("The file is Empty", List.of("O arquivo de imagem recebido está vázio."));

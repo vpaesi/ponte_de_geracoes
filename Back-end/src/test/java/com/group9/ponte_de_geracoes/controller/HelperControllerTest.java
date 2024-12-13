@@ -16,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import com.group9.ponte_de_geracoes.model.Helper;
-import com.group9.ponte_de_geracoes.services.HelperService;
+import com.group9.ponte_de_geracoes.service.HelperService;
 import com.group9.ponte_de_geracoes.util.HelperCreator;
 
 class HelperControllerTest {

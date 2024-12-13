@@ -1,4 +1,4 @@
-package com.group9.ponte_de_geracoes.services;
+package com.group9.ponte_de_geracoes.service;
 
 import java.util.List;
 import java.util.Optional;

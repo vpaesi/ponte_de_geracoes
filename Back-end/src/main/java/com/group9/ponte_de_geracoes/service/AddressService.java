@@ -1,4 +1,4 @@
-package com.group9.ponte_de_geracoes.services;
+package com.group9.ponte_de_geracoes.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

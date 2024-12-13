@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group9.ponte_de_geracoes.model.AssistanceLog;
-import com.group9.ponte_de_geracoes.services.AssistanceLogService;
+import com.group9.ponte_de_geracoes.service.AssistanceLogService;
 
 @RestController
 @RequestMapping("/assistance-logs")
