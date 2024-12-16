@@ -29,5 +29,55 @@ public class SwaggerJsonExamplesUtil {
         }
     }
     """;
-    
+
+    public static final String HELPERS_PAGE_POPULATED_LIST_EXAMPLE = """
+    {
+        "content": [
+            {
+                "id": 1,
+                "name": "Jorge Doe",
+                "birthDate": "2005-05-12",
+                "rg": "123456789",
+                "cpf": "123.456.789-10",
+                "email": "luladoe@example.com",
+                "phone": "(11) 98765-4321",
+                "password": "password123",
+                "skills": "Cozinheiro, Jardineiro",
+                "availableDays": [
+                    "Segunda, Quarta, Sexta"
+                ],
+                "aboutYou": "Adoro ajudar em tarefas domésticas e jardinagem.",
+                "profileImageUrl": "/uploads/generic-icon.jpg",
+                "address": {
+                    "id": 1,
+                    "city": "São Paulo",
+                    "zipCode": "01000-000",
+                    "street": "Rua Exemplo",
+                    "number": "123",
+                    "complement": "Apt. 45"
+                },
+                "available": true
+            }
+        ],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 1,
+            "totalPages": 1
+        }
+    }
+    """;
+
+    public static final String HELPERS_PAGE_EMPTY_LIST_EXAMPLE = """
+    {
+        "content": [],
+        "page": {
+            "size": 10,
+            "number": 0,
+            "totalElements": 0,
+            "totalPages": 0
+        }
+    }
+    """;
+
 }
