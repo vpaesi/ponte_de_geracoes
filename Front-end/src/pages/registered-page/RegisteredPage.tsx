@@ -1,5 +1,4 @@
 import './RegisteredPage.css';
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import urlFetch from '../../components/fetch/Fetch';
@@ -18,17 +17,9 @@ interface Registered {
   name: string;
   birthDate: string;
   profileImageUrl?: string;
-  profileImageUrl?: string;
   availableDays: string[];
   aboutYou: string;
   address: Address;
-}
-
-interface PageInfo {
-  size: number;
-  number: number;
-  totalElements: number;
-  totalPages: number;
 }
 
 interface PageInfo {
@@ -49,7 +40,7 @@ const RegisteredPage: React.FC = () => {
 
   useEffect(() => {
     axios
-    //CONFIRMAR SE A ROTA ESTÁ CORRETA
+    //CONFIRMAR SE O ENDPOINT ESTÁ CORRETO
       .get(`${urlFetch}/addresses/cities`, { params: { page: 0, size: 100 } })
       .then((response) => {
         const data = response.data as { content: string[] };
@@ -68,41 +59,24 @@ const RegisteredPage: React.FC = () => {
           content: Registered[];
           page: PageInfo;
         }>(`${urlFetch}/helper?page=${page}&size=10`);
-          page: PageInfo;
-        }>(`${urlFetch}/helper?page=${page}&size=10`);
 
-        if (response.status === 200 && response.data) {
-          setRegistered(response.data.content || []);
-          setTotalPages(response.data.page.totalPages || 1);
-          setTotalItems(response.data.page.totalElements || 0);
         if (response.status === 200 && response.data) {
           setRegistered(response.data.content || []);
           setTotalPages(response.data.page.totalPages || 1);
           setTotalItems(response.data.page.totalElements || 0);
         } else {
           console.error("Erro ao buscar dados. Status:", response.status);
-          console.error("Erro ao buscar dados. Status:", response.status);
         }
       } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+        console.error('Erro ao buscar dados:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [page, selectedCity]);
+  }, [page]);
 
-  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const city = event.target.value;
-    setSelectedCity(city);
-    setPage(0);
-  };
-
-  const handlePageChange = (newPage: number) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setPage(newPage);
-    }
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
       setPage(newPage);
@@ -113,10 +87,12 @@ const RegisteredPage: React.FC = () => {
     <div className="container">
       <div className="header-registered">
         <h3>Conheça os ajudantes da Ponte de Gerações</h3>
-
-        <div className="city-filter">
-          <label htmlFor="city-select">Filtrar por Cidade:</label>
-          <select id="city-select" onChange={handleCityChange} value={selectedCity}>
+        <div className='city-filter'>
+          <label htmlFor="city-filter">Filtrar por cidade:</label>
+          <select
+            value={selectedCity}
+            onChange={(e) => setSelectedCity(e.target.value)}
+          >
             <option value="">Todas as cidades</option>
             {cities.map((city, index) => (
               <option key={index} value={city}>
@@ -147,7 +123,8 @@ const RegisteredPage: React.FC = () => {
                     {new Date().getFullYear() - new Date(person.birthDate).getFullYear()} anos
                   </h5>
                   <div className="card-address">
-                    <i className="fas fa-location-dot"></i>{person.address.city}/RS
+                    <i className="fas fa-location-dot"></i>
+                    {person.address.city}/RS
                     <p className="card-text">{person.aboutYou}</p>
                   </div>
                 </div>
@@ -165,10 +142,6 @@ const RegisteredPage: React.FC = () => {
         ) : (
           <p>Nenhum dado encontrado.</p>
         )}
-          ))
-        ) : (
-          <p>Nenhum dado encontrado.</p>
-        )}
       </div>
 
       <div className="pagination">
@@ -180,7 +153,6 @@ const RegisteredPage: React.FC = () => {
         </span>
 
         <span>
-          Página {page + 1} de {totalPages}
           Página {page + 1} de {totalPages}
         </span>
 
