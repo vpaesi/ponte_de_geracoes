@@ -18,9 +18,17 @@ interface Registered {
   name: string;
   birthDate: string;
   profileImageUrl?: string;
+  profileImageUrl?: string;
   availableDays: string[];
   aboutYou: string;
   address: Address;
+}
+
+interface PageInfo {
+  size: number;
+  number: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 interface PageInfo {
@@ -60,12 +68,19 @@ const RegisteredPage: React.FC = () => {
           content: Registered[];
           page: PageInfo;
         }>(`${urlFetch}/helper?page=${page}&size=10`);
+          page: PageInfo;
+        }>(`${urlFetch}/helper?page=${page}&size=10`);
 
         if (response.status === 200 && response.data) {
           setRegistered(response.data.content || []);
           setTotalPages(response.data.page.totalPages || 1);
           setTotalItems(response.data.page.totalElements || 0);
+        if (response.status === 200 && response.data) {
+          setRegistered(response.data.content || []);
+          setTotalPages(response.data.page.totalPages || 1);
+          setTotalItems(response.data.page.totalElements || 0);
         } else {
+          console.error("Erro ao buscar dados. Status:", response.status);
           console.error("Erro ao buscar dados. Status:", response.status);
         }
       } catch (error) {
@@ -84,6 +99,10 @@ const RegisteredPage: React.FC = () => {
     setPage(0);
   };
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 0 && newPage < totalPages) {
+      setPage(newPage);
+    }
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
       setPage(newPage);
@@ -146,6 +165,10 @@ const RegisteredPage: React.FC = () => {
         ) : (
           <p>Nenhum dado encontrado.</p>
         )}
+          ))
+        ) : (
+          <p>Nenhum dado encontrado.</p>
+        )}
       </div>
 
       <div className="pagination">
@@ -157,6 +180,7 @@ const RegisteredPage: React.FC = () => {
         </span>
 
         <span>
+          Página {page + 1} de {totalPages}
           Página {page + 1} de {totalPages}
         </span>
 
