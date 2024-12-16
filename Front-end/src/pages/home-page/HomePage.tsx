@@ -59,7 +59,7 @@ const App: React.FC = () => {
         registered={helpers.map(helper => ({
           name: helper.name,
           age: new Date().getFullYear() - new Date(helper.birthDate).getFullYear(),
-          img: Images.helper1, // TROCAR O CAMINHO DEPOIS QUE TIVER IMAGENS NO BANCO DE DADOS
+          img: helper.profileImageUrl,
           description: helper.aboutYou
         }))} />
         <Link to={'/registered'} className='row3-link'>Conheça mais ajudantes</Link>

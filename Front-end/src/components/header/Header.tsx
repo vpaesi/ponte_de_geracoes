@@ -14,7 +14,9 @@ const Header = () => {
 		<header className='header'>
 			<div className='header-left'>
 				<img src={logo} alt="Logo contendo duas pessoas em cima de uma ponte com um pedaço faltando. As duas pessoas estão colocando o pedaço faltante." />
-				<h1>Ponte de Gerações</h1>
+				<h1>
+					<Link to={"/"} className='header-left-link'> Ponte de Gerações </Link>
+					</h1>
 			</div>
 			<div className='header-right'>
 				<nav className='header-nav'>
