@@ -72,6 +72,7 @@ class HelperServiceTest {
         MultipartFile mockFile = mock(MultipartFile.class);
         when(mockFile.isEmpty()).thenReturn(false);
         when(mockFile.getOriginalFilename()).thenReturn("profile.jpg");
+        when(mockFile.getContentType()).thenReturn("image/jpg");
         when(mockFile.getInputStream()).thenReturn(mock(InputStream.class));
 
         when(helperRepository.findById(1L)).thenReturn(Optional.of(helper));

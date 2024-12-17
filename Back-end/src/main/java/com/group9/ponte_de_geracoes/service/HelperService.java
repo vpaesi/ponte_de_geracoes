@@ -28,6 +28,12 @@ public class HelperService {
     private HelperRepository helperRepository;
 
     private final String uploadImagesDir = "./uploads/helper/";
+    private static final List<String> ALLOWED_FILE_TYPES = List.of(
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp"
+    );
 
     public Page<Helper> getHelpers(Boolean isAvailable, String city, String day, Pageable pageable) {
         if (city != null && day != null) {
@@ -59,6 +65,10 @@ public class HelperService {
             }
             if (file.isEmpty()) {
                 throw new ImageStorageException("The file is Empty", List.of("O arquivo de imagem recebido está vázio."));
+            }
+            String contentType = file.getContentType();
+            if (contentType == null || !ALLOWED_FILE_TYPES.contains(contentType)) {
+                throw new ImageStorageException("Invalid file type", List.of("O tipo de arquivo enviado não é válido. Apenas imagens são permitidas."));
             }
 
             Helper helper = optionalHelper.get();
