@@ -1,7 +1,9 @@
 package com.group9.ponte_de_geracoes.util;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.group9.ponte_de_geracoes.model.Address;
 import com.group9.ponte_de_geracoes.model.Helper;
@@ -18,7 +20,7 @@ public class HelperCreator {
         helper.setEmail("joaopaulo@example.com");
         helper.setPhone("(11) 98765-4321");
         helper.setPassword("password123");
-        helper.setSkills("Preciso de ajuda na Cozinha e tarefas básicas");
+        helper.setSkills("Ajudo na Cozinha e tarefas básicas");
         helper.setAvailable(true);
         helper.setProfileImageUrl(null);
         helper.setAvailableDays(Arrays.asList("Segunda", "Quarta", "Sexta"));
@@ -36,7 +38,23 @@ public class HelperCreator {
         return helper;
     }
 
+    public static List<Helper> createListOfHelpersWithDifferentAddresses() {
+        List<Helper> helpers = new ArrayList<>();
+    
+        helpers.add(createHelperWithAddress("São Paulo", "01000-000", "Rua Exemplo", "123", "Apt. 45"));
+        helpers.add(createHelperWithAddress("Rio de Janeiro", "20000-000", "Avenida Exemplo", "456", null));
+        helpers.add(createHelperWithAddress("Belo Horizonte", "30000-000", "Praça Exemplo", "789", "Casa"));
+    
+        return helpers;
+    }
+
     public static Helper createHelperWithName(String name) {
+        Helper helper = createHelperToBeSaved();
+        helper.setName(name);
+        return helper;
+    }
+
+    public static Helper createHelperWithAvailableDays(String name) {
         Helper helper = createHelperToBeSaved();
         helper.setName(name);
         return helper;
@@ -45,6 +63,20 @@ public class HelperCreator {
     public static Helper createHelperWithoutCpf() {
         Helper helper = createHelperToBeSaved();
         helper.setCpf(null);
+        return helper;
+    }
+    
+    private static Helper createHelperWithAddress(String city, String zipCode, String street, String number, String complement) {
+        Address address = new Address();
+        address.setCity(city);
+        address.setZipCode(zipCode);
+        address.setStreet(street);
+        address.setNumber(number);
+        address.setComplement(complement);
+    
+        Helper helper = new Helper();
+        helper.setAddress(address);
+    
         return helper;
     }
 }
