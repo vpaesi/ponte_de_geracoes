@@ -47,6 +47,10 @@ public class HelperService {
         }
     }
 
+    public Optional<Helper> getHelperById(Long id) {
+        return helperRepository.findById(id);
+    }
+
     public Helper insertNewHelper(Helper helper) {
         helper.setId(null);
         
