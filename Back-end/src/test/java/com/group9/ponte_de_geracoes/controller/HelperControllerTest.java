@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
 import com.group9.ponte_de_geracoes.model.Helper;
 import com.group9.ponte_de_geracoes.service.HelperService;
 import com.group9.ponte_de_geracoes.util.HelperCreator;
@@ -133,6 +134,7 @@ class HelperControllerTest {
         verify(helperService, times(1)).getHelpers(null, null, "Segunda", Pageable.unpaged());
     }
 
+    @SuppressWarnings("null")
     @Test
     void testCreateHelper() {
         when(helperService.insertNewHelper(helper)).thenReturn(helper);
@@ -147,6 +149,7 @@ class HelperControllerTest {
         verify(helperService, times(1)).insertNewHelper(helper);
     }
 
+    @SuppressWarnings("null")
     @Test
     void testUpdateHelper() {
         Long helperId = 1L;
@@ -197,9 +200,9 @@ class HelperControllerTest {
     void testDeleteHelperNotFound() {
         Long helperId = 1L;
 
-        doThrow(new RuntimeException("Helper not found")).when(helperService).deleteHelper(helperId);
+        doThrow(new EntityNotFoundException("Helper not found", List.of("O Ajudante informado não foi encontrado."))).when(helperService).deleteHelper(helperId);
 
-        assertThrows(RuntimeException.class, () -> helperController.deleteHelper(helperId));
+        assertThrows(EntityNotFoundException.class, () -> helperController.deleteHelper(helperId));
 
         verify(helperService, times(1)).deleteHelper(helperId);
     }
