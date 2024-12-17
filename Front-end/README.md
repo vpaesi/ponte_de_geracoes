@@ -22,7 +22,9 @@ Com o repositório clonado, entre na pasta do projeto e do  Front.
 
 Dentro da pasta do Front-end, execute:
 
-`npm install` para instalar as dependências do npm
+`npm install` para instalar as dependências do npm.
+
+`npm install vite --save-dev` para instalar o react + vite.
 
 `npm install axios` e `npm install --save-dev @types/axios` para instalar o axios.
 

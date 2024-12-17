@@ -40,25 +40,28 @@ const RegisteredPage: React.FC = () => {
 
   useEffect(() => {
     axios
-    //CONFIRMAR SE O ENDPOINT ESTÁ CORRETO
       .get(`${urlFetch}/addresses/cities`, { params: { page: 0, size: 100 } })
       .then((response) => {
         const data = response.data as { content: string[] };
-        setCities(data.content || []);
+        const sortedCities = (data.content || []).sort((a, b) => a.localeCompare(b));
+        setCities(sortedCities);
       })
       .catch((error) => console.error('Erro ao buscar cidades:', error));
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFilteredData = async () => {
       try {
         setLoading(true);
-        console.log(`Fetching page ${page}`);
+        const params: Record<string, any> = { page, size: 10 };
+        if (selectedCity) {
+          params.city = selectedCity;
+        }
 
         const response = await axios.get<{
           content: Registered[];
           page: PageInfo;
-        }>(`${urlFetch}/helper?page=${page}&size=10`);
+        }>(`${urlFetch}/helper`, { params });
 
         if (response.status === 200 && response.data) {
           setRegistered(response.data.content || []);
@@ -74,8 +77,8 @@ const RegisteredPage: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [page]);
+    fetchFilteredData();
+  }, [page, selectedCity]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
@@ -91,7 +94,10 @@ const RegisteredPage: React.FC = () => {
           <label htmlFor="city-filter">Filtrar por cidade:</label>
           <select
             value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
+            onChange={(e) => {
+              setSelectedCity(e.target.value);
+              setPage(0);
+            }}
           >
             <option value="">Todas as cidades</option>
             {cities.map((city, index) => (
