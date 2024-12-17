@@ -47,6 +47,10 @@ public class AssistedService {
         }
     }
 
+    public Optional<Assisted> getAssistedById(Long id) {
+        return assistedRepository.findById(id);
+    }
+
     public Assisted insertNewAssisted(Assisted assisted) {
         assisted.setId(null);
         if (assisted != null && assisted.getProfileImageUrl() == null){

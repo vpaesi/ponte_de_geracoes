@@ -2,6 +2,8 @@ package com.group9.ponte_de_geracoes.controller;
 
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
 import com.group9.ponte_de_geracoes.model.Assisted;
 import com.group9.ponte_de_geracoes.service.AssistedService;
 import com.group9.ponte_de_geracoes.util.SwaggerJsonExamplesUtil;
@@ -119,6 +122,15 @@ public class AssistedController {
         Page<Assisted> page = assistedService.getAssisteds(needsHelp, city, day, pageable);
         
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<Assisted> getHelperById(@PathVariable Long userId) {
+        Optional<Assisted> assisted = assistedService.getAssistedById(userId);
+        if (assisted.isPresent()) {
+            return ResponseEntity.ok(assisted.get());
+        }
+        throw new EntityNotFoundException("Assisted not founded", List.of("O Ajudado informado não foi encontrado."));
     }
 
     @Operation(
