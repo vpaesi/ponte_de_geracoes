@@ -5,9 +5,32 @@
 
 .header-registered {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 20px;
   text-align: left;
   margin-bottom: 20px;
+}
+
+.city-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.city-filter label {
+  font-size: 1rem;
+  color: var(--primary-color);
+}
+
+.city-filter select {
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 1px solid var(--highlight-color);
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  width: fit-content;
 }
 
 .cards-container {
@@ -60,9 +83,18 @@
   margin: 0 0 10px 0;
 }
 
+.fa-location-dot {
+  font-size: 1rem;
+  margin-right: 10px;
+  color: var(--highlight-color)
+}
+
 .card-available {
+  display: flex;
+  justify-content: center;
   font-size: 20px;
-  margin: 0 0 10px 30px;
+  margin: 0 20px 10px 0;
+  gap: 40px;
 }
 
 .pagination {
@@ -71,8 +103,15 @@
   margin: 40px 0;
 }
 
-.page-button,
-.footer-registered_btn {
+.pagination .fa-chevron-right, .pagination .fa-chevron-left {
+  color: var(--highlight-color);
+  font-weight: 600;
+  font-size: 40px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.footer-registered_btn, .card-available button{
   background-color: var(--highlight-color);
   color: var(--secondary-color);
   border: 1px solid var(--primary-color);
@@ -80,15 +119,10 @@
   cursor: pointer;
 }
 
-.page-button:hover,
+.card-available button:hover,
 .footer-registered_btn:hover {
   background-color: var(--secondary-color);
   color: var(--primary-color);
-}
-
-.page-button {
-  padding: 10px 20px;
-  margin: 0 5px;
 }
 
 .footer-registered {
@@ -97,7 +131,7 @@
   margin-top: 40px;
 }
 
-.footer-registered_btn {
+.footer-registered_btn, .card-available button {
   margin: 0 30px;
   text-wrap: nowrap;
   align-self: center;

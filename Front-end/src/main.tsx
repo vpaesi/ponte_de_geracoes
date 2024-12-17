@@ -9,6 +9,7 @@ import RegisterPage from './pages/register-page/RegisterPage.tsx'
 import EditRegistrationPage from './pages/edit-registration/EditRegistrationPage.tsx'
 import LoginPage from './pages/login-page/LoginPage.tsx'
 import RegisteredPage from './pages/registered-page/RegisteredPage.tsx'
+import ProfilePage from './pages/profile-page/ProfilePage.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path='/edit-registration' element={<EditRegistrationPage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/registered' element={<RegisteredPage />} />
+        <Route path='/profile' element={<ProfilePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>

@@ -1,8 +1,8 @@
 import './RegisteredPage.css';
-
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import urlFetch from '../../components/fetch/Fetch';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 interface Address {
   city: string;
@@ -34,16 +34,34 @@ const RegisteredPage: React.FC = () => {
   const [page, setPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [cities, setCities] = useState<string[]>([]);
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    axios
+      .get(`${urlFetch}/addresses/cities`, { params: { page: 0, size: 100 } })
+      .then((response) => {
+        const data = response.data as { content: string[] };
+        const sortedCities = (data.content || []).sort((a, b) => a.localeCompare(b));
+        setCities(sortedCities);
+      })
+      .catch((error) => console.error('Erro ao buscar cidades:', error));
+  }, []);
+
+  useEffect(() => {
+    const fetchFilteredData = async () => {
       try {
-        console.log(`Fetching page ${page}`);
+        setLoading(true);
+        const params: Record<string, any> = { page, size: 10 };
+        if (selectedCity) {
+          params.city = selectedCity;
+        }
 
         const response = await axios.get<{
           content: Registered[];
           page: PageInfo;
-        }>(`${urlFetch}/helper?page=${page}&size=10`);
+        }>(`${urlFetch}/helper`, { params });
 
         if (response.status === 200 && response.data) {
           setRegistered(response.data.content || []);
@@ -53,12 +71,14 @@ const RegisteredPage: React.FC = () => {
           console.error("Erro ao buscar dados. Status:", response.status);
         }
       } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+        console.error('Erro ao buscar dados:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchData();
-  }, [page]);
+    fetchFilteredData();
+  }, [page, selectedCity]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
@@ -70,10 +90,29 @@ const RegisteredPage: React.FC = () => {
     <div className="container">
       <div className="header-registered">
         <h3>Conheça os ajudantes da Ponte de Gerações</h3>
+        <div className='city-filter'>
+          <label htmlFor="city-filter">Filtrar por cidade:</label>
+          <select
+            value={selectedCity}
+            onChange={(e) => {
+              setSelectedCity(e.target.value);
+              setPage(0);
+            }}
+          >
+            <option value="">Todas as cidades</option>
+            {cities.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="cards-container">
-        {registered.length > 0 ? (
+        {loading ? (
+          <p>Carregando...</p>
+        ) : registered.length > 0 ? (
           registered.map((person) => (
             <div className="card" key={person.id}>
               <div className="card-body">
@@ -86,15 +125,24 @@ const RegisteredPage: React.FC = () => {
                 </div>
                 <div className="card-content">
                   <h5 className="card-title">
-                    {person.name},{" "}
+                    {person.name},{' '}
                     {new Date().getFullYear() - new Date(person.birthDate).getFullYear()} anos
                   </h5>
-                  <p className="card-text">{person.aboutYou}</p>
+                  <div className="card-address">
+                    <i className="fas fa-location-dot"></i>
+                    {person.address.city}/RS
+                    <p className="card-text">{person.aboutYou}</p>
+                  </div>
                 </div>
               </div>
-              <p className="card-available">
-                <b>Disponível para ajudar nos dias:</b> {person.availableDays.join(", ")}
-              </p>
+              <div className="card-available">
+                <p>
+                  <b>Disponível nos dias:</b>
+                  <br />
+                  {person.availableDays.join(', ')}
+                </p>
+                <button>Entrar em contato</button>
+              </div>
             </div>
           ))
         ) : (
@@ -102,25 +150,24 @@ const RegisteredPage: React.FC = () => {
         )}
       </div>
 
-      {/* Paginação */}
       <div className="pagination">
-        <button
+        <span
           onClick={() => handlePageChange(page - 1)}
-          disabled={page === 0}
-          className="page-button"
+          className={`page-arrow ${page === 0 ? 'disabled' : ''}`}
         >
-          &lt;
-        </button>
+          <i className="fas fa-chevron-left"></i>
+        </span>
+
         <span>
           Página {page + 1} de {totalPages}
         </span>
-        <button
+
+        <span
           onClick={() => handlePageChange(page + 1)}
-          disabled={page + 1 >= totalPages}
-          className="page-button"
+          className={`page-arrow ${page + 1 >= totalPages ? 'disabled' : ''}`}
         >
-          &gt;
-        </button>
+          <i className="fas fa-chevron-right"></i>
+        </span>
       </div>
 
       <div className="footer-registered">
