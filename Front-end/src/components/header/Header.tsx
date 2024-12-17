@@ -1,6 +1,7 @@
 import './Header.css';
 import logo from '../../assets/logo.png';
 import { Link, useLocation } from 'react-router-dom';
+import EditRegistrationPage from '../../pages/edit-registration/EditRegistrationPage';
 
 const Header = () => {
 	const location = useLocation();
@@ -22,13 +23,13 @@ const Header = () => {
 				<nav className='header-nav'>
 					{!isHomePage && <Link to='/' className='header-link'>Página Inicial</Link>}
 
-					{!isRegisterPage && !isLoginPage && <Link to='/register' className='header-link'>Cadastre-se</Link>}
+					{!isRegisterPage && !isLoginPage && !EditRegistrationPage && <Link to='/register' className='header-link'>Cadastre-se</Link>}
 
 					{!isHomePage && !isRegisterPage && !isRegisteredPage && !isLoginPage && <Link to='/registered' className='header-link'>Cadastrados</Link>}
 
 					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && !isHomePage && !isRegisteredPage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
 
-					{!isLoginPage && !isRegisterPage && <Link to='/login' className='header-link'>Entrar</Link>}
+					{!isLoginPage && !isRegisterPage && !EditRegistrationPage && <Link to='/login' className='header-link'>Entrar</Link>}
 				</nav>
 			</div>
 		</header>
