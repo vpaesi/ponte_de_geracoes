@@ -177,7 +177,14 @@ textarea:focus {
 .about textarea {
   resize: none;
   height: 80px;
-  width: 100%;
+  width: 11rem;
+  height: 100px;
+}
+
+.skillNeeds-textarea textarea {
+  resize: none;
+  height: 80px;
+  width: 11rem;
   height: 100px;
 }
 
