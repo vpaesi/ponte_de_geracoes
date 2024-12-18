@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
 import { validateFields } from "../../utils/validate-fields/ValidateFields";
 
@@ -13,7 +14,8 @@ const RegisterPage: React.FC = () => {
   const [phone, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
+  const [street, setStreet] = useState<string>("");
+  const [number, setNumber] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [neighborhood, setNeighborhood] = useState<string>("");
@@ -21,7 +23,20 @@ const RegisterPage: React.FC = () => {
   const [userType, setUserType] = useState<string>("");
   const [aboutYou, setAboutYou] = useState<string>("");
   const [skillsNeeds, setSkillsNeeds] = useState<string>("");
+  const [availableDays, setavailableDays] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
+
+  const handleavailableDaysChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    day: string
+  ) => {
+    if (event.target.checked) {
+      setavailableDays([...availableDays, day]);
+    } else {
+      setavailableDays(availableDays.filter((d) => d !== day));
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,11 +49,15 @@ const RegisterPage: React.FC = () => {
       phone,
       password,
       confirmPassword,
-      address,
-      cep: zipCode,
-      city,
-      complement,
-      neighborhood,
+      availableDays,
+      address: {
+        street,
+        number,
+        complement,
+        zipCode,
+        city,
+        neighborhood,
+      },
       userType,
     };
 
@@ -47,39 +66,79 @@ const RegisterPage: React.FC = () => {
     }
 
     try {
-      const formData = {
-        name,
-        birthDate,
-        rg,
-        cpf,
-        email,
-        phone,
-        password,
-        zipCode,
-        city,
-        address,
-        neighborhood,
-        complement,
-        userType,
-        aboutYou,
-        skillsNeeds,
-      };
+      let response;
+      let formData;
 
-      //ALTERAR ENDPOINT P/INDIVIDUAL /HELPER OU ASSISTED
-      const response = await fetch("/registered", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      if (userType !== "" && userType === "ajudante") {
+        formData = {
+          name,
+          birthDate,
+          rg,
+          cpf,
+          email,
+          phone,
+          password,
+          availableDays,
+          address: {
+            street,
+            number,
+            complement,
+            zipCode,
+            city,
+            neighborhood,
+          },
+          userType,
+          aboutYou,
+          skills: skillsNeeds,
+        };
+
+        response = await fetch("/helper", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      } else {
+        formData = {
+          name,
+          birthDate,
+          rg,
+          cpf,
+          email,
+          phone,
+          password,
+          availableDays,
+          address: {
+            street,
+            number,
+            complement,
+            zipCode,
+            city,
+            neighborhood,
+          },
+          userType,
+          aboutYou,
+          needs: skillsNeeds,
+        };
+
+        response = await fetch("http://localhost:8080/assisted", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+      }
 
       if (!response.ok) {
         throw new Error("Erro ao enviar os dados para o banco de dados");
       }
-
+      console.log(formData);
       alert("Cadastro realizado com sucesso!");
+      navigate("/registered");
     } catch (error) {
+      console.error(error);
       alert("Ocorreu um erro ao realizar o cadastro");
     }
   };
@@ -93,7 +152,10 @@ const RegisterPage: React.FC = () => {
       <section className="apresentacao">
         <h1>CADASTRE-SE</h1>
         <p>
-          Já é cadastrado? <Link to="/login" className="login-link">Entrar</Link>
+          Já é cadastrado?{" "}
+          <Link to="/login" className="login-link">
+            Entrar
+          </Link>
         </p>
       </section>
 
@@ -110,7 +172,9 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setName(e.target.value)}
                 className={errors.name ? "input-error" : ""}
               />
-              {errors.name && <span className="error-message">Nome é obrigatório</span>}
+              {errors.name && (
+                <span className="error-message">Nome é obrigatório</span>
+              )}
             </div>
             <div>
               <p>Email</p>
@@ -121,7 +185,9 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className={errors.email ? "input-error" : ""}
               />
-              {errors.email && <span className="error-message">Email é obrigatório</span>}
+              {errors.email && (
+                <span className="error-message">Email é obrigatório</span>
+              )}
             </div>
           </div>
 
@@ -134,7 +200,11 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setBirthDate(e.target.value)}
                 className={errors.birthDate ? "input-error" : ""}
               />
-              {errors.birthDate && <span className="error-message">Data de nascimento é obrigatória</span>}
+              {errors.birthDate && (
+                <span className="error-message">
+                  Data de nascimento é obrigatória
+                </span>
+              )}
             </div>
             <div>
               <p>Celular</p>
@@ -145,7 +215,9 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setPhone(e.target.value)}
                 className={errors.phone ? "input-error" : ""}
               />
-              {errors.phone && <span className="error-message">Celular é obrigatório</span>}
+              {errors.phone && (
+                <span className="error-message">Celular é obrigatório</span>
+              )}
             </div>
             <div>
               <p>RG</p>
@@ -156,7 +228,9 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setRg(e.target.value)}
                 className={errors.rg ? "input-error" : ""}
               />
-              {errors.rg && <span className="error-message">RG é obrigatório</span>}
+              {errors.rg && (
+                <span className="error-message">RG é obrigatório</span>
+              )}
             </div>
             <div>
               <p>CPF</p>
@@ -167,9 +241,10 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setCpf(e.target.value)}
                 className={errors.cpf ? "input-error" : ""}
               />
-              {errors.cpf && <span className="error-message">CPF é obrigatório</span>}
+              {errors.cpf && (
+                <span className="error-message">CPF é obrigatório</span>
+              )}
             </div>
-
           </div>
           <div className="form-row upload-password-confirm">
             <div>
@@ -184,7 +259,9 @@ const RegisterPage: React.FC = () => {
                 }}
                 className={errors.profileImage ? "input-error" : ""}
               />
-              {errors.profileImage && <span className="error-message">Imagem é obrigatória</span>}
+              {errors.profileImage && (
+                <span className="error-message">Imagem é obrigatória</span>
+              )}
             </div>
             <div>
               <p>Senha</p>
@@ -195,7 +272,9 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 className={errors.password ? "input-error" : ""}
               />
-              {errors.password && <span className="error-message">Senha é obrigatória</span>}
+              {errors.password && (
+                <span className="error-message">Senha é obrigatória</span>
+              )}
             </div>
             <div>
               <p>Confirme sua senha</p>
@@ -206,7 +285,9 @@ const RegisterPage: React.FC = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className={errors.confirmPassword ? "input-error" : ""}
               />
-              {errors.confirmPassword && <span className="error-message">As senhas não coincidem</span>}
+              {errors.confirmPassword && (
+                <span className="error-message">As senhas não coincidem</span>
+              )}
             </div>
           </div>
         </fieldset>
@@ -221,10 +302,14 @@ const RegisterPage: React.FC = () => {
                 placeholder="99999-999"
                 value={zipCode}
                 onChange={(e) => setZipCode(e.target.value)}
-                onBlur={() => handleCepBlur(zipCode, setAddress, setCity, setNeighborhood)}
+                onBlur={() =>
+                  handleCepBlur(zipCode, setStreet, setCity, setNeighborhood)
+                }
                 className={errors.zipCode ? "input-error" : ""}
               />
-              {errors.zipCode && <span className="error-message">CEP é obrigatório</span>}
+              {errors.zipCode && (
+                <span className="error-message">CEP é obrigatório</span>
+              )}
             </div>
             <div>
               <p>Cidade</p>
@@ -235,7 +320,9 @@ const RegisterPage: React.FC = () => {
                 readOnly
                 className={errors.city ? "input-error" : ""}
               />
-              {errors.city && <span className="error-message">Cidade é obrigatória</span>}
+              {errors.city && (
+                <span className="error-message">Cidade é obrigatória</span>
+              )}
             </div>
             <div>
               <p>Bairro</p>
@@ -246,7 +333,9 @@ const RegisterPage: React.FC = () => {
                 readOnly
                 className={errors.neighborhood ? "input-error" : ""}
               />
-              {errors.neighborhood && <span className="error-message">Bairro é obrigatório</span>}
+              {errors.neighborhood && (
+                <span className="error-message">Bairro é obrigatório</span>
+              )}
             </div>
           </div>
           <div className="form-row address">
@@ -255,15 +344,27 @@ const RegisterPage: React.FC = () => {
               <input
                 type="text"
                 placeholder="Avenida Exemplo de Rua"
-                value={address}
+                value={street}
                 readOnly
-                className={errors.address ? "input-error" : ""}
+                className={errors.street ? "input-error" : ""}
               />
-              {errors.address && <span className="error-message">Logradouro é obrigatório</span>}
+              {errors.address && (
+                <span className="error-message">Logradouro é obrigatório</span>
+              )}
             </div>
             <div>
               <p>Número</p>
-              <input type="number" placeholder="123" id="number" />
+              <input
+                type="number"
+                placeholder="123"
+                id="number"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
+                className={errors.number ? "input-error" : ""}
+              />
+              {errors.number && (
+                <span className="error-message">Número é obrigatório</span>
+              )}              
             </div>
             <div>
               <p>Complemento</p>
@@ -279,128 +380,133 @@ const RegisterPage: React.FC = () => {
         <fieldset id="userType">
           <legend>Sou...</legend>
           <div className="form-row">
-    <div className="col-1">
-      <div className="form-row user-type">
-        <label>
-          <input
-            type="radio"
-            name="userType"
-            value="ajudado"
-            onChange={() => setUserType("ajudado")}
-          />
-          Ajudado
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="userType"
-            value="ajudante"
-            onChange={() => setUserType("ajudante")}
-          />
-          Ajudante
-        </label>
-      </div>
+            <div className="col-1">
+              <div className="form-row user-type">
+                <label>
+                  <input
+                    type="radio"
+                    name="userType"
+                    value="ajudado"
+                    onChange={() => setUserType("ajudado")}
+                  />
+                  Ajudado
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="userType"
+                    value="ajudante"
+                    onChange={() => setUserType("ajudante")}
+                  />
+                  Ajudante
+                </label>
+              </div>
 
-      <div className="form-row availability">
-        <div className="availability-title">
-          <p>Estou disponível/Preciso de ajuda nos dias:</p>
-        </div>
-        <div className="availability-days">
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="sunday"
-              onChange={() => setUserType("sunday")}
-            />
-            Domingo
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="monday"
-              onChange={() => setUserType("monday")}
-            />
-            Segunda-feira
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="tuesday"
-              onChange={() => setUserType("tuesday")}
-            />
-            Terça-feira
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="wednesday"
-              onChange={() => setUserType("wednesday")}
-            />
-            Quarta-feira
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="thursday"
-              onChange={() => setUserType("thursday")}
-            />
-            Quinta-feira
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="friday"
-              onChange={() => setUserType("friday")}
-            />
-            Sexta-feira
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userType"
-              value="saturday"
-              onChange={() => setUserType("saturday")}
-            />
-            Sábado
-          </label>
-        </div>
-      </div>
-    </div>
+              <div className="form-row availableDays">
+                <div className="availableDays-title">
+                  <p>Estou disponível/Preciso de ajuda nos dias:</p>
+                </div>
+                <div className="availableDays-days">
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Domingo"
+                      onChange={(e) => handleavailableDaysChange(e, "Domingo")}
+                    />
+                    Domingo
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Segunda"
+                      onChange={(e) => handleavailableDaysChange(e, "Segunda")}
+                    />
+                    Segunda-feira
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Terça"
+                      onChange={(e) => handleavailableDaysChange(e, "Terça")}
+                    />
+                    Terça-feira
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Quarta"
+                      onChange={(e) => handleavailableDaysChange(e, "Quarta")}
+                    />
+                    Quarta-feira
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Quinta"
+                      onChange={(e) => handleavailableDaysChange(e, "Quinta")}
+                    />
+                    Quinta-feira
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Sexta"
+                      onChange={(e) => handleavailableDaysChange(e, "Sexta")}
+                    />
+                    Sexta-feira
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      name="availableDaysDay"
+                      value="Sábado"
+                      onChange={(e) => handleavailableDaysChange(e, "Sábado")}
+                    />
+                    Sábado
+                  </label>
+                </div>
+              </div>
+            </div>
 
-    <div className="col-2">
-      <div className="form-row about">
-        <div>
-          <p>Fale um pouco sobre você:</p>
-          <textarea
-            placeholder="Escreva aqui..."
-            value={aboutYou}
-            onChange={(e) => setAboutYou(e.target.value)}
-          />
-        </div>
-        <div>
-          <p>Habilidades/ Necessidades</p>
-          <textarea
-            placeholder="Máximo de 90 caracteres"
-            maxLength={90}
-            value={skillsNeeds}
-            onChange={(e) => setSkillsNeeds(e.target.value)}
-            className={errors.skillsNeeds ? "input-error" : ""}
-          />
-          {errors.skillsNeeds && <span className="error-message">Campo obrigatório</span>}
-        </div>
-      </div>
-    </div>
-  </div>
-</fieldset>
+            <div className="col-2">
+              <div className="form-row about">
+                <div>
+                  <p>Fale um pouco sobre você:</p>
+                  <textarea
+                    placeholder="Escreva aqui..."
+                    value={aboutYou}
+                    onChange={(e) => setAboutYou(e.target.value)}
+                  />
+                </div>
+                <div>
+                    <p>Habilidades/Necessidades*</p>
+                    <textarea
+                    placeholder="Ex.: Amante de artesanato e criação. Gosto de ensinar e aprender com os outros."
+                    maxLength={90}
+                    value={skillsNeeds}
+                    onChange={(e) => setSkillsNeeds(e.target.value)}
+                    className={errors.skillsNeeds ? "input-error" : ""}
+                    />
+                    <br />
+                    <span className="obs-message">*Máximo de 90 caracteres</span>
+                  {errors.skillsNeeds && (
+                    <span className="error-message">Campo obrigatório</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </fieldset>
 
-        <button type="submit" className="submit-button">Finalizar cadastro</button>
-
+        <button type="submit" className="submit-button">
+          Finalizar cadastro
+        </button>
       </form>
     </div>
   );

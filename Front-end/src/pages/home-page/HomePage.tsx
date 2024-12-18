@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./HomePage.css";
-import "../../components/benefit-card/BenefitCard.css"
+import "../../components/benefit-card/BenefitCard.css";
 import { Images } from "../../assets/Images";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/carousel/Carousel";
@@ -9,8 +9,7 @@ import BenefitsForAssisted from "../../components/benefit-card/BenefitsForAssist
 import BenefitsForHelpers from "../../components/benefit-card/BenefitsForHelpers";
 
 const App: React.FC = () => {
-
-  const [helpers, setHelpers] = useState<any[]>([])
+  const [helpers, setHelpers] = useState<any[]>([]);
 
   const fetchHelpers = async () => {
     try {
@@ -37,7 +36,9 @@ const App: React.FC = () => {
           <p>
             Ponte de Gerações é uma plataforma gaúcha que conecta idosos com necessidades específicas a pessoas dispostas a ajudar.
           </p>
-          <Link to='/register' className='row1-link'>Suba agora nessa ponte</Link>
+          <Link to="/register" className="row1-link">
+            Suba agora nessa ponte
+          </Link>
         </div>
         <div className="column image-column">
           <img src={Images.headerImg} alt="Imagem do cabeçalho" />
@@ -56,14 +57,18 @@ const App: React.FC = () => {
       <section className="row row-3">
         <Carousel
           title="Conheça alguns dos nossos ajudantes"
-          registered={helpers.map(helper => ({
+          registered={helpers.map((helper) => ({
             name: helper.name,
-            age: new Date().getFullYear() - new Date(helper.birthDate).getFullYear(),
-            img: helper.profileImageUrl,
-            description: helper.aboutYou
+            age:
+              new Date().getFullYear() -
+              new Date(helper.birthDate).getFullYear(),
+            img: "//localhost:8080" + helper.profileImageUrl,
+            description: helper.aboutYou,
           }))}
         />
-        <Link to={'/registered'} className='row3-link'>Conheça mais ajudantes</Link>
+        <Link to={"/registered"} className="row3-link">
+          Conheça mais ajudantes
+        </Link>
       </section>
 
       <hr />

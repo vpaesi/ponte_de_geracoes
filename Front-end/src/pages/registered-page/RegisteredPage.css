@@ -12,18 +12,19 @@
   margin-bottom: 20px;
 }
 
-.city-filter {
+.filters {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 163px;
+  margin-bottom: 30px;
 }
 
-.city-filter label {
+.filters label {
   font-size: 1rem;
   color: var(--primary-color);
 }
 
-.city-filter select {
+.filters select {
   padding: 5px 10px;
   font-size: 1rem;
   border: 1px solid var(--highlight-color);
@@ -31,6 +32,11 @@
   background-color: var(--secondary-color);
   color: var(--primary-color);
   width: fit-content;
+}
+
+.city-filter, .user-filter {
+  display: flex;
+  gap: 20px;
 }
 
 .cards-container {

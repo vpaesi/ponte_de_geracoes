@@ -36,6 +36,7 @@ const RegisteredPage: React.FC = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [cities, setCities] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState<string>('');
+  const [selectedUser, setSelectedUser] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -58,10 +59,12 @@ const RegisteredPage: React.FC = () => {
           params.city = selectedCity;
         }
 
+        const endpoint = selectedUser === 'helper' ? 'helper' : 'assisted';
+
         const response = await axios.get<{
           content: Registered[];
           page: PageInfo;
-        }>(`${urlFetch}/helper`, { params });
+        }>(`${urlFetch}/${endpoint}`, { params });
 
         if (response.status === 200 && response.data) {
           setRegistered(response.data.content || []);
@@ -78,7 +81,7 @@ const RegisteredPage: React.FC = () => {
     };
 
     fetchFilteredData();
-  }, [page, selectedCity]);
+  }, [page, selectedCity, selectedUser]);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
@@ -90,6 +93,23 @@ const RegisteredPage: React.FC = () => {
     <div className="container">
       <div className="header-registered">
         <h3>Conheça os ajudantes da Ponte de Gerações</h3>
+      </div>
+
+      <div className='filters'>
+        <div className='user-filter'>
+          <label htmlFor="user-filter">Filtrar por tipo de usuário:</label>
+          <select
+            value={selectedUser}
+            onChange={(e) => {
+              setSelectedUser(e.target.value);
+              setPage(0);
+            }}
+          >
+            <option value="helper">Ajudantes</option>
+            <option value="assisted">Ajudados</option>
+          </select>
+        </div>
+
         <div className='city-filter'>
           <label htmlFor="city-filter">Filtrar por cidade:</label>
           <select
