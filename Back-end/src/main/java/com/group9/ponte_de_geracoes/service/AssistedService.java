@@ -42,6 +42,8 @@ public class AssistedService {
             return assistedRepository.findByAvailableDaysContainsAndNeedsHelp(day, needsHelp, pageable);
         } else if (needsHelp != null) {
             return assistedRepository.findByNeedsHelp(needsHelp, pageable);
+        } else if (city != null){
+            return assistedRepository.findByAddress_City(city, pageable);
         } else {
             return assistedRepository.findAll(pageable);
         }

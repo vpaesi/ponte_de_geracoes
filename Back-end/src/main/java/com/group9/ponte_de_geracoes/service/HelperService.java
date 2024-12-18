@@ -42,6 +42,8 @@ public class HelperService {
             return helperRepository.findByAvailableDaysContainsAndIsAvailable(day, isAvailable, pageable);
         } else if (isAvailable != null) {
             return helperRepository.findByIsAvailable(isAvailable, pageable);
+        } else if (city != null) {
+            return helperRepository.findByAddress_City(city, pageable);
         } else {
             return helperRepository.findAll(pageable);
         }
