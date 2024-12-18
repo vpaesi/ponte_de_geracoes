@@ -177,7 +177,7 @@ textarea:focus {
 .about textarea {
   resize: none;
   height: 80px;
-  width: 100%;
+  width: 300px;
   height: 100px;
 }
 
@@ -188,4 +188,8 @@ textarea:focus {
 
 .input-error {
   border: 1px solid red;
+}
+
+.obs-message{
+  font-size: 15px;
 }

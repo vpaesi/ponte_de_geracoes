@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
 import { Link } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
@@ -24,6 +25,7 @@ const RegisterPage: React.FC = () => {
   const [skillsNeeds, setSkillsNeeds] = useState<string>("");
   const [availableDays, setavailableDays] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
 
   const handleavailableDaysChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -134,6 +136,7 @@ const RegisterPage: React.FC = () => {
       }
       console.log(formData);
       alert("Cadastro realizado com sucesso!");
+      navigate("/registered");
     } catch (error) {
       console.error(error);
       alert("Ocorreu um erro ao realizar o cadastro");
@@ -357,7 +360,11 @@ const RegisterPage: React.FC = () => {
                 id="number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
+                className={errors.number ? "input-error" : ""}
               />
+              {errors.number && (
+                <span className="error-message">Número é obrigatório</span>
+              )}              
             </div>
             <div>
               <p>Complemento</p>
@@ -478,14 +485,16 @@ const RegisterPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <p>Habilidades/ Necessidades</p>
-                  <textarea
-                    placeholder="Máximo de 90 caracteres"
+                    <p>Habilidades/Necessidades*</p>
+                    <textarea
+                    placeholder="Ex.: Amante de artesanato e criação. Gosto de ensinar e aprender com os outros."
                     maxLength={90}
                     value={skillsNeeds}
                     onChange={(e) => setSkillsNeeds(e.target.value)}
                     className={errors.skillsNeeds ? "input-error" : ""}
-                  />
+                    />
+                    <br />
+                    <span className="obs-message">*Máximo de 90 caracteres</span>
                   {errors.skillsNeeds && (
                     <span className="error-message">Campo obrigatório</span>
                   )}

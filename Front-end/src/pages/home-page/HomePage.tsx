@@ -34,8 +34,7 @@ const App: React.FC = () => {
         <div className="column text-column">
           <h1>Pontes que aproximam e transformam vidas.</h1>
           <p>
-            Ponte de Gerações é uma plataforma gaúcha que conecta idosos com
-            necessidades específicas a pessoas dispostas a ajudar.
+            Ponte de Gerações é uma plataforma gaúcha que conecta idosos com necessidades específicas a pessoas dispostas a ajudar.
           </p>
           <Link to="/register" className="row1-link">
             Suba agora nessa ponte
