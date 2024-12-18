@@ -14,5 +14,6 @@ public interface AssistedRepository extends JpaRepository<Assisted, Long> {
     Page<Assisted> findAll(@NonNull Pageable pageable);
     Page<Assisted> findByNeedsHelp(boolean needsHelp, Pageable pageable);
     Page<Assisted> findByAddress_CityAndNeedsHelp(String city, boolean needsHelp, Pageable pageable);
+    Page<Assisted> findByAddress_City(String city, Pageable pageable);
     Page<Assisted> findByAvailableDaysContainsAndNeedsHelp(String day, boolean needsHelp, Pageable pageable);
 }
