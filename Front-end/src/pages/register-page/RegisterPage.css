@@ -177,7 +177,14 @@ textarea:focus {
 .about textarea {
   resize: none;
   height: 80px;
-  width: 300px;
+  width: 11rem;
+  height: 100px;
+}
+
+.skillNeeds-textarea textarea {
+  resize: none;
+  height: 80px;
+  width: 11rem;
   height: 100px;
 }
 
@@ -190,6 +197,6 @@ textarea:focus {
   border: 1px solid red;
 }
 
-.obs-message{
+.obs-message {
   font-size: 15px;
 }
