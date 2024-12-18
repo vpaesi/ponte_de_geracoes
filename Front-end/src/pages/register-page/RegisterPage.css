@@ -196,3 +196,7 @@ textarea:focus {
 .input-error {
   border: 1px solid red;
 }
+
+.obs-message {
+  font-size: 15px;
+}

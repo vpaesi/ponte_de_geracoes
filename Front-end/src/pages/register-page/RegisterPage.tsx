@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./RegisterPage.css";
 import { Link } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
@@ -27,6 +28,7 @@ const RegisterPage: React.FC = () => {
   );
   const [availableDays, setavailableDays] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
+  const navigate = useNavigate();
 
   const handleavailableDaysChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -90,6 +92,7 @@ const RegisterPage: React.FC = () => {
       }
 
       alert("Cadastro realizado com sucesso!");
+      navigate("/registered");
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -334,7 +337,11 @@ const RegisterPage: React.FC = () => {
                 id="number"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
+                className={errors.number ? "input-error" : ""}
               />
+              {errors.number && (
+                <span className="error-message">Número é obrigatório</span>
+              )}
             </div>
             <div>
               <p>Complemento</p>
@@ -454,7 +461,7 @@ const RegisterPage: React.FC = () => {
                 <div>
                   <p>Fale um pouco sobre você:</p>
                   <textarea
-                    placeholder="Escreva aqui..."
+                    placeholder="Nos conte um pouco sobre você"
                     value={aboutYou}
                     onChange={(e) => setAboutYou(e.target.value)}
                   />
@@ -466,12 +473,18 @@ const RegisterPage: React.FC = () => {
                     }:`}
                   </p>
                   <textarea
-                    placeholder="Máximo de 90 caracteres"
+                    placeholder={`${
+                      userType !== "ajudado"
+                        ? "Gosto de ensinar e aprender com os outros"
+                        : "Preciso de ajuda para ir ao mercado"
+                    }`}
                     maxLength={90}
                     value={skillsNeeds}
                     onChange={(e) => setSkillsNeeds(e.target.value)}
                     className={errors.skillsNeeds ? "input-error" : ""}
                   />
+                  <br />
+                  <span className="obs-message">*Máximo de 90 caracteres</span>
                   {errors.skillsNeeds && (
                     <span className="error-message">Campo obrigatório</span>
                   )}
