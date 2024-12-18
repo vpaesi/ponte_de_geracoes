@@ -1,6 +1,14 @@
 import isCPF from "../validate-cpf/ValidateCPF";
 import isAdult from "../validate-age/ValidateAge";
 
+interface Address {
+  street: string;
+  number: string;
+  zipCode: string;
+  city: string;
+  neighborhood: string;
+}
+
 interface FormValues {
   name: string;
   dob: string;
@@ -10,16 +18,30 @@ interface FormValues {
   phone: string;
   password: string;
   confirmPassword: string;
-  address: string;
-  city: string;
-  cep: string;
+  availableDays: string[];
+  address: Address;
   userType: string;
 }
 
-export const validateFields = (values: FormValues, setErrors: React.Dispatch<React.SetStateAction<Record<string, boolean>>>) => {
+export const validateFields = (
+  values: FormValues,
+  setErrors: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
+) => {
   const newErrors: Record<string, boolean> = {};
 
-  const { name, dob, rg, cpf, email, phone, password, confirmPassword, address, city, cep, userType } = values;
+  const {
+    name,
+    dob,
+    rg,
+    cpf,
+    email,
+    phone,
+    password,
+    confirmPassword,
+    availableDays,
+    address,
+    userType,
+  } = values;
 
   if (!name.trim()) newErrors.name = true;
   if (!dob) newErrors.dob = true;
@@ -29,17 +51,25 @@ export const validateFields = (values: FormValues, setErrors: React.Dispatch<Rea
   if (!phone.trim()) newErrors.phone = true;
   if (!password.trim()) newErrors.password = true;
   if (password !== confirmPassword) newErrors.confirmPassword = true;
-  if (!address.trim()) newErrors.address = true;
-  if (!city.trim()) newErrors.city = true;
-  if (!cep.trim()) newErrors.cep = true;
   if (!userType.trim()) newErrors.userType = true;
+
+  if (!address.street.trim()) newErrors.addressStreet = true;
+  if (!address.number.trim()) newErrors.addressNumber = true;
+  if (!address.zipCode.trim()) newErrors.addressZipCode = true;
+  if (!address.city.trim()) newErrors.addressCity = true;
+  if (!address.neighborhood.trim()) newErrors.addressNeighborhood = true;
 
   setErrors(newErrors);
 
   if (Object.keys(newErrors).length > 0) {
     alert("Por favor, preencha todos os campos obrigatórios.");
     return false;
-  };
+  }
+
+  if (availableDays.length === 0) {
+    newErrors.availableDays = true;
+    alert("Selecione pelo menos um dia de disponibilidade.");
+  }
 
   if (!isCPF(cpf)) {
     alert("CPF inválido!");
