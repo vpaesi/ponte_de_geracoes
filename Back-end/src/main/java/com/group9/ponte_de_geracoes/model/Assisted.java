@@ -28,7 +28,7 @@ public class Assisted {
     private String phone;
     private String password;
     private String needs;
-    private Boolean needsHelp;
+    private boolean needsHelp;
     private String profileImageUrl;
     private List<String> availableDays;
 
