@@ -34,7 +34,7 @@ const Login: React.FC = () => {
         email: email,
       });
     }
-    navigate("/registered");
+    navigate("/profile");
   };
 
   return (
