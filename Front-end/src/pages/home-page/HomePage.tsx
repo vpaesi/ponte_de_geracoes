@@ -7,9 +7,12 @@ import Carousel from "../../components/carousel/Carousel";
 import urlFetch from "../../components/fetch/Fetch";
 import BenefitsForAssisted from "../../components/benefit-card/BenefitsForAssisted";
 import BenefitsForHelpers from "../../components/benefit-card/BenefitsForHelpers";
+import { useUser } from "../../utils/UserContext";
 
 const App: React.FC = () => {
   const [helpers, setHelpers] = useState<any[]>([]);
+  const { user } = useUser();
+  const { userType } = user || {};
 
   const fetchHelpers = async () => {
     try {
@@ -34,11 +37,18 @@ const App: React.FC = () => {
         <div className="column text-column">
           <h1>Pontes que aproximam e transformam vidas.</h1>
           <p>
-            Ponte de Gerações é uma plataforma gaúcha que conecta idosos com necessidades específicas a pessoas dispostas a ajudar.
+            Ponte de Gerações é uma plataforma gaúcha que conecta idosos com
+            necessidades específicas a pessoas dispostas a ajudar.
           </p>
-          <Link to="/register" className="row1-link">
-            Suba agora nessa ponte
-          </Link>
+          {userType === "default" ? (
+            <Link to="/register" className="row1-link">
+              Suba agora nessa ponte
+            </Link>
+          ) : (
+            <Link to="/registered" className="row1-link">
+              Conheça nossos cadastrados
+            </Link>
+          )}
         </div>
         <div className="column image-column">
           <img src={Images.headerImg} alt="Imagem do cabeçalho" />
@@ -63,7 +73,7 @@ const App: React.FC = () => {
               new Date().getFullYear() -
               new Date(helper.birthDate).getFullYear(),
             // img: "//localhost:8080" + helper.profileImageUrl,
-            img: helper.profileImageUrl,
+            img: "//localhost:8080" + helper.profileImageUrl,
             description: helper.aboutYou,
           }))}
         />
