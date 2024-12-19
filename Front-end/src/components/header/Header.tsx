@@ -14,7 +14,7 @@ const Header = () => {
 	return (
 		<header className='header'>
 			<div className='header-left'>
-				<img src={logo} alt="Logo contendo duas pessoas em cima de uma ponte com um pedaço faltando. As duas pessoas estão colocando o pedaço faltante." />
+				<img src={logo} alt="Logo contendo duas pessoas em cima de uma ponte com um pedaço faltando. As duas pessoas estão colocando o pedaço faltante." className='special-image-size' />
 				<h1>
 					<Link to={"/"} className='header-left-link'> Ponte de Gerações </Link>
 					</h1>

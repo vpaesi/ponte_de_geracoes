@@ -1,0 +1,21 @@
+.all-information{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 30px 50px;
+}
+
+.all-information p{
+    margin: 10px 0;
+}
+
+.personal-information, .availability-skills, .personal-address{
+    border-radius: 5px;
+    border: 1px solid var(--highlight-color);
+    margin-right: 50px;
+    padding: 20px;
+}
+
+.availability-skills{
+    margin: 0 50px;
+    width: 610px;
+}

@@ -2,7 +2,8 @@ import "./RegisteredPage.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import urlFetch from "../../components/fetch/Fetch";
-import "@fortawesome/fontawesome-free/css/all.min.css";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Link } from 'react-router-dom';
 
 interface Address {
   city: string;
@@ -165,7 +166,7 @@ const RegisteredPage: React.FC = () => {
                   <br />
                   {person.availableDays.join(", ")}
                 </p>
-                <button>Entrar em contato</button>
+                <Link to={`/profile/${person.id}`}>Entrar em contato</Link>
               </div>
             </div>
           ))

@@ -470,7 +470,7 @@ const RegisterPage: React.FC = () => {
                   <p>
                     {`Suas ${
                       userType !== "ajudado" ? "Habilidades" : "Necessidades"
-                    }:`}
+                    }:*`}
                   </p>
                   <textarea
                     placeholder={`${
