@@ -85,6 +85,11 @@ legend {
   justify-content: space-between;
 }
 
+.form-address-number {
+  display: flex;
+  align-items: start;
+}
+
 .form-row user-type {
   justify-content: unset !important;
   gap: 10px !important;
@@ -177,7 +182,14 @@ textarea:focus {
 .about textarea {
   resize: none;
   height: 80px;
-  width: 300px;
+  width: 11rem;
+  height: 100px;
+}
+
+.skillNeeds-textarea textarea {
+  resize: none;
+  height: 80px;
+  width: 11rem;
   height: 100px;
 }
 
@@ -190,6 +202,6 @@ textarea:focus {
   border: 1px solid red;
 }
 
-.obs-message{
+.obs-message {
   font-size: 15px;
 }

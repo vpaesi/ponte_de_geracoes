@@ -31,16 +31,12 @@
   opacity: 0.5;
 }
 
-.carousel img {
-    width: 100%;
-    max-width: 200px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
 .carousel-item h3{
     margin: 5px;
+}
+
+.carousel img{
+  margin-left: 70px;
 }
 
 .carousel-button {

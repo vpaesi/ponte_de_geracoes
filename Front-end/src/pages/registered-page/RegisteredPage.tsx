@@ -1,8 +1,9 @@
-import './RegisteredPage.css';
+import "./RegisteredPage.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import urlFetch from '../../components/fetch/Fetch';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import urlFetch from "../../components/fetch/Fetch";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import { Link } from "react-router-dom";
 
 interface Address {
   city: string;
@@ -35,8 +36,8 @@ const RegisteredPage: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [cities, setCities] = useState<string[]>([]);
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  const [selectedUser, setSelectedUser] = useState<string>('');
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,10 +45,12 @@ const RegisteredPage: React.FC = () => {
       .get(`${urlFetch}/addresses/cities`, { params: { page: 0, size: 100 } })
       .then((response) => {
         const data = response.data as { content: string[] };
-        const sortedCities = (data.content || []).sort((a, b) => a.localeCompare(b));
+        const sortedCities = (data.content || []).sort((a, b) =>
+          a.localeCompare(b)
+        );
         setCities(sortedCities);
       })
-      .catch((error) => console.error('Erro ao buscar cidades:', error));
+      .catch((error) => console.error("Erro ao buscar cidades:", error));
   }, []);
 
   useEffect(() => {
@@ -59,7 +62,7 @@ const RegisteredPage: React.FC = () => {
           params.city = selectedCity;
         }
 
-        const endpoint = selectedUser === 'helper' ? 'helper' : 'assisted';
+        const endpoint = selectedUser === "helper" ? "helper" : "assisted";
 
         const response = await axios.get<{
           content: Registered[];
@@ -74,7 +77,7 @@ const RegisteredPage: React.FC = () => {
           console.error("Erro ao buscar dados. Status:", response.status);
         }
       } catch (error) {
-        console.error('Erro ao buscar dados:', error);
+        console.error("Erro ao buscar dados:", error);
       } finally {
         setLoading(false);
       }
@@ -95,8 +98,8 @@ const RegisteredPage: React.FC = () => {
         <h3>Conheça os ajudantes da Ponte de Gerações</h3>
       </div>
 
-      <div className='filters'>
-        <div className='user-filter'>
+      <div className="filters">
+        <div className="user-filter">
           <label htmlFor="user-filter">Filtrar por tipo de usuário:</label>
           <select
             value={selectedUser}
@@ -105,12 +108,12 @@ const RegisteredPage: React.FC = () => {
               setPage(0);
             }}
           >
-            <option value="helper">Ajudantes</option>
             <option value="assisted">Ajudados</option>
+            <option value="helper">Ajudantes</option>
           </select>
         </div>
 
-        <div className='city-filter'>
+        <div className="city-filter">
           <label htmlFor="city-filter">Filtrar por cidade:</label>
           <select
             value={selectedCity}
@@ -138,15 +141,17 @@ const RegisteredPage: React.FC = () => {
               <div className="card-body">
                 <div className="card-image-container">
                   <img
-                    src={person.profileImageUrl}
+                    src={"//localhost:8080" + person.profileImageUrl}
                     className="card-img"
                     alt={person.name}
                   />
                 </div>
                 <div className="card-content">
                   <h5 className="card-title">
-                    {person.name},{' '}
-                    {new Date().getFullYear() - new Date(person.birthDate).getFullYear()} anos
+                    {person.name},{" "}
+                    {new Date().getFullYear() -
+                      new Date(person.birthDate).getFullYear()}{" "}
+                    anos
                   </h5>
                   <div className="card-address">
                     <i className="fas fa-location-dot"></i>
@@ -159,9 +164,9 @@ const RegisteredPage: React.FC = () => {
                 <p>
                   <b>Disponível nos dias:</b>
                   <br />
-                  {person.availableDays.join(', ')}
+                  {person.availableDays.join(", ")}
                 </p>
-                <button>Entrar em contato</button>
+                <Link to={`/profile/${person.id}`}>Entrar em contato</Link>
               </div>
             </div>
           ))
@@ -173,7 +178,7 @@ const RegisteredPage: React.FC = () => {
       <div className="pagination">
         <span
           onClick={() => handlePageChange(page - 1)}
-          className={`page-arrow ${page === 0 ? 'disabled' : ''}`}
+          className={`page-arrow ${page === 0 ? "disabled" : ""}`}
         >
           <i className="fas fa-chevron-left"></i>
         </span>
@@ -184,15 +189,20 @@ const RegisteredPage: React.FC = () => {
 
         <span
           onClick={() => handlePageChange(page + 1)}
-          className={`page-arrow ${page + 1 >= totalPages ? 'disabled' : ''}`}
+          className={`page-arrow ${page + 1 >= totalPages ? "disabled" : ""}`}
         >
           <i className="fas fa-chevron-right"></i>
         </span>
       </div>
 
       <div className="footer-registered">
-        <p>Ponte de Gerações é uma plataforma gaúcha que conecta idosos com necessidades específicas a pessoas dispostas a ajudar.</p>
-        <a href="/register" className='footer-registered_btn'>Suba agora nessa ponte</a>
+        <p>
+          Ponte de Gerações é uma plataforma gaúcha que conecta idosos com
+          necessidades específicas a pessoas dispostas a ajudar.
+        </p>
+        <a href="/register" className="footer-registered_btn">
+          Suba agora nessa ponte
+        </a>
       </div>
     </div>
   );

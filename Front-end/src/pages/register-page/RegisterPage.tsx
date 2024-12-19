@@ -23,6 +23,9 @@ const RegisterPage: React.FC = () => {
   const [userType, setUserType] = useState<string>("");
   const [aboutYou, setAboutYou] = useState<string>("");
   const [skillsNeeds, setSkillsNeeds] = useState<string>("");
+  const [profileImagePreview, setProfileImagePreview] = useState<File | null>(
+    null
+  );
   const [availableDays, setavailableDays] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const navigate = useNavigate();
@@ -40,15 +43,17 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formValues = {
+
+    const baseFormValues = {
       name,
-      dob: birthDate,
+      birthDate,
       rg,
       cpf,
       email,
       phone,
       password,
       confirmPassword,
+      dob: birthDate,
       availableDays,
       address: {
         street,
@@ -59,92 +64,64 @@ const RegisterPage: React.FC = () => {
         neighborhood,
       },
       userType,
+      aboutYou,
+      ...(userType === "ajudante"
+        ? { skills: skillsNeeds }
+        : { needs: skillsNeeds }),
     };
 
-    if (!validateFields(formValues, setErrors)) {
-      return;
-    }
+    if (!validateFields(baseFormValues, setErrors)) return;
 
     try {
-      let response;
-      let formData;
-
-      if (userType !== "" && userType === "ajudante") {
-        formData = {
-          name,
-          birthDate,
-          rg,
-          cpf,
-          email,
-          phone,
-          password,
-          availableDays,
-          address: {
-            street,
-            number,
-            complement,
-            zipCode,
-            city,
-            neighborhood,
-          },
-          userType,
-          aboutYou,
-          skills: skillsNeeds,
-        };
-
-        response = await fetch("/helper", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-      } else {
-        formData = {
-          name,
-          birthDate,
-          rg,
-          cpf,
-          email,
-          phone,
-          password,
-          availableDays,
-          address: {
-            street,
-            number,
-            complement,
-            zipCode,
-            city,
-            neighborhood,
-          },
-          userType,
-          aboutYou,
-          needs: skillsNeeds,
-        };
-
-        response = await fetch("http://localhost:8080/assisted", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        });
-      }
+      const endpoint = userType === "ajudante" ? "/helper" : "/assisted";
+      const response = await fetch(`http://localhost:8080${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(baseFormValues),
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao enviar os dados para o banco de dados");
       }
-      console.log(formData);
+
+      const createdUser = await response.json();
+      const userId = createdUser.id;
+
+      if (profileImagePreview && userId) {
+        await uploadProfileImage(userType, userId, profileImagePreview);
+      }
+
       alert("Cadastro realizado com sucesso!");
       navigate("/registered");
     } catch (error) {
-      console.error(error);
-      alert("Ocorreu um erro ao realizar o cadastro");
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("Ocorreu um erro ao realizar o cadastro.");
+      }
     }
   };
 
-  const setProfileImage = (file: File) => {
-    console.log("Imagem de perfil carregada: ", file);
+  const uploadProfileImage = async (
+    userType: string,
+    userId: string,
+    image: File
+  ) => {
+    const formDataImage = new FormData();
+    formDataImage.append("file", image);
+
+    const endpoint =
+      userType === "ajudante"
+        ? `/helper/upload-image/${userId}`
+        : `/assisted/upload-image/${userId}`;
+    const response = await fetch(`http://localhost:8080${endpoint}`, {
+      method: "POST",
+      body: formDataImage,
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao fazer o upload da imagem");
+    }
   };
 
   return (
@@ -254,7 +231,7 @@ const RegisterPage: React.FC = () => {
                 accept="image/*"
                 onChange={(e) => {
                   if (e.target.files && e.target.files[0]) {
-                    setProfileImage(e.target.files[0]);
+                    setProfileImagePreview(e.target.files[0]);
                   }
                 }}
                 className={errors.profileImage ? "input-error" : ""}
@@ -364,7 +341,7 @@ const RegisterPage: React.FC = () => {
               />
               {errors.number && (
                 <span className="error-message">Número é obrigatório</span>
-              )}              
+              )}
             </div>
             <div>
               <p>Complemento</p>
@@ -404,7 +381,12 @@ const RegisterPage: React.FC = () => {
 
               <div className="form-row availableDays">
                 <div className="availableDays-title">
-                  <p>Estou disponível/Preciso de ajuda nos dias:</p>
+                  <p>
+                    {userType !== "ajudado"
+                      ? "Estou disponível nos dias"
+                      : "Preciso de ajuda nos dias"}
+                    :
+                  </p>
                 </div>
                 <div className="availableDays-days">
                   <label>
@@ -479,22 +461,30 @@ const RegisterPage: React.FC = () => {
                 <div>
                   <p>Fale um pouco sobre você:</p>
                   <textarea
-                    placeholder="Escreva aqui..."
+                    placeholder="Nos conte um pouco sobre você"
                     value={aboutYou}
                     onChange={(e) => setAboutYou(e.target.value)}
                   />
                 </div>
-                <div>
-                    <p>Habilidades/Necessidades*</p>
-                    <textarea
-                    placeholder="Ex.: Amante de artesanato e criação. Gosto de ensinar e aprender com os outros."
+                <div className="skillNeeds-textarea">
+                  <p>
+                    {`Suas ${
+                      userType !== "ajudado" ? "Habilidades" : "Necessidades"
+                    }:*`}
+                  </p>
+                  <textarea
+                    placeholder={`${
+                      userType !== "ajudado"
+                        ? "Gosto de ensinar e aprender com os outros"
+                        : "Preciso de ajuda para ir ao mercado"
+                    }`}
                     maxLength={90}
                     value={skillsNeeds}
                     onChange={(e) => setSkillsNeeds(e.target.value)}
                     className={errors.skillsNeeds ? "input-error" : ""}
-                    />
-                    <br />
-                    <span className="obs-message">*Máximo de 90 caracteres</span>
+                  />
+                  <br />
+                  <span className="obs-message">*Máximo de 90 caracteres</span>
                   {errors.skillsNeeds && (
                     <span className="error-message">Campo obrigatório</span>
                   )}

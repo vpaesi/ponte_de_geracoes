@@ -55,7 +55,7 @@
   border: 2px solid var(--highlight-color);
   border-radius: 15px;
   padding: 20px 0;
-  max-width: 23rem;
+  width: 500px;
   height: auto;
 }
 

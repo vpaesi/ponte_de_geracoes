@@ -30,3 +30,28 @@ hr {
   height: 1px;
   background-color: var(--highlight-color)
 }
+
+img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+a img {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+a img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.special-image-size {
+  width: fit-content;
+  height: fit-content;
+  box-shadow: none;
+  border-radius: 0%;
+}
