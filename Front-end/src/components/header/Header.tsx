@@ -10,6 +10,7 @@ const Header = () => {
 	const isRegisteredPage = location.pathname === '/registered';
 	const isEditRegistrationPage = location.pathname === '/edit-registration';
 	const isLoginPage = location.pathname === '/login';
+	const isProfilePage = location.pathname === '/profile';
 
 	return (
 		<header className='header'>
@@ -23,13 +24,13 @@ const Header = () => {
 				<nav className='header-nav'>
 					{!isHomePage && <Link to='/' className='header-link'>Página Inicial</Link>}
 
-					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage &&  <Link to='/register' className='header-link'>Cadastre-se</Link>}
+					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && !isProfilePage && <Link to='/register' className='header-link'>Cadastre-se</Link>}
 
-					{!isHomePage && !isRegisterPage && !isRegisteredPage && !isLoginPage && <Link to='/registered' className='header-link'>Cadastrados</Link>}
+					{!isHomePage && !isRegisterPage && !isRegisteredPage && !isLoginPage && !isProfilePage && <Link to='/registered' className='header-link'>Cadastrados</Link>}
 
-					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && !isHomePage && !isRegisteredPage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
+					{!isRegisterPage && !isLoginPage && !isEditRegistrationPage && !isHomePage && !isRegisteredPage && !isProfilePage && <Link to='/edit-registration' className='header-link'>Editar Cadastro</Link>}
 
-					{!isLoginPage && !isRegisterPage && !isEditRegistrationPage && <Link to='/login' className='header-link'>Entrar</Link>}
+					{!isLoginPage && !isRegisterPage && !isEditRegistrationPage && !isProfilePage && <Link to='/login' className='header-link'>Entrar</Link>}
 				</nav>
 			</div>
 		</header>

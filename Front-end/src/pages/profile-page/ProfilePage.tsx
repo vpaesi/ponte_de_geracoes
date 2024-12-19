@@ -50,12 +50,12 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className='profile-page'>
-            <h2>Página de perfil</h2>
             <img
                 src={userProfile.profileImageUrl}
                 alt={`Foto de perfil de ${userProfile.name}`}
-                className='special-image-size'
-            />
+                className='profile-page-img' />
+            <Link to={'/edit-registration'} className='link-edit-registration'>Editar perfil</Link>
+            {/* <Link to = {`/edit-registration/${userId}`}>Editar perfil</Link> */}
             <div className='all-information'>
                 <div className='personal-information'>
                     <h1>Dados pessoais</h1>
@@ -84,8 +84,6 @@ const ProfilePage: React.FC = () => {
                 <p><b>Disponível para ajudar:</b> {userProfile.available ? 'Sim' : 'Não'}</p>
             </div>
 
-            <Link to = {'/edit-registration'}>Editar perfil</Link>
-            {/* <Link to = {`/edit-registration/${userId}`}>Editar perfil</Link> */}
         </div>
     );
 };
