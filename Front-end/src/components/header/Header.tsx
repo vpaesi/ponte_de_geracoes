@@ -77,6 +77,15 @@ const Header = () => {
                 Entrar
               </Link>
             )}
+          {userType !== "default" &&
+            !isLoginPage &&
+            !isRegisterPage &&
+            !isEditRegistrationPage &&
+            !isProfilePage && (
+              <Link to="/profile" className="header-link">
+                Ver perfil
+              </Link>
+            )}
         </nav>
       </div>
     </header>
