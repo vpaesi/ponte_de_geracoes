@@ -62,7 +62,8 @@ const App: React.FC = () => {
             age:
               new Date().getFullYear() -
               new Date(helper.birthDate).getFullYear(),
-            img: "//localhost:8080" + helper.profileImageUrl,
+            // img: "//localhost:8080" + helper.profileImageUrl,
+            img: helper.profileImageUrl,
             description: helper.aboutYou,
           }))}
         />
