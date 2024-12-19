@@ -85,6 +85,11 @@ legend {
   justify-content: space-between;
 }
 
+.form-address-number {
+  display: flex;
+  align-items: start;
+}
+
 .form-row user-type {
   justify-content: unset !important;
   gap: 10px !important;

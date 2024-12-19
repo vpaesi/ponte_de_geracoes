@@ -23,6 +23,11 @@ interface FormValues {
   userType: string;
 }
 
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 export const validateFields = (
   values: FormValues,
   setErrors: React.Dispatch<React.SetStateAction<Record<string, boolean>>>
@@ -40,7 +45,6 @@ export const validateFields = (
     confirmPassword,
     availableDays,
     address,
-    userType,
   } = values;
 
   if (!name.trim()) newErrors.name = true;
@@ -50,34 +54,47 @@ export const validateFields = (
   if (!email.trim()) newErrors.email = true;
   if (!phone.trim()) newErrors.phone = true;
   if (!password.trim()) newErrors.password = true;
+  if (!confirmPassword.trim()) newErrors.confirmPassword = true;
   if (password !== confirmPassword) newErrors.confirmPassword = true;
-  if (!userType.trim()) newErrors.userType = true;
 
   if (!address.street.trim()) newErrors.addressStreet = true;
-  if (!address.number.trim()) newErrors.addressNumber = true;
+  if (
+    !address.number.trim() ||
+    isNaN(Number(address.number)) ||
+    Number(address.number) <= 0
+  )
+    newErrors.addressNumber = true;
   if (!address.zipCode.trim()) newErrors.addressZipCode = true;
   if (!address.city.trim()) newErrors.addressCity = true;
-  if (!address.neighborhood.trim()) newErrors.addressNeighborhood = true;
 
-  setErrors(newErrors);
+  if (!isValidEmail(email)) {
+    newErrors.email = true;
+    alert("E-mail inválido. Por favor, insira um e-mail válido.");
+    return false;
+  }
 
-  if (Object.keys(newErrors).length > 0) {
-    alert("Por favor, preencha todos os campos obrigatórios.");
+  if (!isCPF(cpf)) {
+    newErrors.cpf = true;
+    alert("CPF inválido!");
+    return false;
+  }
+
+  if (!isAdult(dob)) {
+    newErrors.dob = true;
+    alert("Você precisa ser maior de idade para se registrar!");
     return false;
   }
 
   if (availableDays.length === 0) {
     newErrors.availableDays = true;
     alert("Selecione pelo menos um dia de disponibilidade.");
-  }
-
-  if (!isCPF(cpf)) {
-    alert("CPF inválido!");
     return false;
   }
 
-  if (!isAdult(dob)) {
-    alert("Você precisa ser maior de idade para se registrar!");
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) {
+    alert("Por favor, preencha todos os campos obrigatórios corretamente.");
     return false;
   }
 
