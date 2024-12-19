@@ -122,7 +122,7 @@ const RegisteredPage: React.FC = () => {
   return (
     <div className="container">
       <div className="header-registered">
-        <h3>Conheça os ajudantes da Ponte de Gerações</h3>
+        <h3>Conheça os usuários cadastrados da Ponte de Gerações</h3>
       </div>
 
       <div className="filters">
