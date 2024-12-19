@@ -2,8 +2,8 @@ import "./RegisteredPage.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import urlFetch from "../../components/fetch/Fetch";
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Link } from 'react-router-dom';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import { Link } from "react-router-dom";
 
 interface Address {
   city: string;
@@ -108,8 +108,8 @@ const RegisteredPage: React.FC = () => {
               setPage(0);
             }}
           >
-            <option value="helper">Ajudantes</option>
             <option value="assisted">Ajudados</option>
+            <option value="helper">Ajudantes</option>
           </select>
         </div>
 
