@@ -37,32 +37,59 @@ const RegisteredPage: React.FC = () => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [cities, setCities] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState<string>("");
-  const [selectedUser, setSelectedUser] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<string>("helper");
   const [loading, setLoading] = useState<boolean>(false);
 
+  // Fetch de cidades baseado em registros disponíveis no banco
   useEffect(() => {
-    axios
-      .get(`${urlFetch}/addresses/cities`, { params: { page: 0, size: 100 } })
-      .then((response) => {
-        const data = response.data as { content: string[] };
-        const sortedCities = (data.content || []).sort((a, b) =>
-          a.localeCompare(b)
+    const fetchCities = async () => {
+      try {
+        setLoading(true);
+
+        // Buscar os ajudantes e ajudados para determinar as cidades disponíveis
+        const helperResponse = await axios.get<{
+          content: Registered[];
+        }>(`${urlFetch}/helper`, { params: { size: 1000 } });
+
+        const assistedResponse = await axios.get<{
+          content: Registered[];
+        }>(`${urlFetch}/assisted`, { params: { size: 1000 } });
+
+        // Extrair cidades de ambos os conjuntos de dados
+        const helperCities = helperResponse.data.content.map(
+          (person) => person.address.city
         );
-        setCities(sortedCities);
-      })
-      .catch((error) => console.error("Erro ao buscar cidades:", error));
+        const assistedCities = assistedResponse.data.content.map(
+          (person) => person.address.city
+        );
+
+        // Combinar e remover duplicatas
+        const uniqueCities = Array.from(new Set([...helperCities, ...assistedCities]))
+          .sort((a, b) => a.localeCompare(b));
+
+        setCities(uniqueCities);
+      } catch (error) {
+        console.error("Erro ao buscar cidades:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCities();
   }, []);
 
+  // Fetch dos dados filtrados
   useEffect(() => {
     const fetchFilteredData = async () => {
       try {
         setLoading(true);
-        const params: Record<string, any> = { page, size: 10 };
-        if (selectedCity) {
-          params.city = selectedCity;
-        }
 
         const endpoint = selectedUser === "helper" ? "helper" : "assisted";
+        const params = {
+          page,
+          size: 10,
+          city: selectedCity || undefined, // Filtra apenas se houver cidade selecionada
+        };
 
         const response = await axios.get<{
           content: Registered[];
@@ -95,7 +122,7 @@ const RegisteredPage: React.FC = () => {
   return (
     <div className="container">
       <div className="header-registered">
-        <h3>Conheça os ajudantes da Ponte de Gerações</h3>
+        <h3>Conheça os usuários cadastrados da Ponte de Gerações</h3>
       </div>
 
       <div className="filters">
@@ -141,7 +168,7 @@ const RegisteredPage: React.FC = () => {
               <div className="card-body">
                 <div className="card-image-container">
                   <img
-                    src={"//localhost:8080" + person.profileImageUrl}
+                    src={person.profileImageUrl || "default-profile.jpg"}
                     className="card-img"
                     alt={person.name}
                   />
@@ -166,7 +193,9 @@ const RegisteredPage: React.FC = () => {
                   <br />
                   {person.availableDays.join(", ")}
                 </p>
-                <Link to={`/profile/${person.id}`}>Entrar em contato</Link>
+                <Link to={`/profile/${person.id}`} className="link-profile">
+                  Entrar em contato
+                </Link>
               </div>
             </div>
           ))

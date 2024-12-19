@@ -411,6 +411,33 @@ const EditRegistrationPage: React.FC = () => {
               </div>
 
               <div className="form-row availableDays">
+              <div className="form-row user-available">
+              <p>
+                    {userType !== "ajudado"
+                      ? "Estou disponível para ajudar no momento"
+                      : "Estou precisando de ajuda no momento"}
+                    :
+                  </p>
+                <label>
+                  <input
+                    type="radio"
+                    name="available"
+                    value="sim"
+                    onChange={() => ("sim")}
+                  />
+                  Sim
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="available"
+                    value="não"
+                    onChange={() => ("não")}
+                  />
+                  Ainda não
+                </label>
+              </div>
+
                 <div className="availableDays-title">
                   <p>
                     {userType !== "ajudado"

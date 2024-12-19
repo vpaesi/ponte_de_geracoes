@@ -96,9 +96,16 @@
 .card-available {
   display: flex;
   justify-content: center;
+  align-self: self-start;
   font-size: 20px;
-  margin: 0 20px 10px 0;
+  margin: 0 20px 10px 40px;
   gap: 40px;
+}
+
+.link-profile{
+  color: var(--highlight-color);
+  align-self: center;
+  margin-left: 40px;
 }
 
 .pagination {
@@ -115,7 +122,7 @@
   cursor: pointer;
 }
 
-.footer-registered_btn, .card-available link{
+.footer-registered_btn{
   background-color: var(--highlight-color);
   color: var(--secondary-color);
   border: 1px solid var(--primary-color);
@@ -123,7 +130,7 @@
   cursor: pointer;
 }
 
-.card-available link:hover,
+.card-available,
 .footer-registered_btn:hover {
   background-color: var(--secondary-color);
   color: var(--primary-color);
@@ -135,7 +142,7 @@
   margin-top: 40px;
 }
 
-.footer-registered_btn, .card-available link {
+.footer-registered_btn {
   margin: 0 30px;
   text-wrap: nowrap;
   align-self: center;
