@@ -1,19 +1,9 @@
 import "./Header.css";
 import logo from "../../assets/logo.png";
-import { Link, useLocation } from "react-router-dom";
-import { useUser } from "../../utils/UserContext";
+import { Link } from "react-router-dom";
+import NavigationLinks from "../navigation/NavigationLinks";
 
 const Header = () => {
-  const location = useLocation();
-  const isHomePage = location.pathname === "/";
-  const isRegisterPage = location.pathname === "/register";
-  const isRegisteredPage = location.pathname === "/registered";
-  const isEditRegistrationPage = location.pathname === "/edit-registration";
-  const isLoginPage = location.pathname === "/login";
-  const isProfilePage = location.pathname === "/profile";
-  const { user } = useUser();
-  const { userType } = user || {};
-
   return (
     <header className="header">
       <div className="header-left">
@@ -24,69 +14,12 @@ const Header = () => {
         />
         <h1>
           <Link to={"/"} className="header-left-link">
-            {" "}
-            Ponte de Gerações{" "}
+            Ponte de Gerações
           </Link>
         </h1>
       </div>
       <div className="header-right">
-        <nav className="header-nav">
-          {!isHomePage && (
-            <Link to="/" className="header-link">
-              Página Inicial
-            </Link>
-          )}
-
-          {userType === "default" &&
-            !isRegisterPage &&
-            !isLoginPage &&
-            !isEditRegistrationPage &&
-            !isProfilePage && (
-              <Link to="/register" className="header-link">
-                Cadastre-se
-              </Link>
-            )}
-
-          {userType !== "default" &&
-            !isRegisterPage &&
-            !isRegisteredPage &&
-            !isLoginPage &&
-            !isProfilePage && (
-              <Link to="/registered" className="header-link">
-                Cadastrados
-              </Link>
-            )}
-
-          {!isRegisterPage &&
-            !isLoginPage &&
-            !isEditRegistrationPage &&
-            !isHomePage &&
-            !isRegisteredPage &&
-            !isProfilePage && (
-              <Link to="/edit-registration" className="header-link">
-                Editar Cadastro
-              </Link>
-            )}
-
-          {userType === "default" &&
-            !isLoginPage &&
-            !isRegisterPage &&
-            !isEditRegistrationPage &&
-            !isProfilePage && (
-              <Link to="/login" className="header-link">
-                Entrar
-              </Link>
-            )}
-          {userType !== "default" &&
-            !isLoginPage &&
-            !isRegisterPage &&
-            !isEditRegistrationPage &&
-            !isProfilePage && (
-              <Link to="/profile" className="header-link">
-                Ver perfil
-              </Link>
-            )}
-        </nav>
+        <NavigationLinks className="header-link" />
       </div>
     </header>
   );

@@ -1,7 +1,7 @@
 import "./RegisteredPage.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import urlFetch from "../../components/fetch/Fetch";
+import { API_BASE_URL } from "../../constants/api";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { Link } from "react-router-dom";
 
@@ -34,7 +34,6 @@ const RegisteredPage: React.FC = () => {
   const [registered, setRegistered] = useState<Registered[]>([]);
   const [page, setPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const [cities, setCities] = useState<string[]>([]);
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<string>("helper");
@@ -49,11 +48,11 @@ const RegisteredPage: React.FC = () => {
         // Buscar os ajudantes e ajudados para determinar as cidades disponíveis
         const helperResponse = await axios.get<{
           content: Registered[];
-        }>(`${urlFetch}/helper`, { params: { size: 1000 } });
+        }>(`${API_BASE_URL}/helper`, { params: { size: 1000 } });
 
         const assistedResponse = await axios.get<{
           content: Registered[];
-        }>(`${urlFetch}/assisted`, { params: { size: 1000 } });
+        }>(`${API_BASE_URL}/assisted`, { params: { size: 1000 } });
 
         // Extrair cidades de ambos os conjuntos de dados
         const helperCities = helperResponse.data.content.map(
@@ -94,12 +93,11 @@ const RegisteredPage: React.FC = () => {
         const response = await axios.get<{
           content: Registered[];
           page: PageInfo;
-        }>(`${urlFetch}/${endpoint}`, { params });
+        }>(`${API_BASE_URL}/${endpoint}`, { params });
 
         if (response.status === 200 && response.data) {
           setRegistered(response.data.content || []);
           setTotalPages(response.data.page.totalPages || 1);
-          setTotalItems(response.data.page.totalElements || 0);
         } else {
           console.error("Erro ao buscar dados. Status:", response.status);
         }

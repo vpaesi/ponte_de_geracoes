@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import urlFetch from "../../components/fetch/Fetch";
+import { API_BASE_URL } from "../../constants/api";
 import "./ProfilePage.css";
 import { Link } from "react-router-dom";
-import { useUser } from "../../utils/UserContext";
+import { useUser } from "../../hooks/useUser";
 interface Address {
   city: string;
   zipCode: string;
@@ -39,7 +39,7 @@ const ProfilePage: React.FC = () => {
       try {
         const endpoint = userType === "ajudante" ? "helper" : "assisted";
         const response = await axios.get<UserProfile>(
-          `${urlFetch}/${endpoint}/${userId}`
+          `${API_BASE_URL}/${endpoint}/${userId}`
         );
         setUserProfile(response.data);
       } catch (error) {

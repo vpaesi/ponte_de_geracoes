@@ -3,8 +3,8 @@ import "../register-page/RegisterPage.css";
 import { useNavigate } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
 import { validateFields } from "../../utils/validate-fields/ValidateFields";
-import urlFetch from "../../components/fetch/Fetch";
-import { useUser } from "../../utils/UserContext";
+import { API_BASE_URL } from "../../constants/api";
+import { useUser } from "../../hooks/useUser";
 
 const EditRegistrationPage: React.FC = () => {
   const { user } = useUser();
@@ -52,7 +52,7 @@ const EditRegistrationPage: React.FC = () => {
       try {
         const endpoint = userType === "ajudante" ? "helper" : "assisted";
 
-        const response = await fetch(`${urlFetch}/${endpoint}/${id}`);
+        const response = await fetch(`${API_BASE_URL}/${endpoint}/${id}`);
         if (!response.ok) {
           throw new Error("Erro ao carregar dados do cadastro.");
         }
@@ -124,7 +124,7 @@ const EditRegistrationPage: React.FC = () => {
 
     try {
       const endpoint = user.userType === "ajudante" ? "helper" : "assisted";
-      const response = await fetch(`${urlFetch}/${endpoint}/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/${endpoint}/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(baseFormValues),
@@ -165,7 +165,7 @@ const EditRegistrationPage: React.FC = () => {
         ? `/helper/upload-image/${userId}`
         : `/assisted/upload-image/${userId}`;
 
-    const response = await fetch(`${urlFetch}${endpoint}`, {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: "POST",
       body: formDataImage,
     });

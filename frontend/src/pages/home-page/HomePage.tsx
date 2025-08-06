@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./HomePage.css";
 import "../../components/benefit-card/BenefitCard.css";
 import { Images } from "../../assets/Images";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/carousel/Carousel";
-import urlFetch from "../../components/fetch/Fetch";
 import BenefitsForAssisted from "../../components/benefit-card/BenefitsForAssisted";
 import BenefitsForHelpers from "../../components/benefit-card/BenefitsForHelpers";
-import { useUser } from "../../utils/UserContext";
+import { useUser } from "../../hooks/useUser";
+import { useHelpers } from "../../hooks/useHelpers";
 
-const App: React.FC = () => {
-  const [helpers, setHelpers] = useState<any[]>([]);
+const HomePage: React.FC = () => {
   const { user } = useUser();
   const { userType } = user || {};
+  const { getCarouselItems, loading, error } = useHelpers();
 
-  const fetchHelpers = async () => {
-    try {
-      const response = await fetch(`${urlFetch}/helper`);
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      const data = await response.json();
-      setHelpers(data.content);
-    } catch (error) {
-      console.error("Erro ao buscar ajudantes:", error);
-    }
-  };
+  const carouselItems = getCarouselItems();
 
-  useEffect(() => {
-    fetchHelpers();
-  }, []);
+  if (error) {
+    console.error("Erro ao carregar ajudantes:", error);
+  }
 
   return (
     <div className="home-page">
@@ -65,18 +54,14 @@ const App: React.FC = () => {
       <hr />
 
       <section className="row row-3">
-        <Carousel
-          title="Conheça alguns dos nossos ajudantes"
-          registered={helpers.map((helper) => ({
-            name: helper.name,
-            age:
-              new Date().getFullYear() -
-              new Date(helper.birthDate).getFullYear(),
-            // img: "//localhost:8080" + helper.profileImageUrl,
-            img: "//localhost:8080" + helper.profileImageUrl,
-            description: helper.aboutYou,
-          }))}
-        />
+        {loading ? (
+          <div>Carregando ajudantes...</div>
+        ) : (
+          <Carousel
+            title="Conheça alguns dos nossos ajudantes"
+            registered={carouselItems}
+          />
+        )}
         <Link to={"/registered"} className="row3-link">
           Conheça mais ajudantes
         </Link>
@@ -92,4 +77,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default HomePage;

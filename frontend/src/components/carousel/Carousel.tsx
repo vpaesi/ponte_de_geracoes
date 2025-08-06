@@ -1,17 +1,11 @@
 import React from "react";
 import "./Carousel.css";
-
-interface RegisteredCarousel {
-  name: string;
-  age: number;
-  img: string;
-  description: string;
-};
+import { CarouselItem } from "../../types";
 
 interface CarouselProps {
   title: string;
-  registered: RegisteredCarousel[];
-};
+  registered: CarouselItem[];
+}
 
 const Carousel: React.FC<CarouselProps> = ({ title, registered }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);

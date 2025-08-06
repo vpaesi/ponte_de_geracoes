@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./LoginPage.css";
-import { useUser } from "../../utils/UserContext";
+import { useUser } from "../../hooks/useUser";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
