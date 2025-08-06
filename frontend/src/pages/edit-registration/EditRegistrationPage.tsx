@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "../register-page/RegisterPage.css";
 import { useNavigate } from "react-router-dom";
 import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
 import { validateFields } from "../../utils/validate-fields/ValidateFields";
 import { API_BASE_URL } from "../../constants/api";
 import { useUser } from "../../hooks/useUser";
+import { PageLayout } from "../../components/layout/PageLayout";
+import { FormField } from "../../components/form/FormField";
 
 const EditRegistrationPage: React.FC = () => {
   const { user } = useUser();
@@ -176,394 +177,311 @@ const EditRegistrationPage: React.FC = () => {
   };
 
   return (
-    <div className="cadastro-container">
-      <section className="apresentacao">
-        <h1>EDITAR CADASTRO</h1>
-      </section>
-
-      <form onSubmit={handleUpdate} className="cadastro-form">
-        <fieldset>
-          <legend>Dados Pessoais</legend>
-          <div className="form-row nome-email">
-            <div>
-              <p>Nome Completo</p>
-              <input
-                type="text"
-                placeholder="Digite seu nome"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className={errors.name ? "input-error" : ""}
-              />
-              {errors.name && (
-                <span className="error-message">Nome é obrigatório</span>
-              )}
-            </div>
-            <div>
-              <p>Email</p>
-              <input
-                type="email"
-                placeholder="nome@exemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={errors.email ? "input-error" : ""}
-              />
-              {errors.email && (
-                <span className="error-message">Email é obrigatório</span>
-              )}
-            </div>
+    <PageLayout>
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-4">
+              Editar Cadastro
+            </h1>
+            <p className="text-lg text-accent-600">
+              Atualize suas informações pessoais e mantenha seu perfil sempre atualizado
+            </p>
           </div>
 
-          <div className="form-row phone-dob-rg-cpf">
-            <div>
-              <p>Nascimento</p>
-              <input
-                type="date"
-                value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
-                className={errors.birthDate ? "input-error" : ""}
-              />
-              {errors.birthDate && (
-                <span className="error-message">
-                  Data de nascimento é obrigatória
-                </span>
-              )}
-            </div>
-            <div>
-              <p>Celular</p>
-              <input
-                type="number"
-                placeholder="51999999999"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className={errors.phone ? "input-error" : ""}
-              />
-              {errors.phone && (
-                <span className="error-message">Celular é obrigatório</span>
-              )}
-            </div>
-            <div>
-              <p>RG</p>
-              <input
-                type="text"
-                placeholder="1234567891"
-                value={rg}
-                onChange={(e) => setRg(e.target.value)}
-                className={errors.rg ? "input-error" : ""}
-              />
-              {errors.rg && (
-                <span className="error-message">RG é obrigatório</span>
-              )}
-            </div>
-            <div>
-              <p>CPF</p>
-              <input
-                type="text"
-                placeholder="12345678901"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                className={errors.cpf ? "input-error" : ""}
-              />
-              {errors.cpf && (
-                <span className="error-message">CPF é obrigatório</span>
-              )}
-            </div>
-          </div>
-          <div className="form-row upload-password-confirm">
-            <div>
-              <p>Upload de imagem</p>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    setProfileImagePreview(e.target.files[0]);
-                  }
-                }}
-                className={errors.profileImage ? "input-error" : ""}
-              />
-              {errors.profileImage && (
-                <span className="error-message">Imagem é obrigatória</span>
-              )}
-            </div>
-            <div>
-              <p>Senha</p>
-              <input
-                type="password"
-                placeholder="Digite a senha"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={errors.password ? "input-error" : ""}
-              />
-              {errors.password && (
-                <span className="error-message">Senha é obrigatória</span>
-              )}
-            </div>
-            <div>
-              <p>Confirme sua senha</p>
-              <input
-                type="password"
-                placeholder="Digite novamente"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className={errors.confirmPassword ? "input-error" : ""}
-              />
-              {errors.confirmPassword && (
-                <span className="error-message">As senhas não coincidem</span>
-              )}
-            </div>
-          </div>
-        </fieldset>
+          {/* Form */}
+          <div className="glass-card p-8">
+            <form onSubmit={handleUpdate} className="space-y-8">
+              {/* Personal Data Section */}
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-accent-800 mb-6 text-center border-b border-accent-200 pb-4">
+                  Dados Pessoais
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    label="Nome Completo"
+                    type="text"
+                    placeholder="Digite seu nome completo"
+                    value={name}
+                    onChange={setName}
+                    error={errors.name ? "Nome é obrigatório" : undefined}
+                    required
+                  />
 
-        <fieldset>
-          <legend>Endereço</legend>
-          <div className="form-row address">
-            <div>
-              <p>CEP</p>
-              <input
-                type="text"
-                placeholder="99999-999"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
-                onBlur={() =>
-                  handleCepBlur(zipCode, setStreet, setCity, setNeighborhood)
-                }
-                className={errors.zipCode ? "input-error" : ""}
-              />
-              {errors.zipCode && (
-                <span className="error-message">CEP é obrigatório</span>
-              )}
-            </div>
-            <div>
-              <p>Cidade</p>
-              <input
-                type="text"
-                placeholder="Digite sua cidade"
-                value={city}
-                readOnly
-                className={errors.city ? "input-error" : ""}
-              />
-              {errors.city && (
-                <span className="error-message">Cidade é obrigatória</span>
-              )}
-            </div>
-            <div>
-              <p>Logradouro</p>
-              <input
-                type="text"
-                placeholder="Avenida Exemplo de Rua"
-                value={street}
-                readOnly
-                className={errors.address ? "input-error" : ""}
-              />
-              {errors.address && (
-                <span className="error-message">Logradouro é obrigatório</span>
-              )}
-            </div>
-          </div>
-          <div className="form-row address">
-            <div className="form-address-number">
-              <div>
-                <p>Número</p>
-                <input
-                  type="number"
-                  placeholder="123"
-                  value={number}
-                  id="number"
-                />
+                  <FormField
+                    label="Email"
+                    type="email"
+                    placeholder="nome@exemplo.com"
+                    value={email}
+                    onChange={setEmail}
+                    error={errors.email ? "Email é obrigatório" : undefined}
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <FormField
+                    label="Data de Nascimento"
+                    type="date"
+                    value={birthDate}
+                    onChange={setBirthDate}
+                    error={errors.birthDate ? "Data é obrigatória" : undefined}
+                    required
+                  />
+
+                  <FormField
+                    label="Celular"
+                    type="tel"
+                    placeholder="(11) 99999-9999"
+                    value={phone}
+                    onChange={setPhone}
+                    error={errors.phone ? "Celular é obrigatório" : undefined}
+                    required
+                  />
+
+                  <FormField
+                    label="RG"
+                    type="text"
+                    placeholder="12.345.678-9"
+                    value={rg}
+                    onChange={setRg}
+                    error={errors.rg ? "RG é obrigatório" : undefined}
+                    required
+                  />
+
+                  <FormField
+                    label="CPF"
+                    type="text"
+                    placeholder="123.456.789-01"
+                    value={cpf}
+                    onChange={setCpf}
+                    error={errors.cpf ? "CPF é obrigatório" : undefined}
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <FormField label="Nova Foto de Perfil">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setProfileImagePreview(e.target.files[0]);
+                        }
+                      }}
+                      className="input-field"
+                    />
+                  </FormField>
+
+                  <FormField
+                    label="Nova Senha"
+                    type="password"
+                    placeholder="Digite sua nova senha"
+                    value={password}
+                    onChange={setPassword}
+                    error={errors.password ? "Senha é obrigatória" : undefined}
+                  />
+
+                  <FormField
+                    label="Confirme a Nova Senha"
+                    type="password"
+                    placeholder="Digite novamente"
+                    value={confirmPassword}
+                    onChange={setConfirmPassword}
+                    error={errors.confirmPassword ? "As senhas não coincidem" : undefined}
+                  />
+                </div>
               </div>
-              <div>
-                <p>Complemento</p>
-                <input
+
+              {/* Address Section */}
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-accent-800 mb-6 text-center border-b border-accent-200 pb-4">
+                  Endereço
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <FormField
+                    label="CEP"
+                    type="text"
+                    placeholder="00000-000"
+                    value={zipCode}
+                    onChange={setZipCode}
+                    onBlur={() => handleCepBlur(zipCode, setStreet, setCity, setNeighborhood)}
+                    error={errors.zipCode ? "CEP é obrigatório" : undefined}
+                    required
+                  />
+
+                  <FormField
+                    label="Cidade"
+                    type="text"
+                    placeholder="Digite sua cidade"
+                    value={city}
+                    onChange={setCity}
+                    readOnly
+                    className="bg-accent-50"
+                    error={errors.city ? "Cidade é obrigatória" : undefined}
+                    required
+                  />
+
+                  <FormField
+                    label="Bairro"
+                    type="text"
+                    placeholder="Digite seu bairro"
+                    value={neighborhood}
+                    onChange={setNeighborhood}
+                    readOnly
+                    className="bg-accent-50"
+                    error={errors.neighborhood ? "Bairro é obrigatório" : undefined}
+                    required
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <FormField
+                    label="Logradouro"
+                    type="text"
+                    placeholder="Avenida Exemplo de Rua"
+                    value={street}
+                    onChange={setStreet}
+                    readOnly
+                    className="md:col-span-2 bg-accent-50"
+                    error={errors.address ? "Logradouro é obrigatório" : undefined}
+                    required
+                  />
+
+                  <FormField
+                    label="Número"
+                    type="text"
+                    placeholder="123"
+                    value={number}
+                    onChange={setNumber}
+                    error={errors.number ? "Número é obrigatório" : undefined}
+                    required
+                  />
+                </div>
+
+                <FormField
+                  label="Complemento"
                   type="text"
-                  placeholder="Casa 2, Bloco A"
+                  placeholder="Casa 2, Bloco A, Apartamento 101..."
                   value={complement}
-                  onChange={(e) => setComplement(e.target.value)}
+                  onChange={setComplement}
                 />
               </div>
-            </div>
+
+              {/* Profile Section */}
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold text-accent-800 mb-6 text-center border-b border-accent-200 pb-4">
+                  Perfil e Disponibilidade
+                </h2>
+
+                {/* User Type (Read Only) */}
+                <div className="bg-accent-50 rounded-lg p-6">
+                  <h3 className="text-lg font-semibold text-accent-700 mb-4 text-center">
+                    Tipo de Usuário (não pode ser alterado)
+                  </h3>
+                  <div className="flex justify-center">
+                    <div className={`px-6 py-3 rounded-full font-semibold text-white shadow-lg ${
+                      userType === 'ajudante' ? 'bg-secondary-500' : 'bg-primary-500'
+                    }`}>
+                      {userType === 'ajudante' ? '🤝 Ajudante' : '❤️ Ajudado'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Available Days */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-accent-700 text-center">
+                    {userType === 'ajudante' 
+                      ? 'Quando você está disponível para ajudar?' 
+                      : 'Quando você precisaria de ajuda?'
+                    }
+                  </h3>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+                    {[
+                      { key: 'Domingo', label: 'Dom' },
+                      { key: 'Segunda', label: 'Seg' },
+                      { key: 'Terça', label: 'Ter' },
+                      { key: 'Quarta', label: 'Qua' },
+                      { key: 'Quinta', label: 'Qui' },
+                      { key: 'Sexta', label: 'Sex' },
+                      { key: 'Sábado', label: 'Sáb' }
+                    ].map((day) => (
+                      <label
+                        key={day.key}
+                        className={`cursor-pointer p-3 rounded-lg border-2 text-center transition-all duration-300 hover:shadow-md ${
+                          availableDays.includes(day.key)
+                            ? 'border-primary-500 bg-primary-100 text-primary-700'
+                            : 'border-accent-200 hover:border-primary-200'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          className="hidden"
+                          checked={availableDays.includes(day.key)}
+                          onChange={(e) => handleavailableDaysChange(e, day.key)}
+                        />
+                        <div className="font-medium text-sm">
+                          {day.label}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* About and Skills */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <FormField label="Fale um pouco sobre você">
+                    <textarea
+                      rows={4}
+                      placeholder="Conte um pouco sobre sua personalidade, hobbies, experiências..."
+                      value={aboutYou}
+                      onChange={(e) => setAboutYou(e.target.value)}
+                      className="input-field resize-none"
+                    />
+                  </FormField>
+
+                  <FormField
+                    label={userType === 'ajudante' ? 'Suas Habilidades' : 'Suas Necessidades'}
+                    error={errors.skillsNeeds ? "Este campo é obrigatório" : undefined}
+                  >
+                    <textarea
+                      rows={4}
+                      placeholder={
+                        userType === 'ajudante'
+                          ? 'Ex: Gosto de ensinar tecnologia, ajudar com compras...'
+                          : 'Ex: Preciso de ajuda para ir ao mercado, usar o computador...'
+                      }
+                      maxLength={150}
+                      value={skillsNeeds}
+                      onChange={(e) => setSkillsNeeds(e.target.value)}
+                      className={`input-field resize-none ${errors.skillsNeeds ? 'input-error' : ''}`}
+                    />
+                    <div className="text-right text-sm text-accent-500 mt-1">
+                      {skillsNeeds.length}/150
+                    </div>
+                  </FormField>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex justify-center pt-8 border-t border-accent-200">
+                <button
+                  type="submit"
+                  className="btn-primary px-12 py-4 text-lg"
+                >
+                  Salvar Alterações
+                </button>
+              </div>
+            </form>
           </div>
-        </fieldset>
-        <fieldset id="userType">
-          <legend>Sou...</legend>
-          <div className="form-row">
-            <div className="col-1">
-              <div className="form-row user-type">
-                <label>
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="ajudado"
-                    disabled={true}
-                    checked={userType === "ajudado"}
-                  />
-                  Ajudado
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="userType"
-                    value="ajudante"
-                    disabled={true}
-                    checked={userType === "ajudante"}
-                  />
-                  Ajudante
-                </label>
-              </div>
-
-              <div className="form-row availableDays">
-              <div className="form-row user-available">
-              <p>
-                    {userType !== "ajudado"
-                      ? "Estou disponível para ajudar no momento"
-                      : "Estou precisando de ajuda no momento"}
-                    :
-                  </p>
-                <label>
-                  <input
-                    type="radio"
-                    name="available"
-                    value="sim"
-                    onChange={() => ("sim")}
-                  />
-                  Sim
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="available"
-                    value="não"
-                    onChange={() => ("não")}
-                  />
-                  Ainda não
-                </label>
-              </div>
-
-                <div className="availableDays-title">
-                  <p>
-                    {userType !== "ajudado"
-                      ? "Estou disponível nos dias"
-                      : "Preciso de ajuda nos dias"}
-                    :
-                  </p>
-                </div>
-                <div className="availableDays-days">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Domingo"
-                      checked={availableDays.includes("Domingo")}
-                      onChange={(e) => handleavailableDaysChange(e, "Domingo")}
-                    />
-                    Domingo
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Segunda"
-                      checked={availableDays.includes("Segunda")}
-                      onChange={(e) => handleavailableDaysChange(e, "Segunda")}
-                    />
-                    Segunda-feira
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Terça"
-                      checked={availableDays.includes("Terça")}
-                      onChange={(e) => handleavailableDaysChange(e, "Terça")}
-                    />
-                    Terça-feira
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Quarta"
-                      checked={availableDays.includes("Quarta")}
-                      onChange={(e) => handleavailableDaysChange(e, "Quarta")}
-                    />
-                    Quarta-feira
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Quinta"
-                      checked={availableDays.includes("Quinta")}
-                      onChange={(e) => handleavailableDaysChange(e, "Quinta")}
-                    />
-                    Quinta-feira
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Sexta"
-                      checked={availableDays.includes("Sexta")}
-                      onChange={(e) => handleavailableDaysChange(e, "Sexta")}
-                    />
-                    Sexta-feira
-                  </label>
-                  <label>
-                    <input
-                      type="checkbox"
-                      name="availableDaysDay"
-                      value="Sábado"
-                      checked={availableDays.includes("Sábado")}
-                      onChange={(e) => handleavailableDaysChange(e, "Sábado")}
-                    />
-                    Sábado
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-2">
-              <div className="form-row about">
-                <div>
-                  <p>Fale um pouco sobre você:</p>
-                  <textarea
-                    placeholder="Nos conte um pouco sobre você"
-                    value={aboutYou}
-                    onChange={(e) => setAboutYou(e.target.value)}
-                  />
-                </div>
-                <div className="skillNeeds-textarea">
-                  <p>
-                    {`Suas ${
-                      userType !== "ajudado" ? "Habilidades" : "Necessidades"
-                    }:`}
-                  </p>
-                  <textarea
-                    placeholder={`${
-                      userType !== "ajudado"
-                        ? "Gosto de ensinar e aprender com os outros"
-                        : "Preciso de ajuda para ir ao mercado"
-                    }`}
-                    maxLength={90}
-                    value={skillsNeeds}
-                    onChange={(e) => setSkillsNeeds(e.target.value)}
-                    className={errors.skillsNeeds ? "input-error" : ""}
-                  />
-                  <br />
-                  <span className="obs-message">*Máximo de 90 caracteres</span>
-                  {errors.skillsNeeds && (
-                    <span className="error-message">Campo obrigatório</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </fieldset>
-
-        <button type="submit" className="submit-button">
-          Salvar Alterações
-        </button>
-      </form>
-    </div>
+        </div>
+      </div>
+    </PageLayout>
   );
 };
 

@@ -2,15 +2,16 @@ import React from 'react';
 
 interface FormFieldProps {
   label: string;
-  type: string;
+  type?: string;
   placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
   onBlur?: () => void;
-  error?: boolean;
-  errorMessage?: string;
+  error?: string;
   readOnly?: boolean;
   required?: boolean;
+  className?: string;
+  children?: React.ReactNode;
 }
 
 export const FormField: React.FC<FormFieldProps> = ({
@@ -20,28 +21,31 @@ export const FormField: React.FC<FormFieldProps> = ({
   value,
   onChange,
   onBlur,
-  error = false,
-  errorMessage,
+  error,
   readOnly = false,
   required = false,
+  className = "",
+  children,
 }) => {
   return (
-    <div>
-      <p>
+    <div className={`space-y-2 ${className}`}>
+      <label className="block text-sm font-semibold text-accent-700">
         {label}
-        {required && '*'}
-      </p>
-      <input
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
-        className={error ? "input-error" : ""}
-        readOnly={readOnly}
-      />
-      {error && errorMessage && (
-        <span className="error-message">{errorMessage}</span>
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </label>
+      {children || (
+        <input
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange?.(e.target.value)}
+          onBlur={onBlur}
+          className={`input-field ${error ? 'input-error' : ''}`}
+          readOnly={readOnly}
+        />
+      )}
+      {error && (
+        <span className="error-message">{error}</span>
       )}
     </div>
   );

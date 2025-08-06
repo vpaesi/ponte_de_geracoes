@@ -3,16 +3,17 @@ import BenefitCard from './BenefitCard';
 
 const BenefitsForAssisted = () => {
   return (
-    <section className="benefits-section">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
       {BENEFITS_FOR_ASSISTED.map((benefit, index) => (
-        <BenefitCard
-          key={index}
-          title={benefit.title}
-          description={benefit.description}
-          icon={benefit.icon}
-        />
+        <div key={index} className="animate-fade-in" style={{animationDelay: `${index * 0.1}s`}}>
+          <BenefitCard
+            title={benefit.title}
+            description={benefit.description}
+            icon={benefit.icon}
+          />
+        </div>
       ))}
-    </section>
+    </div>
   );
 };
 
