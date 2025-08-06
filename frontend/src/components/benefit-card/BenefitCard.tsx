@@ -1,24 +1,29 @@
 import React from "react";
+import IconWrapper from "../ui/IconWrapper";
 
 interface BenefitCardProps {
   title: string;
   description: string;
-  icon?: string;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  iconColor?: string;
 }
 
-const BenefitCard: React.FC<BenefitCardProps> = ({ title, description, icon }) => {
+const BenefitCard: React.FC<BenefitCardProps> = ({ 
+  title, 
+  description, 
+  icon: IconComponent,
+  iconColor = "text-primary-600"
+}) => {
   return (
     <div className="card p-8 h-full group hover:scale-105 transition-all duration-300">
       <div className="flex flex-col items-center text-center space-y-6">
-        {icon && (
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full opacity-20 group-hover:opacity-30 transition-opacity duration-300"></div>
-            <img 
-              src={icon} 
-              alt={`Ícone para ${title}`} 
-              className="relative z-10 w-16 h-16 object-contain rounded-none shadow-none hover:scale-100" 
-            />
-          </div>
+        {IconComponent && (
+          <IconWrapper 
+            icon={IconComponent}
+            size="lg"
+            color={iconColor}
+            className="mb-2"
+          />
         )}
         <h3 className="text-xl font-bold text-primary-600 group-hover:text-primary-700 transition-colors duration-300">
           {title}

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../../constants/api";
+import { API_BASE_URL } from "../constants/api";
 import { Link } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
-import { PageLayout } from "../../components/layout/PageLayout";
+import { useUser } from "../hooks/useUser";
+import { PageLayout } from "../components/PageLayout";
 interface Address {
   city: string;
   zipCode: string;
@@ -28,7 +28,7 @@ interface UserProfile {
   address: Address;
 }
 
-const ProfilePage: React.FC = () => {
+const Profile: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const { user } = useUser();
   const { id, userType } = user || {};
@@ -124,7 +124,7 @@ const ProfilePage: React.FC = () => {
                 {/* Edit Button */}
                 <div className="flex flex-col items-center lg:items-end gap-4">
                   <Link
-                    to="/edit-registration"
+                    to="/edit-profile"
                     className="btn-primary flex items-center space-x-2 text-center"
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,4 +254,4 @@ const ProfilePage: React.FC = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;

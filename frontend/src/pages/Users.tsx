@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from "../../constants/api";
-import { PageLayout } from "../../components/layout/PageLayout";
+import { API_BASE_URL } from "../constants/api";
+import { PageLayout } from "../components/PageLayout";
+import CriarContaBtn from "../components/ui/CriarContaBtn";
+import PlatformDescription from "../components/ui/PlatformDescription";
 
 interface Address {
   city: string;
@@ -29,7 +31,7 @@ interface PageInfo {
   totalPages: number;
 }
 
-const RegisteredPage: React.FC = () => {
+const Users: React.FC = () => {
   const [registered, setRegistered] = useState<Registered[]>([]);
   const [page, setPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
@@ -328,19 +330,19 @@ const RegisteredPage: React.FC = () => {
           )}
 
           {/* Footer CTA */}
-          <div className="text-center bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-600 rounded-2xl p-12 text-white shadow-2xl">
+          <div className="text-center bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-600 rounded-2xl p-12 shadow-2xl">
             <h2 className="text-3xl font-bold mb-4">
               Faça Parte Desta Comunidade!
             </h2>
             <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-              Ponte de Gerações é uma plataforma gaúcha que conecta idosos com necessidades específicas a pessoas dispostas a ajudar.
+              <PlatformDescription />
             </p>
-            <Link
-              to="/register"
-              className="inline-block bg-white text-primary-600 font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-primary-50"
-            >
-              Suba agora nessa ponte
-            </Link>
+            <CriarContaBtn 
+              to="/signup"
+              variant="outline"
+              size="lg"
+              className="bg-white text-primary-600 hover:bg-primary-50 border-white hover:border-primary-100"
+            />
           </div>
         </div>
       </div>
@@ -348,4 +350,4 @@ const RegisteredPage: React.FC = () => {
   );
 };
 
-export default RegisteredPage;
+export default Users;

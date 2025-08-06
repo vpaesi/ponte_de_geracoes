@@ -10,6 +10,7 @@ const BenefitsForHelpers = () => {
             title={benefit.title}
             description={benefit.description}
             icon={benefit.icon}
+            iconColor={benefit.iconColor}
           />
         </div>
       ))}

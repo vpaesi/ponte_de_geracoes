@@ -1,5 +1,5 @@
 import React from "react";
-import { CarouselItem } from "../../types";
+import { CarouselItem } from "../types";
 
 interface CarouselProps {
   title: string;

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useUser } from "../../hooks/useUser";
-import { PageLayout } from "../../components/layout/PageLayout";
-import { FormField } from "../../components/form/FormField";
+import { useUser } from "../hooks/useUser";
+import { PageLayout } from "../components/PageLayout";
+import { FormField } from "../components/form/FormField";
 
-const LoginPage: React.FC = () => {
+const Login: React.FC = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -236,7 +236,7 @@ const LoginPage: React.FC = () => {
                 <p className="text-accent-600">
                   Ainda não tem uma conta?{" "}
                   <Link
-                    to="/register"
+                    to="/signup"
                     className="text-primary-600 hover:text-primary-700 font-semibold transition-colors duration-300"
                   >
                     Cadastre-se
@@ -265,4 +265,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default Login;

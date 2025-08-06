@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
-import { validateFields } from "../../utils/validate-fields/ValidateFields";
-import { PageLayout } from "../../components/layout/PageLayout";
-import { FormField } from "../../components/form/FormField";
+import { handleCepBlur } from "../utils/ValidadeCep";
+import { validateFields } from "../utils/ValidateFields";
+import { PageLayout } from "../components/PageLayout";
+import { FormField } from "../components/form/FormField";
 
-const RegisterPage: React.FC = () => {
+const SignUp: React.FC = () => {
   const [formData, setFormData] = useState({
     name: "",
     birthDate: "",
@@ -647,4 +647,4 @@ const RegisterPage: React.FC = () => {
   );
 };
 
-export default RegisterPage;
+export default SignUp;

@@ -84,7 +84,7 @@ export const useRegistrationForm = () => {
       }
 
       alert("Cadastro realizado com sucesso!");
-      navigate("/registered");
+      navigate("/users");
     } catch (error) {
       const errorMessage = error instanceof Error 
         ? error.message 

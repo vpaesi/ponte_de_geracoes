@@ -18,9 +18,9 @@ export const useNavigationHelpers = (): UseNavigationHelpers => {
   return {
     isCurrentPage,
     isHomePage: isCurrentPage('/'),
-    isRegisterPage: isCurrentPage('/register'),
-    isRegisteredPage: isCurrentPage('/registered'),
-    isEditRegistrationPage: isCurrentPage('/edit-registration'),
+    isRegisterPage: isCurrentPage('/signup'),
+    isRegisteredPage: isCurrentPage('/users'),
+    isEditRegistrationPage: isCurrentPage('/edit-profile'),
     isLoginPage: isCurrentPage('/login'),
     isProfilePage: isCurrentPage('/profile'),
   };

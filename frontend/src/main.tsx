@@ -2,14 +2,14 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./components/header/Header.tsx";
-import Footer from "./components/footer/Footer.tsx";
-import HomePage from "./pages/home-page/HomePage.tsx";
-import RegisterPage from "./pages/register-page/RegisterPage.tsx";
-import EditRegistrationPage from "./pages/edit-registration/EditRegistrationPage.tsx";
-import LoginPage from "./pages/login-page/LoginPage.tsx";
-import RegisteredPage from "./pages/registered-page/RegisteredPage.tsx";
-import ProfilePage from "./pages/profile-page/ProfilePage.tsx";
+import Header from "./components/Header.tsx";
+import Footer from "./components/Footer.tsx";
+import Home from "./pages/Home.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import UpdateProfile from "./pages/UpdateProfile.tsx";
+import Login from "./pages/Login.tsx";
+import Users from "./pages/Users.tsx";
+import Profile from "./pages/Profile.tsx";
 import { UserProvider } from "./utils/UserContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
@@ -18,12 +18,12 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/edit-registration" element={<EditRegistrationPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/registered" element={<RegisteredPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/edit-profile" element={<UpdateProfile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleCepBlur } from "../../utils/validate-cep/ValidadeCep";
-import { validateFields } from "../../utils/validate-fields/ValidateFields";
-import { API_BASE_URL } from "../../constants/api";
-import { useUser } from "../../hooks/useUser";
-import { PageLayout } from "../../components/layout/PageLayout";
-import { FormField } from "../../components/form/FormField";
+import { handleCepBlur } from "../utils/ValidadeCep";
+import { validateFields } from "../utils/ValidateFields";
+import { API_BASE_URL } from "../constants/api";
+import { useUser } from "../hooks/useUser";
+import { PageLayout } from "../components/PageLayout";
+import { FormField } from "../components/form/FormField";
 
-const EditRegistrationPage: React.FC = () => {
+const UpdateProfile: React.FC = () => {
   const { user } = useUser();
   const { id } = user || {};
   const userType = user.userType;
@@ -143,7 +143,7 @@ const EditRegistrationPage: React.FC = () => {
       }
 
       alert("Cadastro atualizado com sucesso!");
-      navigate("/registered");
+      navigate("/profile");
     } catch (error) {
       if (error instanceof Error) {
         alert(error.message);
@@ -485,4 +485,4 @@ const EditRegistrationPage: React.FC = () => {
   );
 };
 
-export default EditRegistrationPage;
+export default UpdateProfile;

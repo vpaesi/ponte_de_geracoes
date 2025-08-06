@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { useUser } from '../../hooks/useUser';
-import { useNavigationHelpers } from '../../hooks/useNavigationHelpers';
+import { useUser } from '../hooks/useUser';
+import { useNavigationHelpers } from '../hooks/useNavigationHelpers';
 
 interface NavigationLinksProps {
   className: string;
@@ -63,19 +63,19 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({ className }) => {
       )}
 
       {shouldShowRegisterLink && (
-        <Link to="/register" className={className}>
-          Cadastre-se
+        <Link to="/signup" className={className}>
+          Sign Up
         </Link>
       )}
 
       {shouldShowRegisteredLink && (
-        <Link to="/registered" className={className}>
-          Cadastrados
+        <Link to="/users" className={className}>
+          Encontrar usuários
         </Link>
       )}
 
       {shouldShowEditRegistrationLink && (
-        <Link to="/edit-registration" className={className}>
+        <Link to="/edit-profile" className={className}>
           Editar Cadastro
         </Link>
       )}

@@ -1,4 +1,4 @@
-import { cepService } from '../../services/cepService';
+import { cepService } from '../services/cepService';
 
 export const handleCepBlur = async (
   cep: string,
