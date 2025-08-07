@@ -218,7 +218,7 @@ const Login: React.FC = () => {
                 {isLoading && (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 )}
-                <span>{isLoading ? 'Entrando...' : 'Entrar'}</span>
+                <span>{isLoading ? 'Entrando...' : 'Login'}</span>
               </button>
 
               {/* Divider */}

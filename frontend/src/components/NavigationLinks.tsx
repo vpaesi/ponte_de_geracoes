@@ -82,7 +82,7 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({ className }) => {
 
       {shouldShowLoginLink && (
         <Link to="/login" className={className}>
-          Entrar
+          Login
         </Link>
       )}
 
