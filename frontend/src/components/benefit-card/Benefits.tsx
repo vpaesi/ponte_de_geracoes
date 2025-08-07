@@ -1,10 +1,10 @@
-import { BENEFITS_FOR_ASSISTED } from '../../constants/benefits';
+import { BENEFITS } from '../../constants/benefits';
 import BenefitCard from './BenefitCard';
 
-const BenefitsForAssisted = () => {
+const Benefits = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-      {BENEFITS_FOR_ASSISTED.map((benefit, index) => (
+      {BENEFITS.map((benefit, index) => (
         <div key={index} className="animate-fade-in" style={{animationDelay: `${index * 0.1}s`}}>
           <BenefitCard
             title={benefit.title}
@@ -18,4 +18,4 @@ const BenefitsForAssisted = () => {
   );
 };
 
-export default BenefitsForAssisted;
+export default Benefits;

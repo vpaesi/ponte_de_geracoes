@@ -1,8 +1,7 @@
 import React from "react";
 import ActiveSupport from "../assets/active-support.svg";
 import Carousel from "../components/Carousel";
-import BenefitsForAssisted from "../components/benefit-card/BenefitsForAssisted";
-import BenefitsForHelpers from "../components/benefit-card/BenefitsForHelpers";
+import Benefits from "../components/benefit-card/Benefits";
 import CriarContaBtn from "../components/ui/CriarContaBtn";
 import EncontrarUsuariosBtn from "../components/ui/EncontrarUsuariosBtn";
 import PlatformDescription from "../components/ui/PlatformDescription";
@@ -59,14 +58,14 @@ const Home: React.FC = () => {
 
       <hr className="border-gray-200" />
 
-      {/* Benefits for Assisted Section */}
+      {/* Benefits Section */}
       <section className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Benefícios para os ajudados
+            Benefícios
           </h2>
           <div>
-            <BenefitsForAssisted />
+            <Benefits />
           </div>
         </div>
       </section>
@@ -97,20 +96,6 @@ const Home: React.FC = () => {
             >
               Encontrar ajudantes
             </EncontrarUsuariosBtn>
-          </div>
-        </div>
-      </section>
-
-      <hr className="border-gray-200" />
-
-      {/* Benefits for Helpers Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Benefícios para os ajudantes
-          </h2>
-          <div>
-            <BenefitsForHelpers />
           </div>
         </div>
       </section>
