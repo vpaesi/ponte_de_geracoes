@@ -23,7 +23,6 @@ const Users: React.FC = () => {
   const [totalPaginas, setTotalPaginas] = useState<number>(1);
   const [cidades, setCidades] = useState<string[]>([]);
   const [cidadeSelecionada, setCidadeSelecionada] = useState<string>("");
-  // Definir "todos" como padrão
   const [tipoUsuarioSelecionado, setTipoUsuarioSelecionado] = useState<string>(
     USER_TYPES.ALL
   );
@@ -54,14 +53,14 @@ const Users: React.FC = () => {
           page: pagina,
           size: 10,
           ...(cidadeSelecionada && { city: cidadeSelecionada }),
-          isAvailable: true,
+          // Não filtrar por available quando estamos mostrando todos ou específicos
+          // isAvailable: true,
         };
 
         const resposta = await userService.searchUsers(
           tipoUsuarioSelecionado,
           parametros
         );
-
         setUsuarios(resposta.content);
         setTotalPaginas(resposta.page.totalPages);
       } catch (error) {
@@ -88,21 +87,27 @@ const Users: React.FC = () => {
 
   // Determinar o tipo de usuário para o UserCard
   const getUserTypeForCard = (user: User): "ajudante" | "assistido" => {
-    if (tipoUsuarioSelecionado === USER_TYPES.ALL) {
-      // Quando está mostrando todos, precisamos determinar o tipo pelo usuário
-      // Pode usar uma propriedade do user ou a lógica que determina o tipo
-      return user.userType || "ajudante"; // Assumindo que o user tem uma propriedade userType
+    // Priorizar o userType que vem do serviço
+    if (user.userType) {
+      return user.userType;
     }
-    return tipoUsuarioSelecionado as "ajudante" | "assistido";
+
+    // Fallback para o tipo selecionado (quando não é "todos")
+    if (tipoUsuarioSelecionado !== USER_TYPES.ALL) {
+      return tipoUsuarioSelecionado as "ajudante" | "assistido";
+    }
+
+    // Último fallback
+    return "ajudante";
   };
 
   return (
     <PageLayout>
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 pt-4 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Cabeçalho */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
               Usuários Registrados
             </h1>
             <p className="text-xl text-accent-600 max-w-2xl mx-auto">
@@ -130,29 +135,17 @@ const Users: React.FC = () => {
           )}
 
           {/* Lista de usuários */}
-          {!carregando && (
+          {!carregando && usuarios.length > 0 && (
             <>
-              <div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {usuarios.map((pessoa) => (
-                    <UserCard
-                      key={`${pessoa.id}-${pessoa.userType || "unknown"}`}
-                      user={pessoa}
-                      userType={getUserTypeForCard(pessoa)}
-                      calculateAge={calcularIdade}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="m-6 text-center">
-                <p className="text-gray-600">
-                  {usuarios.length > 0
-                    ? `Encontrados ${usuarios.length} usuário${
-                        usuarios.length !== 1 ? "s" : ""
-                      }`
-                    : "Nenhum usuário encontrado"}
-                  {cidadeSelecionada && ` em ${cidadeSelecionada}`}
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {usuarios.map((pessoa) => (
+                  <UserCard
+                    key={`${pessoa.id}-${pessoa.userType || "unknown"}`}
+                    user={pessoa}
+                    userType={getUserTypeForCard(pessoa)}
+                    calculateAge={calcularIdade}
+                  />
+                ))}
               </div>
             </>
           )}
@@ -180,6 +173,15 @@ const Users: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Contador de resultados */}
+          <div className="m-6 text-center">
+            <p className="text-gray-600">
+              Encontrados {usuarios.length} usuário
+              {usuarios.length !== 1 ? "s" : ""}
+              {cidadeSelecionada && ` em ${cidadeSelecionada}`}
+            </p>
+          </div>
 
           {/* Paginação */}
           {!carregando && usuarios.length > 0 && totalPaginas > 1 && (

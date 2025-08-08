@@ -23,7 +23,8 @@
           "complement": "Apt. 45",
           "neighborhood": "Centro"
         },
-        "available": true
+        "available": true,
+        "userType": "ajudante"
       },
       {
         "id": 2,
@@ -47,7 +48,8 @@
           "complement": "Casa 2",
           "neighborhood": "Copacabana"
         },
-        "available": true
+        "available": true,
+        "userType": "ajudante"
       },
       {
         "id": 3,
@@ -71,7 +73,8 @@
           "complement": "",
           "neighborhood": "Centro"
         },
-        "available": true
+        "available": false,
+        "userType": "ajudante"
       },
       {
         "id": 4,
@@ -95,7 +98,8 @@
           "complement": "Bloco A",
           "neighborhood": "Centro Histórico"
         },
-        "available": false
+        "available": false,
+        "userType": "ajudante"
       },
       {
         "id": 5,
@@ -119,7 +123,8 @@
           "complement": "Apt. 12",
           "neighborhood": "Pelourinho"
         },
-        "available": true
+        "available": true,
+        "userType": "ajudante"
       }
     ],
     "page": {
@@ -153,7 +158,9 @@
           "number": "987",
           "complement": "Casa",
           "neighborhood": "Vila Madalena"
-        }
+        },
+        "available": true,
+        "userType": "assistido"
       },
       {
         "id": 7,
@@ -177,7 +184,9 @@
           "number": "432",
           "complement": "Apt. 101",
           "neighborhood": "Tijuca"
-        }
+        },
+        "available": false,
+        "userType": "assistido"
       },
       {
         "id": 8,
@@ -201,7 +210,9 @@
           "number": "765",
           "complement": "",
           "neighborhood": "Centro"
-        }
+        },
+        "available": true,
+        "userType": "assistido"
       },
       {
         "id": 9,
@@ -225,7 +236,9 @@
           "number": "159",
           "complement": "Casa 3",
           "neighborhood": "Moinhos de Vento"
-        }
+        },
+        "available": false,
+        "userType": "assistido"
       },
       {
         "id": 10,
@@ -249,7 +262,9 @@
           "number": "357",
           "complement": "Sobrado",
           "neighborhood": "Centro Histórico"
-        }
+        },
+        "available": true,
+        "userType": "assistido"
       }
     ],
     "page": {

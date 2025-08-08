@@ -1,6 +1,7 @@
 export interface User {
-  id: string | null | number;
-  nome: string;
+  id: number;
+  name?: string; // Para compatibilidade com APIs diferentes
+  nome?: string; // Para compatibilidade com dados mockados
   birthDate?: string;
   rg?: string;
   cpf?: string;
@@ -14,7 +15,8 @@ export interface User {
   address?: Address;
   skills?: string;
   needs?: string;
-  userType?: 'ajudante' | 'assistido'; // Adicionar esta propriedade
+  needsHelp?: boolean; // Para assistidos
+  userType?: 'ajudante' | 'assistido';
 }
 
 export interface UserContextType {
@@ -36,12 +38,12 @@ export interface RegisteredPerson {
 
 export interface Address {
   id?: number;
+  city: string;
+  zipCode: string;
   street: string;
   number: string;
   complement?: string;
-  zipCode: string;
-  city: string;
-  neighborhood: string;
+  neighborhood?: string;
 }
 
 export interface CarouselItem {

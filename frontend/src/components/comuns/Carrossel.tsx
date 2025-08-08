@@ -39,7 +39,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
       if (helpersResponse.content && Array.isArray(helpersResponse.content)) {
         const helpers = (helpersResponse.content as User[]).map((user: User) => ({
           id: Number(user.id) || 0,
-          nome: user.nome,
+          nome: user.nome || "Nome não informado",
           age: calcularIdade(user.birthDate),
           img: user.profileImageUrl || "",
           descricao: user.aboutYou || "Sem descrição disponível",
@@ -58,7 +58,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
       if (assistedResponse.content && Array.isArray(assistedResponse.content)) {
         const assisted = (assistedResponse.content as User[]).map((user: User) => ({
           id: Number(user.id) + 1000 || 1000,
-          nome: user.nome,
+          nome: user.nome || "Nome não informado",
           age: calcularIdade(user.birthDate),
           img: user.profileImageUrl || "",
           descricao: user.aboutYou || "Sem descrição disponível",
@@ -158,7 +158,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
                       className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
                         usuario.userType === "helper"
                           ? "bg-blue-100 text-blue-800"
-                          : "bg-green-100 text-green-800"
+                          : "bg-purple-100 text-purple-800"
                       }`}
                     >
                       {usuario.userType === "helper"

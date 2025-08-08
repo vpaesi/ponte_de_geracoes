@@ -189,7 +189,10 @@ const AtualizarPerfil: React.FC = () => {
             />
 
             <EnderecoSection
-              endereco={dadosUsuario.address!}
+              endereco={{
+                ...dadosUsuario.address!,
+                neighborhood: dadosUsuario.address?.neighborhood ?? ""
+              }}
               atualizarCampo={atualizarCampo}
               onCepBlur={handleCepBlur}
             />

@@ -31,7 +31,7 @@ const UserCard: React.FC<UserCardProps> = ({
         <div className="relative">
           <ProfileImage
             src={user.profileImageUrl}
-            alt={user.nome}
+            alt={user.nome || user.name || "Usuário sem nome"}
             size="xl"
           />
           <div className="absolute top-0 right-0">
@@ -44,7 +44,7 @@ const UserCard: React.FC<UserCardProps> = ({
       <div className="p-6 space-y-4">
         <div className="text-center">
           <h3 className="text-xl font-bold text-accent-800 mb-1">
-            {user.nome}
+            {user.nome || user.name}
           </h3>
           <p className="text-accent-600">
             {calculateAge(user.birthDate)} anos
@@ -82,9 +82,9 @@ const UserCard: React.FC<UserCardProps> = ({
         {/* Dias disponíveis */}
         <AvailableDays days={user.availableDays || []} />
 
-        {/* Status */}
+        {/* Status - usar o available do próprio usuário */}
         <div className="flex justify-center">
-          <StatusBadge available={user.available || false} />
+          <StatusBadge available={user.available ?? false} />
         </div>
       </div>
     </div>

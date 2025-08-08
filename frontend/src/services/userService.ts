@@ -30,18 +30,34 @@ export const userService = {
           apiService.getUsers("assisted", { ...params, page: 0 }) // Reset page for assisted
         ]);
 
-        // Combinar os resultados
-        const allUsers = [
-          ...(helpersResponse.content || []),
-          ...(assistedResponse.content || [])
-        ];
+        // Adicionar userType aos dados e combinar os resultados
+        const helpers = (helpersResponse.content || []).map((user: any) => ({
+          ...user,
+          userType: 'ajudante' as const,
+          // Garantir que available está definido
+          available: user.available ?? true
+        }));
+
+        const assisted = (assistedResponse.content || []).map((user: any) => ({
+          ...user,
+          userType: 'assistido' as const,
+          // Para assistidos, usar needsHelp se available não estiver definido
+          available: user.available ?? !user.needsHelp
+        }));
+
+        const allUsers = [...helpers, ...assisted];
+
+        // Filtrar por cidade se especificado
+        const filteredUsers = params.city 
+          ? allUsers.filter(user => user.address?.city === params.city)
+          : allUsers;
 
         // Calcular paginação manual para todos os usuários
-        const totalElements = allUsers.length;
+        const totalElements = filteredUsers.length;
         const totalPages = Math.ceil(totalElements / params.size);
         const startIndex = params.page * params.size;
         const endIndex = startIndex + params.size;
-        const paginatedUsers = allUsers.slice(startIndex, endIndex);
+        const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
 
         return {
           content: paginatedUsers as User[],
@@ -55,7 +71,20 @@ export const userService = {
       } else {
         // Buscar tipo específico
         const endpoint = userType === USER_TYPES.HELPER ? "helper" : "assisted";
-        return await apiService.getUsers(endpoint as "helper" | "assisted", params);
+        const response = await apiService.getUsers(endpoint as "helper" | "assisted", params);
+        
+        // Adicionar userType aos dados retornados
+        const usersWithType = (response.content || []).map((user: any) => ({
+          ...user,
+          userType: userType as 'ajudante' | 'assistido',
+          // Garantir que available está definido
+          available: user.available ?? (userType === USER_TYPES.ASSISTED ? !user.needsHelp : true)
+        }));
+
+        return {
+          content: usersWithType as User[],
+          page: response.page
+        };
       }
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);
