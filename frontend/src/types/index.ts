@@ -1,13 +1,19 @@
 export interface User {
-  profileImageUrl: string;
-  birthDate(birthDate: any): import("react").ReactNode;
-  address: any;
-  aboutYou: string;
-  availableDays: any;
-  id: number | null;
-  userType: "ajudante" | "ajudado" | "default";
+  id: string;
   name: string;
+  birthDate: string;
+  rg: string;
+  cpf: string;
   email: string;
+  phone: string;
+  userType: 'ajudante' | 'assistido';
+  skills?: string;
+  needs?: string;
+  aboutYou: string;
+  availableDays: string[];
+  profileImageUrl?: string;
+  address: Address;
+  available?: boolean;
 }
 
 export interface UserContextType {
@@ -25,14 +31,8 @@ export interface RegisteredPerson {
   birthDate?: string;
 }
 
-export interface CarouselItem {
-  name: string;
-  age: number;
-  img: string;
-  description: string;
-}
-
 export interface Address {
+  id?: number;
   street: string;
   number: string;
   complement?: string;
@@ -41,20 +41,49 @@ export interface Address {
   neighborhood: string;
 }
 
-export interface FormValues {
+export interface CarouselItem {
+  id: number;
   name: string;
-  birthDate: string;
-  dob: string; // Alias for birthDate used in validation
+  age: number;
+  img: string;
+  description: string;
+  userType: 'helper' | 'assisted';
+}
+
+export interface FormData {
+  nome: string;
+  dataNascimento: string;
   rg: string;
   cpf: string;
   email: string;
-  phone: string;
-  password: string;
-  confirmPassword: string;
-  availableDays: string[];
-  address: Address;
-  userType: string;
-  aboutYou: string;
-  skills?: string;
-  needs?: string;
+  telefone: string;
+  senha: string;
+  confirmarSenha: string;
+  endereco: Address;
+  tipoUsuario: 'ajudante' | 'assistido';
+  sobreMim: string;
+  habilidades?: string;
+  necessidades?: string;
+  diasDisponiveis: string[];
+}
+
+export interface ValidationError {
+  campo: string;
+  mensagem: string;
+}
+
+export interface ValidationResult {
+  valido: boolean;
+  erros: Record<string, boolean>;
+  mensagens: ValidationError[];
+}
+
+export interface ApiResponse<T> {
+  content: T[];
+  page: {
+    size: number;
+    number: number;
+    totalPages: number;
+    totalElements: number;
+  };
 }

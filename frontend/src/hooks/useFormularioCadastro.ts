@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { 
   validarFormularioCadastro, 
   buscarEnderecoPorCep,
-  exibirErrosValidacao,
-  DadosFormulario
+  exibirErrosValidacao
 } from '../utils/validadoresForm';
 import { registrationService } from '../services/registrationService';
+import type { FormData } from '../types';
 
 export const useFormularioCadastro = () => {
   const navegar = useNavigate();
   
-  const [dadosFormulario, setDadosFormulario] = useState({
+  const [dadosFormulario, setDadosFormulario] = useState<FormData>({
     nome: "",
     dataNascimento: "",
     rg: "",
@@ -21,18 +21,18 @@ export const useFormularioCadastro = () => {
     senha: "",
     confirmarSenha: "",
     endereco: {
-      logradouro: "",
-      numero: "",
-      cep: "",
-      cidade: "",
-      bairro: "",
-      complemento: ""
+      street: "",
+      number: "",
+      zipCode: "",
+      city: "",
+      neighborhood: "",
+      complement: ""
     },
-    tipoUsuario: "",
+    tipoUsuario: "ajudante",
     sobreMim: "",
     habilidades: "",
     necessidades: "",
-    diasDisponiveis: [] as string[],
+    diasDisponiveis: [],
   });
 
   const [imagemPerfilPreview, setImagemPerfilPreview] = useState<File | null>(null);
@@ -41,7 +41,7 @@ export const useFormularioCadastro = () => {
 
   const atualizarCampo = (campo: string, valor: string | string[]) => {
     if (campo.startsWith('endereco.')) {
-      const subcampo = campo.split('.')[1];
+      const subcampo = campo.split('.')[1] as keyof FormData['endereco'];
       setDadosFormulario(anterior => ({
         ...anterior,
         endereco: {
@@ -53,7 +53,6 @@ export const useFormularioCadastro = () => {
       setDadosFormulario(anterior => ({ ...anterior, [campo]: valor }));
     }
     
-    // Limpa erro quando usuário começa a digitar
     if (erros[campo]) {
       setErros(anterior => ({ ...anterior, [campo]: false }));
     }
@@ -70,9 +69,9 @@ export const useFormularioCadastro = () => {
   const buscarCep = async (cep: string) => {
     await buscarEnderecoPorCep(
       cep,
-      (valor) => atualizarCampo('endereco.logradouro', valor),
-      (valor) => atualizarCampo('endereco.cidade', valor),
-      (valor) => atualizarCampo('endereco.bairro', valor)
+      (valor) => atualizarCampo('endereco.street', valor),
+      (valor) => atualizarCampo('endereco.city', valor),
+      (valor) => atualizarCampo('endereco.neighborhood', valor)
     );
   };
 
@@ -81,16 +80,7 @@ export const useFormularioCadastro = () => {
     
     if (enviando) return;
 
-    // Prepara os dados conforme esperado pelo validador
-    const dadosParaValidar: DadosFormulario = {
-      ...dadosFormulario,
-      // Dependendo do tipo de usuário, define o campo correto
-      habilidades: dadosFormulario.tipoUsuario === "ajudante" ? dadosFormulario.habilidades : undefined,
-      necessidades: dadosFormulario.tipoUsuario !== "ajudante" ? dadosFormulario.necessidades : undefined
-    };
-
-    // Usa a validação completa do módulo validadoresForm
-    const resultadoValidacao = validarFormularioCadastro(dadosParaValidar, setErros);
+    const resultadoValidacao = validarFormularioCadastro(dadosFormulario, setErros);
     
     if (!resultadoValidacao.valido) {
       exibirErrosValidacao(resultadoValidacao);
@@ -100,28 +90,25 @@ export const useFormularioCadastro = () => {
     try {
       setEnviando(true);
       
-      // Adapta os dados para o formato esperado pela API e para o tipo FormValues
       const dadosParaAPI = {
         name: dadosFormulario.nome,
         birthDate: dadosFormulario.dataNascimento,
-        dob: dadosFormulario.dataNascimento, // Adiciona dob conforme esperado por FormValues
         rg: dadosFormulario.rg,
         cpf: dadosFormulario.cpf,
         email: dadosFormulario.email,
         phone: dadosFormulario.telefone,
         password: dadosFormulario.senha,
-        confirmPassword: dadosFormulario.confirmarSenha,
         address: {
-          street: dadosFormulario.endereco.logradouro,
-          number: dadosFormulario.endereco.numero,
-          complement: dadosFormulario.endereco.complemento,
-          zipCode: dadosFormulario.endereco.cep,
-          city: dadosFormulario.endereco.cidade,
-          neighborhood: dadosFormulario.endereco.bairro
+          street: dadosFormulario.endereco.street,
+          number: dadosFormulario.endereco.number,
+          complement: dadosFormulario.endereco.complement,
+          zipCode: dadosFormulario.endereco.zipCode,
+          city: dadosFormulario.endereco.city,
+          neighborhood: dadosFormulario.endereco.neighborhood
         },
         availableDays: dadosFormulario.diasDisponiveis,
         aboutYou: dadosFormulario.sobreMim,
-        userType: dadosFormulario.tipoUsuario, // Adiciona userType conforme esperado por FormValues
+        userType: dadosFormulario.tipoUsuario,
         ...(dadosFormulario.tipoUsuario === "ajudante"
           ? { skills: dadosFormulario.habilidades }
           : { needs: dadosFormulario.necessidades })
