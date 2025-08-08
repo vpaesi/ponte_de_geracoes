@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { PageLayout } from "../components/PageLayout";
-import { InputsForms } from "../components/forms/InputsForms";
-import { InputsFormsFormatado } from "../components/forms/InputsFormsFormatado";
-import { formataCpf, formataCelular, formataCep } from "../utils/formatadores";
+import { DadosPessoaisSection } from "../components/forms/sections/DadosPessoaisSection";
+import { EnderecoSection } from "../components/forms/sections/EnderecoSection";
+import { SobreVoceSection } from "../components/forms/sections/SobreVoceSection";
 import { cepService } from "../services/cepService";
 import type { User } from "../types";
 
@@ -87,11 +87,10 @@ const AtualizarPerfil: React.FC = () => {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const arquivo = e.target.files?.[0];
-    if (arquivo) {
-      // Aqui você pode implementar o upload da imagem
-      console.log('Imagem selecionada:', arquivo);
+  const handleImageChange = (file: File | null) => {
+    if (file) {
+      console.log('Imagem selecionada:', file);
+      // Implementar upload da imagem aqui
     }
   };
 
@@ -178,203 +177,29 @@ const AtualizarPerfil: React.FC = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Dados Pessoais */}
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-bold text-primary-600 mb-6">
-                Dados Pessoais
-              </h2>
+            <DadosPessoaisSection
+              dados={{
+                ...dadosUsuario,
+                email: dadosUsuario.email ?? ""
+              }}
+              atualizarCampo={atualizarCampo}
+              showFileUpload={true}
+              onImageChange={handleImageChange}
+              fileInputLabel="Nova Foto de Perfil"
+            />
 
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Nova Foto de Perfil
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="w-full p-2 border border-accent-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
-                </div>
+            <EnderecoSection
+              endereco={dadosUsuario.address!}
+              atualizarCampo={atualizarCampo}
+              onCepBlur={handleCepBlur}
+            />
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <InputsForms
-                    label="Nome completo"
-                    type="text"
-                    placeholder="Seu nome completo"
-                    value={dadosUsuario.name || ""}
-                    onChange={(valor) => atualizarCampo("name", valor)}
-                    required
-                  />
-
-                  <InputsForms
-                    label="Email"
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={dadosUsuario.email || ""}
-                    onChange={(valor) => atualizarCampo("email", valor)}
-                    required
-                  />
-
-                  <InputsForms
-                    label="Data de nascimento"
-                    type="date"
-                    placeholder=""
-                    value={dadosUsuario.birthDate || ""}
-                    onChange={(valor) => atualizarCampo("birthDate", valor)}
-                    required
-                  />
-
-                  <InputsFormsFormatado
-                    label="Telefone"
-                    type="tel"
-                    placeholder="(00) 00000-0000"
-                    value={dadosUsuario.phone || ""}
-                    onChange={(valor) => atualizarCampo("phone", valor)}
-                    formatter={formataCelular}
-                    required
-                  />
-
-                  <InputsForms
-                    label="RG"
-                    type="text"
-                    placeholder="00.000.000-0"
-                    value={dadosUsuario.rg || ""}
-                    onChange={(valor) => atualizarCampo("rg", valor)}
-                    required
-                  />
-
-                  <InputsFormsFormatado
-                    label="CPF"
-                    type="text"
-                    placeholder="000.000.000-00"
-                    value={dadosUsuario.cpf || ""}
-                    onChange={(valor) => atualizarCampo("cpf", valor)}
-                    formatter={formataCpf}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Endereço */}
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-bold text-primary-600 mb-6">
-                Endereço
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InputsFormsFormatado
-                  label="CEP"
-                  type="text"
-                  placeholder="00000-000"
-                  value={dadosUsuario.address?.zipCode || ""}
-                  onChange={(valor) => atualizarCampo("address.zipCode", valor)}
-                  onBlur={handleCepBlur}
-                  formatter={formataCep}
-                  required
-                />
-
-                <InputsForms
-                  label="Cidade"
-                  type="text"
-                  placeholder="Sua cidade"
-                  value={dadosUsuario.address?.city || ""}
-                  onChange={(valor) => atualizarCampo("address.city", valor)}
-                  required
-                />
-
-                <InputsForms
-                  label="Logradouro"
-                  type="text"
-                  placeholder="Rua, Avenida, etc."
-                  value={dadosUsuario.address?.street || ""}
-                  onChange={(valor) => atualizarCampo("address.street", valor)}
-                  required
-                />
-
-                <InputsForms
-                  label="Número"
-                  type="text"
-                  placeholder="123"
-                  value={dadosUsuario.address?.number || ""}
-                  onChange={(valor) => atualizarCampo("address.number", valor)}
-                  required
-                />
-
-                <InputsForms
-                  label="Bairro"
-                  type="text"
-                  placeholder="Seu bairro"
-                  value={dadosUsuario.address?.neighborhood || ""}
-                  onChange={(valor) => atualizarCampo("address.neighborhood", valor)}
-                  required
-                />
-
-                <InputsForms
-                  label="Complemento (opcional)"
-                  type="text"
-                  placeholder="Apto, Bloco, etc."
-                  value={dadosUsuario.address?.complement || ""}
-                  onChange={(valor) => atualizarCampo("address.complement", valor)}
-                />
-              </div>
-            </div>
-
-            {/* Sobre você */}
-            <div className="glass-card p-8">
-              <h2 className="text-2xl font-bold text-primary-600 mb-6">
-                Sobre Você
-              </h2>
-
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Fale um pouco sobre você
-                  </label>
-                  <textarea
-                    rows={4}
-                    placeholder="Conte um pouco sobre sua personalidade, hobbies, experiências..."
-                    value={dadosUsuario.aboutYou || ""}
-                    onChange={(e) => atualizarCampo("aboutYou", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    {userType === "ajudante" ? "Suas Habilidades" : "Suas Necessidades"}
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder={userType === "ajudante" ? "Liste suas habilidades..." : "Liste suas necessidades..."}
-                    value={userType === "ajudante" ? (dadosUsuario.skills || "") : (dadosUsuario.needs || "")}
-                    onChange={(e) => atualizarCampo(userType === "ajudante" ? "skills" : "needs", e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
-                  />
-                </div>
-
-                {/* Dias disponíveis */}
-                <div className="space-y-4">
-                  <label className="block text-sm font-semibold text-accent-700">
-                    {userType === "ajudante" ? "Quando você está disponível para ajudar?" : "Quando você precisaria de ajuda?"}
-                  </label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                    {["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"].map((dia) => (
-                      <label key={dia} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={dadosUsuario.availableDays?.includes(dia) || false}
-                          onChange={(e) => handleDiasDisponiveisChange(e, dia)}
-                          className="w-4 h-4 text-primary-600 border-accent-300 rounded focus:ring-primary-500"
-                        />
-                        <span className="text-sm text-accent-700">{dia.slice(0, 3)}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <SobreVoceSection
+              dados={dadosUsuario}
+              userType={userType || "ajudante"}
+              atualizarCampo={atualizarCampo}
+              onDiasDisponiveisChange={handleDiasDisponiveisChange}
+            />
 
             {/* Botões */}
             <div className="flex justify-between items-center pt-8 border-t border-accent-200">

@@ -42,12 +42,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           onChange={(value) => onUpdateFormData("password", value)}
           error={errors.password}
           required
-        />
-      </div>
+        />        
 
       {errors.submit && (
         <div className="text-red-600 text-sm text-center">{errors.submit}</div>
       )}
+      </div>
 
       <button
         type="submit"
