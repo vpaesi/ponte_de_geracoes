@@ -165,7 +165,7 @@
         "phone": "(11) 93333-5678",
         "password": "senha123",
         "needs": "Companhia para Atividades, Atividades Domésticas, Preparo de Refeições",
-        "needsHelp": true,
+        "needsHelp": false,
         "availableDays": ["Quarta", "Sexta", "Sábado"],
         "aboutYou": "Viúva há 5 anos, gosto de companhia para sair e fazer atividades. Às vezes preciso de ajuda com tarefas domésticas mais pesadas.",
         "profileImageUrl": "/generic-icon.jpg",

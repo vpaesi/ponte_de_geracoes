@@ -14,7 +14,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`min-h-screen py-12 px-4 ${className}`}>
+    <div className={`min-h-screen pt-10 pb-0 px-4 ${className}`}>
       <div className="max-w-4xl mx-auto">
         {(title || subtitle) && (
           <div className="text-center mb-12 animate-fade-in">

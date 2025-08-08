@@ -1,19 +1,20 @@
 export interface User {
-  id: string | null;
+  id: string | null | number;
   nome: string;
   birthDate?: string;
   rg?: string;
   cpf?: string;
   email: string;
   phone?: string;
-  userType: 'ajudante' | 'assistido' | 'default';
+  password?: string;
+  availableDays?: string[];
+  aboutYou?: string;
+  profileImageUrl?: string;
+  available?: boolean;
+  address?: Address;
   skills?: string;
   needs?: string;
-  aboutYou?: string;
-  availableDays?: string[];
-  profileImageUrl?: string;
-  address?: Address;
-  available?: boolean;
+  userType?: 'ajudante' | 'assistido'; // Adicionar esta propriedade
 }
 
 export interface UserContextType {
