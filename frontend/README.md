@@ -180,7 +180,7 @@ src/
 ├── hooks/                     # Hooks customizados
 │   ├── useHelpers.ts         # Hook para buscar ajudantes
 │   ├── useNavigationHelpers.ts # Hook para navegação
-│   ├── useRegistrationForm.ts  # Hook para formulário de registro
+│   ├── useFormularioCadastro.ts  # Hook para formulário de registro
 │   └── useUser.ts            # Hook para contexto de usuário
 ├── pages/                     # Páginas da aplicação
 ├── services/                  # Serviços da aplicação

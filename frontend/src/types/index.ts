@@ -1,4 +1,9 @@
 export interface User {
+  profileImageUrl: string;
+  birthDate(birthDate: any): import("react").ReactNode;
+  address: any;
+  aboutYou: string;
+  availableDays: any;
   id: number | null;
   userType: "ajudante" | "ajudado" | "default";
   name: string;

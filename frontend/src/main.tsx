@@ -6,7 +6,7 @@ import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import Home from "./pages/Home.tsx";
 import SignUp from "./pages/SignUp.tsx";
-import UpdateProfile from "./pages/UpdateProfile.tsx";
+import AtualizarPerfil from "./pages/AtualizarPerfil.tsx";
 import Login from "./pages/Login.tsx";
 import Users from "./pages/Users.tsx";
 import Profile from "./pages/Profile.tsx";
@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/edit-profile" element={<UpdateProfile />} />
+          <Route path="/edit-profile" element={<AtualizarPerfil />} />
           <Route path="/login" element={<Login />} />
           <Route path="/users" element={<Users />} />
           <Route path="/profile" element={<Profile />} />

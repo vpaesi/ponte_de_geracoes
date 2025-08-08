@@ -2,6 +2,8 @@ import { API_BASE_URL } from '../constants/api';
 import mockData from '../data/mockUsers.json';
 
 interface ApiResponse<T> {
+  conteudo: never[];
+  pagina: any;
   content: T[];
   page: {
     size: number;
@@ -58,7 +60,7 @@ export const apiService = {
       isAvailable?: boolean;
       day?: string;
     }
-  ): Promise<ApiResponse<any>> {
+  ): Promise<ApiResponse<unknown>> {
     try {
       // Tenta buscar do backend primeiro
       const queryParams = new URLSearchParams();

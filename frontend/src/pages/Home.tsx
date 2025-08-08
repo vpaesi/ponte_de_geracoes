@@ -1,9 +1,9 @@
 import React from "react";
 import { useUser } from "../hooks/useUser";
 import { useHelpers } from "../hooks/useHelpers";
-import HeroSection from "../components/HeroSection";
-import BenefitsSection from "../components/BenefitsSection";
-import ListaOfUSersSection from "../components/ListaOfUSersSection";
+import SecaoBeneficios from "../components/secoes/SecaoBeneficios";
+import SecaoCarrossel from "../components/secoes/SecaoCarrossel";
+import HeroSection from "../components/secoes/SecaoHero";
 
 const Home: React.FC = () => {
   const { user } = useUser();
@@ -18,17 +18,13 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen mx-20">
-      
       <HeroSection userType={userType} />
       <hr className="border-gray-200" />
 
-      <BenefitsSection />
+      <SecaoBeneficios />
       <hr className="border-gray-200" />
 
-      <ListaOfUSersSection
-        loading={loading}
-        carouselItems={carouselItems}
-      />
+      <SecaoCarrossel loading={loading} carouselItems={carouselItems} />
     </div>
   );
 };

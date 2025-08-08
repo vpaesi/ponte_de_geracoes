@@ -1,7 +1,7 @@
 import React from "react";
 import { PageLayout } from "../components/PageLayout";
-import { LoginForm } from "../components/login/LoginForm";
-import { LoginFooter } from "../components/login/LoginFooter";
+import { LoginForm } from "../components/LoginForm";
+import { LoginFooter } from "../components/LoginFooter";
 import { useLoginForm } from "../hooks/useLoginForm";
 
 const Login: React.FC = () => {
@@ -28,11 +28,9 @@ const Login: React.FC = () => {
             />
 
             <div className="mt-6 space-y-4">
-              <LoginFooter
-              />
+              <LoginFooter />
             </div>
           </div>
-
         </div>
       </div>
     </PageLayout>

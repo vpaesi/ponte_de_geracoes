@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
   children,
   title,
   subtitle,
-  className = '',
+  className = "",
 }) => {
   return (
     <div className={`min-h-screen py-12 px-4 ${className}`}>
@@ -30,9 +30,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({
             )}
           </div>
         )}
-        <div className="animate-slide-in">
-          {children}
-        </div>
+        <div className="animate-slide-in">{children}</div>
       </div>
     </div>
   );
