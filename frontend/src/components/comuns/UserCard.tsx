@@ -24,7 +24,7 @@ const UserCard: React.FC<UserCardProps> = ({
     <div className={`
       glass-card overflow-hidden hover:shadow-xl 
       transition-all duration-300 transform hover:-translate-y-1 
-      bg-white ${className}
+      bg-white ${className} border border-gray-200 rounded-lg
     `}>
       {/* Imagem */}
       <div className="p-6 pb-0 flex justify-center">
