@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { API_BASE_URL } from "../constants/api";
+import { apiService } from "../services/apiService";
 import { PageLayout } from "../components/PageLayout";
 import CriarContaBtn from "../components/ui/CriarContaBtn";
 import PlatformDescription from "../components/ui/PlatformDescription";
+import genericIcon from "../assets/generic-icon.jpg"; // Importar a imagem
 
 interface Address {
   city: string;
@@ -40,34 +40,13 @@ const Users: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<string>("helper");
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Fetch de cidades baseado em registros disponíveis no banco
+  // Fetch de cidades
   useEffect(() => {
     const fetchCities = async () => {
       try {
         setLoading(true);
-
-        // Buscar os ajudantes e ajudados para determinar as cidades disponíveis
-        const helperResponse = await axios.get<{
-          content: Registered[];
-        }>(`${API_BASE_URL}/helper`, { params: { size: 1000 } });
-
-        const assistedResponse = await axios.get<{
-          content: Registered[];
-        }>(`${API_BASE_URL}/assisted`, { params: { size: 1000 } });
-
-        // Extrair cidades de ambos os conjuntos de dados
-        const helperCities = helperResponse.data.content.map(
-          (person) => person.address.city
-        );
-        const assistedCities = assistedResponse.data.content.map(
-          (person) => person.address.city
-        );
-
-        // Combinar e remover duplicatas
-        const uniqueCities = Array.from(new Set([...helperCities, ...assistedCities]))
-          .sort((a, b) => a.localeCompare(b));
-
-        setCities(uniqueCities);
+        const citiesData = await apiService.getCities();
+        setCities(citiesData);
       } catch (error) {
         console.error("Erro ao buscar cidades:", error);
       } finally {
@@ -84,26 +63,23 @@ const Users: React.FC = () => {
       try {
         setLoading(true);
 
-        const endpoint = selectedUser === "helper" ? "helper" : "assisted";
         const params = {
           page,
           size: 10,
-          city: selectedCity || undefined, // Filtra apenas se houver cidade selecionada
+          city: selectedCity || undefined,
         };
 
-        const response = await axios.get<{
-          content: Registered[];
-          page: PageInfo;
-        }>(`${API_BASE_URL}/${endpoint}`, { params });
+        const response = await apiService.getUsers(
+          selectedUser as 'helper' | 'assisted',
+          params
+        );
 
-        if (response.status === 200 && response.data) {
-          setRegistered(response.data.content || []);
-          setTotalPages(response.data.page.totalPages || 1);
-        } else {
-          console.error("Erro ao buscar dados. Status:", response.status);
-        }
+        setRegistered(response.content || []);
+        setTotalPages(response.page.totalPages || 1);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
+        setRegistered([]);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
@@ -199,9 +175,12 @@ const Users: React.FC = () => {
                     {/* Profile Image */}
                     <div className="aspect-w-16 aspect-h-12 mb-6">
                       <img
-                        src={person.profileImageUrl || "/generic-icon.jpg"}
+                        src={person.profileImageUrl || genericIcon} // Usar a imagem importada
                         alt={person.name}
                         className="w-full h-48 object-cover rounded-xl shadow-lg"
+                        onError={(e) => {
+                          e.currentTarget.src = genericIcon; // Usar a imagem importada no fallback
+                        }}
                       />
                     </div>
 

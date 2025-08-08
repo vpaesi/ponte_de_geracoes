@@ -1,0 +1,262 @@
+{
+  "helpers": {
+    "content": [
+      {
+        "id": 1,
+        "name": "Maria Silva",
+        "birthDate": "1995-03-15",
+        "rg": "12.345.678-9",
+        "cpf": "123.456.789-01",
+        "email": "maria.silva@email.com",
+        "phone": "(11) 99999-1234",
+        "password": "senha123",
+        "skills": "Tecnologia e Computador, Compras e Mercado, Ensino e Educação",
+        "availableDays": ["Segunda", "Quarta", "Sexta"],
+        "aboutYou": "Sou estudante de tecnologia e adoro ajudar pessoas mais experientes com questões digitais. Tenho paciência para ensinar e gosto muito de ouvir histórias de vida.",
+        "profileImageUrl": "../assets/generic-icon.jpg",
+        "address": {
+          "id": 1,
+          "city": "São Paulo",
+          "zipCode": "01000-000",
+          "street": "Rua das Flores",
+          "number": "123",
+          "complement": "Apt. 45",
+          "neighborhood": "Centro"
+        },
+        "available": true
+      },
+      {
+        "id": 2,
+        "name": "João Santos",
+        "birthDate": "1998-07-22",
+        "rg": "23.456.789-0",
+        "cpf": "234.567.890-12",
+        "email": "joao.santos@email.com",
+        "phone": "(11) 98888-5678",
+        "password": "senha123",
+        "skills": "Transporte e Locomoção, Compras e Mercado, Companhia e Conversação",
+        "availableDays": ["Terça", "Quinta", "Sábado"],
+        "aboutYou": "Trabalho como motorista e tenho tempo livre para ajudar com transporte e companhia. Gosto muito de conversar e conhecer pessoas novas.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 2,
+          "city": "Rio de Janeiro",
+          "zipCode": "20000-000",
+          "street": "Avenida Copacabana",
+          "number": "456",
+          "complement": "Casa 2",
+          "neighborhood": "Copacabana"
+        },
+        "available": true
+      },
+      {
+        "id": 3,
+        "name": "Ana Costa",
+        "birthDate": "1996-11-08",
+        "rg": "34.567.890-1",
+        "cpf": "345.678.901-23",
+        "email": "ana.costa@email.com",
+        "phone": "(11) 97777-9012",
+        "password": "senha123",
+        "skills": "Atividades Domésticas, Culinária, Arte e Artesanato",
+        "availableDays": ["Segunda", "Quinta", "Domingo"],
+        "aboutYou": "Adoro cozinhar e fazer artesanato. Posso ajudar com tarefas domésticas e ensinar receitas tradicionais. Tenho muito carinho por pessoas mais velhas.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 3,
+          "city": "Belo Horizonte",
+          "zipCode": "30000-000",
+          "street": "Rua da Liberdade",
+          "number": "789",
+          "complement": "",
+          "neighborhood": "Centro"
+        },
+        "available": true
+      },
+      {
+        "id": 4,
+        "name": "Pedro Oliveira",
+        "birthDate": "1994-05-30",
+        "rg": "45.678.901-2",
+        "cpf": "456.789.012-34",
+        "email": "pedro.oliveira@email.com",
+        "phone": "(11) 96666-3456",
+        "password": "senha123",
+        "skills": "Reparos Domésticos, Jardinagem, Exercícios e Atividade Física",
+        "availableDays": ["Terça", "Sexta", "Sábado"],
+        "aboutYou": "Sou engenheiro e gosto de fazer reparos em casa. Também pratico jardinagem como hobby e posso ajudar com exercícios leves.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 4,
+          "city": "Porto Alegre",
+          "zipCode": "90000-000",
+          "street": "Rua dos Andradas",
+          "number": "321",
+          "complement": "Bloco A",
+          "neighborhood": "Centro Histórico"
+        },
+        "available": false
+      },
+      {
+        "id": 5,
+        "name": "Carla Ferreira",
+        "birthDate": "1997-12-18",
+        "rg": "56.789.012-3",
+        "cpf": "567.890.123-45",
+        "email": "carla.ferreira@email.com",
+        "phone": "(11) 95555-7890",
+        "password": "senha123",
+        "skills": "Cuidados de Saúde, Organização Financeira, Leitura",
+        "availableDays": ["Segunda", "Quarta", "Sexta", "Domingo"],
+        "aboutYou": "Trabalho na área da saúde e tenho experiência em cuidados básicos. Também gosto de ajudar com organização de documentos e adoro ler.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 5,
+          "city": "Salvador",
+          "zipCode": "40000-000",
+          "street": "Avenida Sete de Setembro",
+          "number": "654",
+          "complement": "Apt. 12",
+          "neighborhood": "Pelourinho"
+        },
+        "available": true
+      }
+    ],
+    "page": {
+      "size": 10,
+      "number": 0,
+      "totalElements": 5,
+      "totalPages": 1
+    }
+  },
+  "assisted": {
+    "content": [
+      {
+        "id": 6,
+        "name": "José da Silva",
+        "birthDate": "1945-08-12",
+        "rg": "67.890.123-4",
+        "cpf": "678.901.234-56",
+        "email": "jose.silva@email.com",
+        "phone": "(11) 94444-1234",
+        "password": "senha123",
+        "needs": "Ajuda com Tecnologia, Compras e Mercado, Transporte para Consultas",
+        "needsHelp": true,
+        "availableDays": ["Segunda", "Terça", "Quinta"],
+        "aboutYou": "Sou aposentado e moro sozinho. Preciso de ajuda principalmente com tecnologia e para ir ao mercado. Gosto muito de conversar e tenho muitas histórias para contar.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 6,
+          "city": "São Paulo",
+          "zipCode": "02000-000",
+          "street": "Rua do Comércio",
+          "number": "987",
+          "complement": "Casa",
+          "neighborhood": "Vila Madalena"
+        }
+      },
+      {
+        "id": 7,
+        "name": "Maria dos Santos",
+        "birthDate": "1950-02-25",
+        "rg": "78.901.234-5",
+        "cpf": "789.012.345-67",
+        "email": "maria.santos@email.com",
+        "phone": "(11) 93333-5678",
+        "password": "senha123",
+        "needs": "Companhia para Atividades, Atividades Domésticas, Preparo de Refeições",
+        "needsHelp": true,
+        "availableDays": ["Quarta", "Sexta", "Sábado"],
+        "aboutYou": "Viúva há 5 anos, gosto de companhia para sair e fazer atividades. Às vezes preciso de ajuda com tarefas domésticas mais pesadas.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 7,
+          "city": "Rio de Janeiro",
+          "zipCode": "21000-000",
+          "street": "Rua das Palmeiras",
+          "number": "432",
+          "complement": "Apt. 101",
+          "neighborhood": "Tijuca"
+        }
+      },
+      {
+        "id": 8,
+        "name": "Antônio Pereira",
+        "birthDate": "1940-11-03",
+        "rg": "89.012.345-6",
+        "cpf": "890.123.456-78",
+        "email": "antonio.pereira@email.com",
+        "phone": "(11) 92222-9012",
+        "password": "senha123",
+        "needs": "Ajuda com Medicamentos, Exercícios Leves, Conversação",
+        "needsHelp": true,
+        "availableDays": ["Segunda", "Quarta", "Sexta"],
+        "aboutYou": "Ex-professor aposentado. Gosto de conversar sobre educação e história. Preciso de companhia para exercícios leves e lembretes sobre medicamentos.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 8,
+          "city": "Belo Horizonte",
+          "zipCode": "31000-000",
+          "street": "Avenida Afonso Pena",
+          "number": "765",
+          "complement": "",
+          "neighborhood": "Centro"
+        }
+      },
+      {
+        "id": 9,
+        "name": "Helena Costa",
+        "birthDate": "1948-06-17",
+        "rg": "90.123.456-7",
+        "cpf": "901.234.567-89",
+        "email": "helena.costa@email.com",
+        "phone": "(11) 91111-3456",
+        "password": "senha123",
+        "needs": "Cuidado com Plantas, Atividades Criativas, Organização de Documentos",
+        "needsHelp": true,
+        "availableDays": ["Terça", "Quinta", "Domingo"],
+        "aboutYou": "Adoro plantas e atividades manuais, mas às vezes preciso de ajuda. Também tenho dificuldade para organizar documentos importantes.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 9,
+          "city": "Porto Alegre",
+          "zipCode": "91000-000",
+          "street": "Rua dos Jasmins",
+          "number": "159",
+          "complement": "Casa 3",
+          "neighborhood": "Moinhos de Vento"
+        }
+      },
+      {
+        "id": 10,
+        "name": "Francisco Oliveira",
+        "birthDate": "1942-09-08",
+        "rg": "01.234.567-8",
+        "cpf": "012.345.678-90",
+        "email": "francisco.oliveira@email.com",
+        "phone": "(11) 90000-7890",
+        "password": "senha123",
+        "needs": "Reparos em Casa, Escutar Música, Leitura em Voz Alta",
+        "needsHelp": true,
+        "availableDays": ["Segunda", "Terça", "Sábado"],
+        "aboutYou": "Ex-mecânico aposentado. Gosto de música clássica e histórias. Às vezes preciso de pequenos reparos em casa e companhia para atividades culturais.",
+        "profileImageUrl": "/generic-icon.jpg",
+        "address": {
+          "id": 10,
+          "city": "Salvador",
+          "zipCode": "41000-000",
+          "street": "Rua do Pelourinho",
+          "number": "357",
+          "complement": "Sobrado",
+          "neighborhood": "Centro Histórico"
+        }
+      }
+    ],
+    "page": {
+      "size": 10,
+      "number": 0,
+      "totalElements": 5,
+      "totalPages": 1
+    }
+  }
+}
