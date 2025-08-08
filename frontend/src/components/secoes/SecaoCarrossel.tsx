@@ -1,6 +1,7 @@
 import { CarouselItem } from "../../types";
-import BtnEncontrarUsuarios from "../comuns/BtnEncontrarUsuarios";
+import Button from "../comuns/Button";
 import Carrossel from "../comuns/Carrossel";
+import { UsersIcon } from "@heroicons/react/24/outline";
 
 interface ListaOfUsersSectionProps {
   loading: boolean;
@@ -9,7 +10,7 @@ interface ListaOfUsersSectionProps {
 
 export default function SecaoCarrossel({ loading }: ListaOfUsersSectionProps) {
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-8 px-4">
       <div className="max-w-6xl mx-auto text-center space-y-16">
         {loading ? (
           <div className="flex flex-col items-center space-y-4 py-16">
@@ -17,16 +18,21 @@ export default function SecaoCarrossel({ loading }: ListaOfUsersSectionProps) {
             <p className="text-gray-600 text-lg">Carregando usuários...</p>
           </div>
         ) : (
-          <div className="space-y-16">
+          <div className="">
             {/* Carousel único com todos os tipos de usuários */}
-            <Carrossel title="Conecte-se com Nossa Comunidade" city="" />
+            <Carrossel titulo="Conecte-se com nossa Comunidade" city="" />
           </div>
         )}
 
-        <div className="pt-6 space-y-4">
-          <BtnEncontrarUsuarios to="/users" variant="outline" size="lg">
-            Ver Todos os Usuários
-          </BtnEncontrarUsuarios>
+        <div style={{ marginTop: "0 !important" }}>
+          <Button
+            to="/users"
+            variant="outline"
+            size="md"
+            icon={<UsersIcon className="w-5 h-5" />}
+          >
+            Conhecer comunidade
+          </Button>
         </div>
       </div>
     </section>

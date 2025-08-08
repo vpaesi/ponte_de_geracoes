@@ -9,47 +9,79 @@ import {
 } from '@heroicons/react/24/outline';
 
 export interface Benefit {
-  title: string;
-  description: string;
+  id: string;
+  titulo: string;
+  descricao: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  iconColor?: string;
+  iconColor: string;
+  categoria?: 'social' | 'health' | 'learning' | 'personal' | 'security';
 }
+
+// Cores padronizadas para os ícones
+export const ICON_COLORS = {
+  warm: "text-warm-600",
+  red: "text-red-500",
+  secondary: "text-secondary-600",
+  yellow: "text-yellow-600",
+  green: "text-green-600",
+  indigo: "text-indigo-600",
+} as const;
 
 export const BENEFITS: Benefit[] = [
   {
-    title: "Conexão e Companhia",
-    description: "Fortalece laços humanos através de conversas, trocas de experiências e redução da solidão.",
+    id: "conexao-companhia",
+    titulo: "Conexão e Companhia",
+    descricao: "Fortalece laços humanos através de conversas, trocas de experiências e redução da solidão.",
     icon: UsersIcon,
-    iconColor: "text-warm-600",
+    iconColor: ICON_COLORS.warm,
+    categoria: 'social',
   },
   {
-    title: "Bem-estar e Saúde",
-    description: "Promove saúde física e mental através do cuidado mútuo e incentivo a hábitos saudáveis.",
+    id: "bem-estar-saude",
+    titulo: "Bem-estar e Saúde",
+    descricao: "Promove saúde física e mental através do cuidado mútuo e incentivo a hábitos saudáveis.",
     icon: HeartIcon,
-    iconColor: "text-red-500",
+    iconColor: ICON_COLORS.red,
+    categoria: 'health',
   },
   {
-    title: "Aprendizado e Crescimento",
-    description: "Possibilita troca de conhecimentos, sabedoria e desenvolvimento de novas habilidades.",
+    id: "aprendizado-crescimento",
+    titulo: "Aprendizado e Crescimento",
+    descricao: "Possibilita troca de conhecimentos, sabedoria e desenvolvimento de novas habilidades.",
     icon: BookOpenIcon,
-    iconColor: "text-secondary-600",
+    iconColor: ICON_COLORS.secondary,
+    categoria: 'learning',
   },
   {
-    title: "Propósito e Valorização",
-    description: "Oferece senso de propósito e reconhecimento mútuo, valorizando a contribuição de cada pessoa.",
+    id: "proposito-valorizacao",
+    titulo: "Propósito e Valorização",
+    descricao: "Oferece senso de propósito e reconhecimento mútuo, valorizando a contribuição de cada pessoa.",
     icon: TrophyIcon,
-    iconColor: "text-yellow-600",
+    iconColor: ICON_COLORS.yellow,
+    categoria: 'personal',
   },
   {
-    title: "Segurança e Confiança",
-    description: "Cria uma rede confiável de apoio e suporte para necessidades do dia a dia.",
+    id: "seguranca-confianca",
+    titulo: "Segurança e Confiança",
+    descricao: "Cria uma rede confiável de apoio e suporte para necessidades do dia a dia.",
     icon: ShieldCheckIcon,
-    iconColor: "text-green-600",
+    iconColor: ICON_COLORS.green,
+    categoria: 'security',
   },
   {
-    title: "Desenvolvimento Pessoal",
-    description: "Desenvolve empatia, paciência e responsabilidade social em ambas as partes.",
+    id: "desenvolvimento-pessoal",
+    titulo: "Desenvolvimento Pessoal",
+    descricao: "Desenvolve empatia, paciência e responsabilidade social em ambas as partes.",
     icon: AcademicCapIcon,
-    iconColor: "text-indigo-600",
+    iconColor: ICON_COLORS.indigo,
+    categoria: 'personal',
   }
 ];
+
+// Função utilitária para filtrar benefícios por categoria
+export const getBenefitsBycategoria = (categoria: Benefit['categoria']) => 
+  BENEFITS.filter(benefit => benefit.categoria === categoria);
+
+// Função utilitária para buscar benefício por ID
+export const getBenefitById = (id: string) => 
+  BENEFITS.find(benefit => benefit.id === id);

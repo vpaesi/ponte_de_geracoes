@@ -148,7 +148,7 @@ const Users: React.FC = () => {
                     <div className="relative">
                       <ProfileImage
                         src={pessoa.profileImageUrl}
-                        alt={pessoa.name}
+                        alt={pessoa.nome}
                         size="xl"
                       />
                       <div className="absolute top-0 right-0">
@@ -169,7 +169,7 @@ const Users: React.FC = () => {
                   <div className="p-6 space-y-4">
                     <div className="text-center">
                       <h3 className="text-xl font-bold text-accent-800 mb-1">
-                        {pessoa.name}
+                        {pessoa.nome}
                       </h3>
                       <p className="text-accent-600">
                         {calcularIdade(pessoa.birthDate)} anos

@@ -8,7 +8,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUserState] = useState<User>({
     id: null,
     userType: "default",
-    name: "",
+    nome: "",
     email: "",
   });
 
@@ -18,7 +18,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const clearUser = () => {
-    setUserState({ id: null, userType: "default", name: "", email: "" });
+    setUserState({ id: null, userType: "default", nome: "", email: "" });
     localStorage.removeItem("user");
   };
 

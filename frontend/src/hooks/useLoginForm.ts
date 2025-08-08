@@ -62,7 +62,7 @@ export const useLoginForm = () => {
       // Simular resposta do backend
       const userData = {
         id: "1",
-        name: "Usuário Teste",
+        nome: "Usuário Teste",
         email: formData.email,
         userType: formData.userType as "ajudante" | "assistido",
       };

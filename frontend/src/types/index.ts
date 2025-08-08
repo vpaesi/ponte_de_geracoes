@@ -1,6 +1,6 @@
 export interface User {
   id: string | null;
-  name: string;
+  nome: string;
   birthDate?: string;
   rg?: string;
   cpf?: string;
@@ -24,7 +24,7 @@ export interface UserContextType {
 
 export interface RegisteredPerson {
   id: number;
-  name: string;
+  nome: string;
   age: number;
   profileImageUrl: string;
   aboutYou: string;
@@ -45,10 +45,10 @@ export interface Address {
 
 export interface CarouselItem {
   id: number;
-  name: string;
+  nome: string;
   age: number;
   img: string;
-  description: string;
+  descricao: string;
   userType: 'helper' | 'assisted';
 }
 

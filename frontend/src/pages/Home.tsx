@@ -19,10 +19,10 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen mx-20">
       <HeroSection userType={userType} />
-      <hr className="border-gray-200" />
+      <hr className="border-gray-200 m-4" />
 
       <SecaoBeneficios />
-      <hr className="border-gray-200" />
+      <hr className="border-gray-200 m-4" />
 
       <SecaoCarrossel loading={loading} carouselItems={carouselItems} />
     </div>

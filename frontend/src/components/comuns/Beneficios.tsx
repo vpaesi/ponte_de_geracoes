@@ -1,24 +1,24 @@
 import { BENEFITS } from "../../constants/benefits";
 import CardBeneficio from "./CardBeneficio";
+import GridContainer from "./GridContainer";
 
 const Beneficios = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+    <GridContainer
+      cols={{ default: 1, md: 2, lg: 3 }}
+      gap={8}
+      maxWidth="7xl"
+    >
       {BENEFITS.map((benefit, index) => (
-        <div
-          key={index}
-          className="animate-fade-in"
-          style={{ animationDelay: `${index * 0.1}s` }}
-        >
-          <CardBeneficio
-            title={benefit.title}
-            description={benefit.description}
-            icon={benefit.icon}
-            iconColor={benefit.iconColor}
-          />
-        </div>
+        <CardBeneficio
+          key={`benefit-${index}`}
+          titulo={benefit.titulo}
+          descricao={benefit.descricao}
+          icon={benefit.icon}
+          iconColor={benefit.iconColor}
+        />
       ))}
-    </div>
+    </GridContainer>
   );
 };
 

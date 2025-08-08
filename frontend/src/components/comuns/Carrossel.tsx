@@ -5,11 +5,11 @@ import ProfileImage from "./ProfileImage";
 import type { CarouselItem, User } from "../../types";
 
 interface CarrosselProps {
-  title: string;
+  titulo: string;
   city?: string;
 }
 
-const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
+const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usuarios, setUsuarios] = useState<CarouselItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -39,10 +39,10 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
       if (helpersResponse.content && Array.isArray(helpersResponse.content)) {
         const helpers = (helpersResponse.content as User[]).map((user: User) => ({
           id: Number(user.id) || 0,
-          name: user.name,
+          nome: user.nome,
           age: calcularIdade(user.birthDate),
           img: user.profileImageUrl || "",
-          description: user.aboutYou || "Sem descrição disponível",
+          descricao: user.aboutYou || "Sem descrição disponível",
           userType: "helper" as const,
         }));
         todosUsuarios.push(...helpers);
@@ -58,10 +58,10 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
       if (assistedResponse.content && Array.isArray(assistedResponse.content)) {
         const assisted = (assistedResponse.content as User[]).map((user: User) => ({
           id: Number(user.id) + 1000 || 1000,
-          name: user.name,
+          nome: user.nome,
           age: calcularIdade(user.birthDate),
           img: user.profileImageUrl || "",
-          description: user.aboutYou || "Sem descrição disponível",
+          descricao: user.aboutYou || "Sem descrição disponível",
           userType: "assisted" as const,
         }));
         todosUsuarios.push(...assisted);
@@ -117,7 +117,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-3xl font-bold text-center text-gray-900">{title}</h2>
+      <h2 className="text-3xl font-bold text-center text-gray-900">{titulo}</h2>
 
       <div className="relative">
         <div className="flex items-center justify-center space-x-4">
@@ -134,24 +134,24 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
             {usuariosVisiveis.map((usuario) => (
               <div
                 key={usuario.id}
-                className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                className="overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <div className="p-4 flex justify-center">
+                <div className="mb-2 flex justify-center bg-transparent">
                   <ProfileImage
                     src={usuario.img}
-                    alt={usuario.name}
+                    alt={usuario.nome}
                     size="xl"
                   />
                 </div>
-                <div className="p-4 pt-0">
+                <div className="p-4 pt-2 bg-white rounded-lg shadow-md">
                   <h3 className="font-semibold text-lg text-gray-900 mb-1 text-center">
-                    {usuario.name}
+                    {usuario.nome}
                   </h3>
                   <p className="text-gray-600 text-sm mb-2 text-center">
                     {usuario.age} anos
                   </p>
                   <p className="text-gray-700 text-sm line-clamp-3 text-center">
-                    {usuario.description}
+                    {usuario.descricao}
                   </p>
                   <div className="mt-3 text-center">
                     <span

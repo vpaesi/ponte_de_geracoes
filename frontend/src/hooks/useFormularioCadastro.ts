@@ -91,7 +91,7 @@ export const useFormularioCadastro = () => {
       setEnviando(true);
       
       const dadosParaAPI = {
-        name: dadosFormulario.nome,
+        nome: dadosFormulario.nome,
         birthDate: dadosFormulario.dataNascimento,
         rg: dadosFormulario.rg,
         cpf: dadosFormulario.cpf,

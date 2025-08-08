@@ -4,7 +4,7 @@ import { formataCpf, formataCelular } from "../../../utils/formatadores";
 
 interface DadosPessoaisSectionProps {
   dados: {
-    name?: string;
+    nome?: string;
     nome?: string;
     email: string;
     birthDate?: string;
@@ -48,7 +48,7 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
   };
 
   // Normalizar nomes dos campos para compatibilidade
-  const nomeField = dados.name ?? dados.nome ?? "";
+  const nomeField = dados.nome ?? dados.nome ?? "";
   const emailField = dados.email ?? "";
   const nascimentoField = dados.birthDate ?? dados.dataNascimento ?? "";
   const telefoneField = dados.phone ?? dados.telefone ?? "";
@@ -86,8 +86,8 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
             type="text"
             placeholder="Seu nome completo"
             value={nomeField}
-            onChange={(valor) => atualizarCampo(dados.name !== undefined ? "name" : "nome", valor)}
-            error={getErrorMessage(dados.name !== undefined ? "name" : "nome", "Nome é obrigatório")}
+            onChange={(valor) => atualizarCampo(dados.nome !== undefined ? "nome" : "nome", valor)}
+            error={getErrorMessage(dados.nome !== undefined ? "nome" : "nome", "Nome é obrigatório")}
             required
           />
 

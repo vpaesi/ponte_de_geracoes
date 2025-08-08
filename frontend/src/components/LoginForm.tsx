@@ -1,6 +1,6 @@
 import React from "react";
 import { InputsForms } from "./forms/InputsForms";
-import variantClassBtn from "./variantClassBtn";
+import Button from "./comuns/Button";
 
 interface LoginFormProps {
   formData: {
@@ -49,13 +49,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       )}
       </div>
 
-      <button
+      <Button 
         type="submit"
+        variant="primary" 
+        className="w-full"
         disabled={isLoading}
-        className={`${variantClassBtn.primary} w-full`}
       >
         {isLoading ? "Entrando..." : "Entrar"}
-      </button>
+      </Button>
     </form>
   );
 };

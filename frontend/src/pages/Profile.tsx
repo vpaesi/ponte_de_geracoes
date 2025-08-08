@@ -16,7 +16,7 @@ interface Address {
 
 interface UserProfile {
   id: number;
-  name: string;
+  nome: string;
   birthDate: string;
   rg: string;
   cpf: string;
@@ -92,7 +92,7 @@ const Profile: React.FC = () => {
                   <div className="shadow-xl ring-4 ring-primary-100">
                     <ProfileImage
                       src={userProfile.profileImageUrl}
-                      alt={`Foto de perfil de ${userProfile.name}`}
+                      alt={`Foto de perfil de ${userProfile.nome}`}
                       size="2xl"
                     />
                   </div>
@@ -110,7 +110,7 @@ const Profile: React.FC = () => {
                 {/* Profile Info Header */}
                 <div className="flex-1 text-center lg:text-left">
                   <h2 className="text-3xl font-bold text-accent-800 mb-2">
-                    {userProfile.name}
+                    {userProfile.nome}
                   </h2>
                   <p className="text-lg text-accent-600 mb-4">
                     {userProfile.available
@@ -179,7 +179,7 @@ const Profile: React.FC = () => {
 
                 <div className="space-y-4">
                   {[
-                    { label: "Nome", value: userProfile.name },
+                    { label: "Nome", value: userProfile.nome },
                     {
                       label: "Data de nascimento",
                       value: new Date(userProfile.birthDate).toLocaleDateString(

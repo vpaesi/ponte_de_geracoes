@@ -2,34 +2,48 @@ import React from "react";
 import IconWrapper from "../IconesLayout";
 
 interface CardBeneficioProps {
-  title: string;
-  description: string;
+  titulo: string;
+  descricao: string;
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   iconColor?: string;
+  className?: string;
 }
 
 const CardBeneficio: React.FC<CardBeneficioProps> = ({
-  title,
-  description,
+  titulo,
+  descricao,
   icon: IconComponent,
   iconColor = "text-primary-600",
+  className = "",
 }) => {
   return (
-    <div className="card p-8 h-full group hover:scale-105 transition-all duration-300">
-      <div className="flex flex-col items-center text-center space-y-6">
+    <div
+      className={`
+      glass-card p-6 h-full group 
+      hover:scale-105 hover:shadow-xl 
+      transition-all duration-300 
+      ${className}
+      rounded-lg border
+      bg-white
+    `}
+    >
+      <div className="flex flex-col items-center text-center space-y-4">
         {IconComponent && (
-          <IconWrapper
-            icon={IconComponent}
-            size="lg"
-            color={iconColor}
-            className="mb-2"
-          />
+          <div className="mb-2">
+            <IconWrapper
+              icon={IconComponent}
+              size="lg"
+              color={iconColor}
+            />
+          </div>
         )}
+
         <h3 className="text-xl font-bold text-primary-600 group-hover:text-primary-700 transition-colors duration-300">
-          {title}
+          {titulo}
         </h3>
-        <p className="text-accent-600 leading-relaxed text-base group-hover:text-accent-700 transition-colors duration-300">
-          {description}
+
+        <p className="text-accent-600 leading-relaxed group-hover:text-accent-700 transition-colors duration-300">
+          {descricao}
         </p>
       </div>
     </div>

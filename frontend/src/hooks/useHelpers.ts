@@ -29,7 +29,7 @@ export const useHelpers = () => {
   const getCarouselItems = (): CarouselItem[] => {
     return helpers.map((helper, index) => ({
       id: helper.id || index,
-      name: helper.name,
+      nome: helper.nome,
       age: helper.birthDate ? new Date().getFullYear() - new Date(helper.birthDate).getFullYear() : 0,
       img: helper.profileImageUrl || '',
       description: helper.aboutYou || 'Sem descrição disponível',
