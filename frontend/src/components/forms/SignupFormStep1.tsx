@@ -1,6 +1,6 @@
 import React from "react";
-import { InputsFormsFormatado } from "../forms/InputsFormsFormatado";
-import { formatadorCpf } from "../../utils/formatadoresSignupForm";
+import { InputsFormsFormatado } from "./InputsFormsFormatado";
+import { formataCpf, formataCelular } from "../../utils/formatadores";
 
 interface PropsFormularioCadastroEtapa1 {
   dadosFormulario: {
@@ -64,10 +64,12 @@ export const SignupFormStep1: React.FC<PropsFormularioCadastroEtapa1> = ({
         <InputsFormsFormatado
           label="Data de nascimento"
           type="date"
+          placeholder=""
           value={dadosFormulario.dataNascimento}
           onChange={(valor) => atualizarCampo("dataNascimento", valor)}
           error={erros.dataNascimento ? "Data de nascimento é obrigatória" : ""}
-          required placeholder={""}        />
+          required
+        />
 
         <InputsFormsFormatado
           label="Telefone"
@@ -76,6 +78,7 @@ export const SignupFormStep1: React.FC<PropsFormularioCadastroEtapa1> = ({
           value={dadosFormulario.telefone}
           onChange={(valor) => atualizarCampo("telefone", valor)}
           error={erros.telefone ? "Telefone é obrigatório" : ""}
+          formatter={formataCelular}
           required
         />
 
@@ -96,7 +99,7 @@ export const SignupFormStep1: React.FC<PropsFormularioCadastroEtapa1> = ({
           value={dadosFormulario.cpf}
           onChange={(valor) => atualizarCampo("cpf", valor)}
           error={erros.cpf ? "CPF é obrigatório" : ""}
-          formatter={formatadorCpf}
+          formatter={formataCpf}
           required
         />
       </div>
@@ -155,9 +158,9 @@ export const SignupFormStep1: React.FC<PropsFormularioCadastroEtapa1> = ({
             <input
               type="radio"
               name="userType"
-              value="ajudado"
-              checked={dadosFormulario.tipoUsuario === "ajudado"}
-              onChange={() => atualizarCampo("tipoUsuario", "ajudado")}
+              value="assistido"
+              checked={dadosFormulario.tipoUsuario === "assistido"}
+              onChange={() => atualizarCampo("tipoUsuario", "assistido")}
               className="w-4 h-4 text-secondary-600 border-accent-300 focus:ring-secondary-500"
             />
             <span className="text-accent-700">

@@ -1,23 +1,23 @@
 export interface User {
-  id: string;
+  id: string | null;
   name: string;
-  birthDate: string;
-  rg: string;
-  cpf: string;
+  birthDate?: string;
+  rg?: string;
+  cpf?: string;
   email: string;
-  phone: string;
-  userType: 'ajudante' | 'assistido';
+  phone?: string;
+  userType: 'ajudante' | 'assistido' | 'default';
   skills?: string;
   needs?: string;
-  aboutYou: string;
-  availableDays: string[];
+  aboutYou?: string;
+  availableDays?: string[];
   profileImageUrl?: string;
-  address: Address;
+  address?: Address;
   available?: boolean;
 }
 
 export interface UserContextType {
-  user: User;
+  user: User | null;
   setUser: (user: User) => void;
   clearUser: () => void;
 }
@@ -29,6 +29,8 @@ export interface RegisteredPerson {
   profileImageUrl: string;
   aboutYou: string;
   birthDate?: string;
+  address: Address;
+  availableDays: string[];
 }
 
 export interface Address {
@@ -59,7 +61,14 @@ export interface FormData {
   telefone: string;
   senha: string;
   confirmarSenha: string;
-  endereco: Address;
+  endereco: {
+    street: string;
+    number: string;
+    complement?: string;
+    zipCode: string;
+    city: string;
+    neighborhood: string;
+  };
   tipoUsuario: 'ajudante' | 'assistido';
   sobreMim: string;
   habilidades?: string;

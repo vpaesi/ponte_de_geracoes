@@ -6,7 +6,7 @@ export const useLoginForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    userType: "ajudante" as "ajudante" | "ajudado"
+    userType: "ajudante" as "ajudante" | "assistido"
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +33,7 @@ export const useLoginForm = () => {
     if (!formData.email.trim()) {
       newErrors.email = "Email é obrigatório";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Digite um email válido";
+      newErrors.email = "Email inválido";
     }
 
     if (!formData.password.trim()) {
@@ -56,43 +56,22 @@ export const useLoginForm = () => {
     setIsLoading(true);
 
     try {
-      const endpoint = formData.userType === "ajudante" ? "/helper/login" : "/assisted/login";
-      const response = await fetch(`http://localhost:8080${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("Email ou senha incorretos");
-        } else if (response.status === 404) {
-          throw new Error("Usuário não encontrado");
-        } else {
-          throw new Error("Erro ao fazer login. Tente novamente.");
-        }
-      }
-
-      const userData = await response.json();
+      // Simular login - aqui você faria a requisição real para o backend
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      setUser({
-        id: userData.id,
-        name: userData.name,
-        email: userData.email,
-        userType: formData.userType
-      });
+      // Simular resposta do backend
+      const userData = {
+        id: "1",
+        name: "Usuário Teste",
+        email: formData.email,
+        userType: formData.userType as "ajudante" | "assistido",
+      };
 
-      navigate("/profile");
-      
+      setUser(userData);
+      navigate("/");
     } catch (error) {
-      console.error("Erro no login:", error);
       setErrors({
-        submit: error instanceof Error ? error.message : "Erro inesperado ao fazer login"
+        submit: "Erro ao fazer login. Verifique suas credenciais."
       });
     } finally {
       setIsLoading(false);

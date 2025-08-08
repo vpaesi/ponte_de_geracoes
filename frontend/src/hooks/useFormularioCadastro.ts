@@ -4,7 +4,7 @@ import {
   validarFormularioCadastro, 
   buscarEnderecoPorCep,
   exibirErrosValidacao
-} from '../utils/validadoresForm';
+} from '../utils/validadores';
 import { registrationService } from '../services/registrationService';
 import type { FormData } from '../types';
 
@@ -125,7 +125,7 @@ export const useFormularioCadastro = () => {
       }
 
       alert("Cadastro realizado com sucesso!");
-      navegar("/usuarios");
+      navegar("/users");
     } catch (erro) {
       const mensagemErro = erro instanceof Error 
         ? erro.message 

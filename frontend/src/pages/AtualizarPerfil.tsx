@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { buscarEnderecoPorCep } from "../utils/validadoresForm";
 import { useUser } from "../hooks/useUser";
 import { PageLayout } from "../components/PageLayout";
 import { InputsForms } from "../components/forms/InputsForms";
-import { formatadorCpf, formatadorCelular, formatadorCep } from "../utils/formatadoresSignupForm";
+import { InputsFormsFormatado } from "../components/forms/InputsFormsFormatado";
+import { formataCpf, formataCelular, formataCep } from "../utils/formatadores";
+import { cepService } from "../services/cepService";
 import type { User } from "../types";
 
 const URL_BASE_API = import.meta.env.VITE_API_URL || "http://localhost:8080";
@@ -35,13 +36,11 @@ const AtualizarPerfil: React.FC = () => {
     availableDays: []
   });
 
-  const [imagemPerfilPreview, setImagemPerfilPreview] = useState<File | null>(null);
-  const [erros, setErros] = useState<Record<string, boolean>>({});
   const [carregando, setCarregando] = useState(false);
 
   const atualizarCampo = (campo: keyof User | string, valor: string | string[]) => {
     if (campo.startsWith('address.')) {
-      const subcampo = campo.split('.')[1] as keyof User['address'];
+      const subcampo = campo.split('.')[1];
       setDadosUsuario(prev => ({
         ...prev,
         address: {
@@ -52,137 +51,117 @@ const AtualizarPerfil: React.FC = () => {
     } else {
       setDadosUsuario(prev => ({ ...prev, [campo]: valor }));
     }
-
-    if (erros[campo]) {
-      setErros(prev => ({ ...prev, [campo]: false }));
-    }
   };
 
   const handleDiasDisponiveisChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     dia: string
   ) => {
+    const isChecked = event.target.checked;
     const diasAtuais = dadosUsuario.availableDays || [];
-    const novosDias = event.target.checked
-      ? [...diasAtuais, dia]
-      : diasAtuais.filter((d) => d !== dia);
     
-    atualizarCampo('availableDays', novosDias);
+    if (isChecked) {
+      atualizarCampo('availableDays', [...diasAtuais, dia]);
+    } else {
+      atualizarCampo('availableDays', diasAtuais.filter(d => d !== dia));
+    }
   };
 
-  const handleCepBlur = () => {
+  const handleCepBlur = async () => {
     const cep = dadosUsuario.address?.zipCode;
     if (cep && cep.length >= 8) {
-      buscarEnderecoPorCep(
-        cep,
-        (valor) => atualizarCampo('address.street', valor),
-        (valor) => atualizarCampo('address.city', valor),
-        (valor) => atualizarCampo('address.neighborhood', valor)
-      );
+      try {
+        const endereco = await cepService.fetchAddressByCep(cep);
+        if (endereco.logradouro) {
+          atualizarCampo('address.street', endereco.logradouro);
+        }
+        if (endereco.localidade) {
+          atualizarCampo('address.city', endereco.localidade);
+        }
+        if (endereco.bairro) {
+          atualizarCampo('address.neighborhood', endereco.bairro);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+      }
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const arquivo = e.target.files?.[0];
+    if (arquivo) {
+      // Aqui você pode implementar o upload da imagem
+      console.log('Imagem selecionada:', arquivo);
     }
   };
 
   useEffect(() => {
-    if (!id) return;
-
-    const buscarDadosUsuario = async () => {
+    const carregarPerfilUsuario = async () => {
+      if (!id || !userType) return;
+      
       try {
         setCarregando(true);
-        const endpoint = userType === "ajudante" ? "helper" : "assisted";
-        const resposta = await fetch(`${URL_BASE_API}/${endpoint}/${id}`);
+        const endpoint = userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
+        const response = await fetch(`${URL_BASE_API}${endpoint}`);
         
-        if (!resposta.ok) {
-          throw new Error("Erro ao carregar dados do usuário.");
+        if (response.ok) {
+          const userData = await response.json();
+          setDadosUsuario({
+            ...userData,
+            address: userData.address || {
+              street: "",
+              number: "",
+              complement: "",
+              zipCode: "",
+              city: "",
+              neighborhood: ""
+            }
+          });
         }
-
-        const dados = await resposta.json();
-        setDadosUsuario({
-          ...dados,
-          skills: userType === "ajudante" ? dados.skills : undefined,
-          needs: userType !== "ajudante" ? dados.needs : undefined
-        });
-      } catch (erro) {
-        console.error(erro);
-        alert("Ocorreu um erro ao carregar os dados do usuário.");
+      } catch (error) {
+        console.error('Erro ao carregar perfil:', error);
       } finally {
         setCarregando(false);
       }
     };
 
-    buscarDadosUsuario();
+    carregarPerfilUsuario();
   }, [id, userType]);
 
-  const handleUpdate = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validação básica
-    const novosErros: Record<string, boolean> = {};
-    if (!dadosUsuario.name) novosErros.name = true;
-    if (!dadosUsuario.email) novosErros.email = true;
-    if (!dadosUsuario.birthDate) novosErros.birthDate = true;
-    if (!dadosUsuario.phone) novosErros.phone = true;
     
-    setErros(novosErros);
-    if (Object.keys(novosErros).length > 0) return;
-
     try {
       setCarregando(true);
-      const endpoint = userType === "ajudante" ? "helper" : "assisted";
+      const endpoint = userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
       
-      const resposta = await fetch(`${URL_BASE_API}/${endpoint}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+      const response = await fetch(`${URL_BASE_API}${endpoint}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(dadosUsuario),
       });
 
-      if (!resposta.ok) {
-        throw new Error("Erro ao atualizar os dados.");
+      if (response.ok) {
+        alert('Perfil atualizado com sucesso!');
+        navegar('/profile');
+      } else {
+        throw new Error('Erro ao atualizar perfil');
       }
-
-      if (imagemPerfilPreview) {
-        await enviarImagemPerfil(userType!, id!, imagemPerfilPreview);
-      }
-
-      alert("Perfil atualizado com sucesso!");
-      navegar("/perfil");
-    } catch (erro) {
-      const mensagem = erro instanceof Error ? erro.message : "Erro ao atualizar perfil.";
-      alert(mensagem);
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
+      alert('Erro ao atualizar perfil. Tente novamente.');
     } finally {
       setCarregando(false);
-    }
-  };
-
-  const enviarImagemPerfil = async (
-    userType: string,
-    userId: string,
-    imagem: File
-  ) => {
-    const formData = new FormData();
-    formData.append("file", imagem);
-
-    const endpoint = userType === "ajudante"
-      ? `/helper/upload-image/${userId}`
-      : `/assisted/upload-image/${userId}`;
-
-    const resposta = await fetch(`${URL_BASE_API}${endpoint}`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!resposta.ok) {
-      throw new Error("Erro ao fazer upload da imagem");
     }
   };
 
   if (carregando) {
     return (
       <PageLayout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-            <p className="mt-4 text-accent-600">Carregando dados...</p>
-          </div>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
         </div>
       </PageLayout>
     );
@@ -192,294 +171,230 @@ const AtualizarPerfil: React.FC = () => {
     <PageLayout>
       <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-4">
-              Editar Perfil
+              Atualizar Perfil
             </h1>
-            <p className="text-lg text-accent-600">
-              Atualize suas informações pessoais
-            </p>
           </div>
 
-          <div className="glass-card p-8">
-            <form onSubmit={handleUpdate} className="space-y-8">
-              {/* Dados Pessoais */}
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Dados Pessoais */}
+            <div className="glass-card p-8">
+              <h2 className="text-2xl font-bold text-primary-600 mb-6">
+                Dados Pessoais
+              </h2>
+
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-accent-800 mb-6 text-center border-b border-accent-200 pb-4">
-                  Dados Pessoais
-                </h2>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Nova Foto de Perfil
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="w-full p-2 border border-accent-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <InputsForms
-                    label="Nome Completo"
+                    label="Nome completo"
                     type="text"
-                    placeholder="Digite seu nome completo"
+                    placeholder="Seu nome completo"
                     value={dadosUsuario.name || ""}
-                    onChange={(value) => atualizarCampo('name', value)}
-                    error={erros.name ? "Nome é obrigatório" : undefined}
+                    onChange={(valor) => atualizarCampo("name", valor)}
                     required
                   />
 
                   <InputsForms
                     label="Email"
                     type="email"
-                    placeholder="nome@exemplo.com"
+                    placeholder="seu@email.com"
                     value={dadosUsuario.email || ""}
-                    onChange={(value) => atualizarCampo('email', value)}
-                    error={erros.email ? "Email é obrigatório" : undefined}
+                    onChange={(valor) => atualizarCampo("email", valor)}
                     required
                   />
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <InputsForms
-                    label="Data de Nascimento"
+                    label="Data de nascimento"
                     type="date"
-                    value={dadosUsuario.birthDate || ""}
-                    onChange={(value) => atualizarCampo('birthDate', value)}
-                    error={erros.birthDate ? "Data é obrigatória" : undefined}
-                    required
                     placeholder=""
+                    value={dadosUsuario.birthDate || ""}
+                    onChange={(valor) => atualizarCampo("birthDate", valor)}
+                    required
+                  />
+
+                  <InputsFormsFormatado
+                    label="Telefone"
+                    type="tel"
+                    placeholder="(00) 00000-0000"
+                    value={dadosUsuario.phone || ""}
+                    onChange={(valor) => atualizarCampo("phone", valor)}
+                    formatter={formataCelular}
+                    required
                   />
 
                   <InputsForms
-                    label="Celular"
-                    type="tel"
-                    placeholder="(11) 99999-9999"
-                    value={dadosUsuario.phone || ""}
-                    onChange={(value: string) => atualizarCampo('phone', formatadorCelular(value))}
-                    error={erros.phone ? "Celular é obrigatório" : undefined}
+                    label="RG"
+                    type="text"
+                    placeholder="00.000.000-0"
+                    value={dadosUsuario.rg || ""}
+                    onChange={(valor) => atualizarCampo("rg", valor)}
                     required
-                  />                 
+                  />
 
-                  <InputsForms
+                  <InputsFormsFormatado
                     label="CPF"
                     type="text"
-                    placeholder="123.456.789-01"
+                    placeholder="000.000.000-00"
                     value={dadosUsuario.cpf || ""}
-                    onChange={(value: string) => atualizarCampo('cpf', formatadorCpf(value))}
-                    error={erros.cpf ? "CPF é obrigatório" : undefined}
+                    onChange={(valor) => atualizarCampo("cpf", valor)}
+                    formatter={formataCpf}
                     required
                   />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <InputsForms label="Nova Foto de Perfil">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          setImagemPerfilPreview(e.target.files[0]);
-                        }
-                      }}
-                      className="input-field"
-                    />
-                  </InputsForms>
                 </div>
               </div>
+            </div>
 
-              {/* Seção de Endereço */}
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-accent-800 mb-6 text-center border-b border-accent-200 pb-4">
-                  Endereço
-                </h2>
+            {/* Endereço */}
+            <div className="glass-card p-8">
+              <h2 className="text-2xl font-bold text-primary-600 mb-6">
+                Endereço
+              </h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <InputsForms
-                    label="CEP"
-                    type="text"
-                    placeholder="00000-000"
-                    value={dadosUsuario.address?.zipCode || ""}
-                    onChange={(value: string) => atualizarCampo('address.zipCode', formatadorCep(value))}
-                    onBlur={handleCepBlur}
-                    error={erros.cep ? "CEP é obrigatório" : undefined}
-                    required
-                  />
-
-                  <InputsForms
-                    label="Cidade"
-                    type="text"
-                    placeholder="Digite sua cidade"
-                    value={dadosUsuario.address?.city || ""}
-                    onChange={(value) => atualizarCampo('address.city', value)}
-                    readonly
-                    className="bg-accent-50"
-                    error={erros.cidade ? "Cidade é obrigatória" : undefined}
-                    required
-                  />
-
-                  <InputsForms
-                    label="Bairro"
-                    type="text"
-                    placeholder="Digite seu bairro"
-                    value={dadosUsuario.address?.neighborhood || ""}
-                    onChange={(value) => atualizarCampo('address.neighborhood', value)}
-                    readonly
-                    className="bg-accent-50"
-                    error={
-                      erros.bairro ? "Bairro é obrigatório" : undefined
-                    }
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <InputsForms
-                    label="Logradouro"
-                    type="text"
-                    placeholder="Avenida Exemplo de Rua"
-                    value={dadosUsuario.address?.street || ""}
-                    onChange={(value) => atualizarCampo('address.street', value)}
-                    readonly
-                    className="md:col-span-2 bg-accent-50"
-                    error={
-                      erros.logradouro ? "Logradouro é obrigatório" : undefined
-                    }
-                    required
-                  />
-
-                  <InputsForms
-                    label="Número"
-                    type="text"
-                    placeholder="123"
-                    value={dadosUsuario.address?.number || ""}
-                    onChange={(value) => atualizarCampo('address.number', value)}
-                    error={erros.numero ? "Número é obrigatório" : undefined}
-                    required
-                  />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <InputsFormsFormatado
+                  label="CEP"
+                  type="text"
+                  placeholder="00000-000"
+                  value={dadosUsuario.address?.zipCode || ""}
+                  onChange={(valor) => atualizarCampo("address.zipCode", valor)}
+                  onBlur={handleCepBlur}
+                  formatter={formataCep}
+                  required
+                />
 
                 <InputsForms
-                  label="Complemento"
+                  label="Cidade"
                   type="text"
-                  placeholder="Casa 2, Bloco A, Apartamento 101..."
+                  placeholder="Sua cidade"
+                  value={dadosUsuario.address?.city || ""}
+                  onChange={(valor) => atualizarCampo("address.city", valor)}
+                  required
+                />
+
+                <InputsForms
+                  label="Logradouro"
+                  type="text"
+                  placeholder="Rua, Avenida, etc."
+                  value={dadosUsuario.address?.street || ""}
+                  onChange={(valor) => atualizarCampo("address.street", valor)}
+                  required
+                />
+
+                <InputsForms
+                  label="Número"
+                  type="text"
+                  placeholder="123"
+                  value={dadosUsuario.address?.number || ""}
+                  onChange={(valor) => atualizarCampo("address.number", valor)}
+                  required
+                />
+
+                <InputsForms
+                  label="Bairro"
+                  type="text"
+                  placeholder="Seu bairro"
+                  value={dadosUsuario.address?.neighborhood || ""}
+                  onChange={(valor) => atualizarCampo("address.neighborhood", valor)}
+                  required
+                />
+
+                <InputsForms
+                  label="Complemento (opcional)"
+                  type="text"
+                  placeholder="Apto, Bloco, etc."
                   value={dadosUsuario.address?.complement || ""}
-                  onChange={(value) => atualizarCampo('address.complement', value)}
+                  onChange={(valor) => atualizarCampo("address.complement", valor)}
                 />
               </div>
+            </div>
 
-              {/* Seção de Perfil */}
+            {/* Sobre você */}
+            <div className="glass-card p-8">
+              <h2 className="text-2xl font-bold text-primary-600 mb-6">
+                Sobre Você
+              </h2>
+
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold text-accent-800 mb-6 text-center border-b border-accent-200 pb-4">
-                  Perfil e Disponibilidade
-                </h2>
-
-                {/* Tipo de Usuário (Somente Leitura) */}
-                <div className="bg-accent-50 rounded-lg p-6">
-                  <h3 className="text-lg font-semibold text-accent-700 mb-4 text-center">
-                    Tipo de Usuário (não pode ser alterado)
-                  </h3>
-                  <div className="flex justify-center">
-                    <div
-                      className={`px-6 py-3 rounded-full font-semibold text-white shadow-lg ${
-                        userType === "ajudante"
-                          ? "bg-secondary-500"
-                          : "bg-primary-500"
-                      }`}
-                    >
-                      {userType === "ajudante" ? "🤝 Ajudante" : "❤️ Ajudado"}
-                    </div>
-                  </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Fale um pouco sobre você
+                  </label>
+                  <textarea
+                    rows={4}
+                    placeholder="Conte um pouco sobre sua personalidade, hobbies, experiências..."
+                    value={dadosUsuario.aboutYou || ""}
+                    onChange={(e) => atualizarCampo("aboutYou", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
+                  />
                 </div>
 
-                {/* Dias Disponíveis */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-accent-700 text-center">
-                    {userType === "ajudante"
-                      ? "Quando você está disponível para ajudar?"
-                      : "Quando você precisaria de ajuda?"}
-                  </h3>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    {userType === "ajudante" ? "Suas Habilidades" : "Suas Necessidades"}
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder={userType === "ajudante" ? "Liste suas habilidades..." : "Liste suas necessidades..."}
+                    value={userType === "ajudante" ? (dadosUsuario.skills || "") : (dadosUsuario.needs || "")}
+                    onChange={(e) => atualizarCampo(userType === "ajudante" ? "skills" : "needs", e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
+                  />
+                </div>
 
+                {/* Dias disponíveis */}
+                <div className="space-y-4">
+                  <label className="block text-sm font-semibold text-accent-700">
+                    {userType === "ajudante" ? "Quando você está disponível para ajudar?" : "Quando você precisaria de ajuda?"}
+                  </label>
                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-                    {[
-                      { key: "Domingo", label: "Dom" },
-                      { key: "Segunda", label: "Seg" },
-                      { key: "Terça", label: "Ter" },
-                      { key: "Quarta", label: "Qua" },
-                      { key: "Quinta", label: "Qui" },
-                      { key: "Sexta", label: "Sex" },
-                      { key: "Sábado", label: "Sáb" },
-                    ].map((dia) => (
-                      <label
-                        key={dia.key}
-                        className={`cursor-pointer p-3 rounded-lg border-2 text-center transition-all duration-300 hover:shadow-md ${
-                          dadosUsuario.availableDays?.includes(dia.key)
-                            ? "border-primary-500 bg-primary-100 text-primary-700"
-                            : "border-accent-200 hover:border-primary-200"
-                        }`}
-                      >
+                    {["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"].map((dia) => (
+                      <label key={dia} className="flex items-center space-x-2 cursor-pointer">
                         <input
                           type="checkbox"
-                          className="hidden"
-                          checked={dadosUsuario.availableDays?.includes(dia.key)}
-                          onChange={(e) =>
-                            handleDiasDisponiveisChange(e, dia.key)
-                          }
+                          checked={dadosUsuario.availableDays?.includes(dia) || false}
+                          onChange={(e) => handleDiasDisponiveisChange(e, dia)}
+                          className="w-4 h-4 text-primary-600 border-accent-300 rounded focus:ring-primary-500"
                         />
-                        <div className="font-medium text-sm">{dia.label}</div>
+                        <span className="text-sm text-accent-700">{dia.slice(0, 3)}</span>
                       </label>
                     ))}
                   </div>
                 </div>
-
-                {/* Sobre e Habilidades */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <InputsForms label="Fale um pouco sobre você">
-                    <textarea
-                      rows={4}
-                      placeholder="Conte um pouco sobre sua personalidade, hobbies, experiências..."
-                      value={dadosUsuario.aboutYou || ""}
-                      onChange={(e) => atualizarCampo('aboutYou', e.target.value)}
-                      className="input-field resize-none"
-                    />
-                  </InputsForms>
-
-                  <InputsForms
-                    label={
-                      userType === "ajudante"
-                        ? "Suas Habilidades"
-                        : "Suas Necessidades"
-                    }
-                    error={
-                      erros.habilidadesNecessidades
-                        ? "Este campo é obrigatório"
-                        : undefined
-                    }
-                  >
-                    <textarea
-                      rows={4}
-                      placeholder={
-                        userType === "ajudante"
-                          ? "Ex: Gosto de ensinar tecnologia, ajudar com compras..."
-                          : "Ex: Preciso de ajuda para ir ao mercado, usar o computador..."
-                      }
-                      maxLength={150}
-                      value={userType === "ajudante" ? dadosUsuario.skills : dadosUsuario.needs}
-                      onChange={(e) => atualizarCampo(userType === "ajudante" ? 'skills' : 'needs', e.target.value)}
-                      className={`input-field resize-none ${
-                        erros.habilidadesNecessidades ? "input-error" : ""
-                      }`}
-                    />
-                    <div className="text-right text-sm text-accent-500 mt-1">
-                      {userType === "ajudante" ? dadosUsuario.skills?.length : dadosUsuario.needs?.length}/150
-                    </div>
-                  </InputsForms>
-                </div>
               </div>
+            </div>
 
-              {/* Botão de Envio */}
-              <div className="flex justify-center pt-8 border-t border-accent-200">
-                <button
-                  type="submit"
-                  disabled={carregando}
-                  className="btn-primary px-12 py-4 text-lg disabled:opacity-50"
-                >
-                  {carregando ? "Salvando..." : "Salvar Alterações"}
-                </button>
-              </div>
-            </form>
-          </div>
+            {/* Botões */}
+            <div className="flex justify-between items-center pt-8 border-t border-accent-200">
+              <button
+                type="button"
+                onClick={() => navegar("/profile")}
+                className="px-6 py-3 rounded-lg font-semibold bg-accent-200 text-accent-700 hover:bg-accent-300 hover:shadow-md transition-all duration-300"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="submit"
+                disabled={carregando}
+                className="px-6 py-3 rounded-lg font-semibold bg-primary-600 text-white hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50"
+              >
+                {carregando ? "Salvando..." : "Salvar Alterações"}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </PageLayout>

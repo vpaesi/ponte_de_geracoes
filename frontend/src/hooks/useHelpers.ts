@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { RegisteredPerson, CarouselItem } from '../types';
 import { apiService } from '../services/apiService';
 import { API_ENDPOINTS } from '../constants/api';
+import type { RegisteredPerson, CarouselItem } from '../types';
 
 export const useHelpers = () => {
   const [helpers, setHelpers] = useState<RegisteredPerson[]>([]);
@@ -27,11 +27,13 @@ export const useHelpers = () => {
   }, []);
 
   const getCarouselItems = (): CarouselItem[] => {
-    return helpers.map((helper) => ({
+    return helpers.map((helper, index) => ({
+      id: helper.id || index,
       name: helper.name,
-      age: new Date().getFullYear() - new Date(helper.birthDate || '').getFullYear(),
-      img: `//localhost:8080${helper.profileImageUrl}`,
-      description: helper.aboutYou,
+      age: helper.birthDate ? new Date().getFullYear() - new Date(helper.birthDate).getFullYear() : 0,
+      img: helper.profileImageUrl ? `http://localhost:8080${helper.profileImageUrl}` : '/default-avatar.png',
+      description: helper.aboutYou || 'Sem descrição disponível',
+      userType: 'helper' as const,
     }));
   };
 

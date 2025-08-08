@@ -1,6 +1,10 @@
-import { FormValues } from '../types';
 import { apiService } from './apiService';
 import { API_ENDPOINTS } from '../constants/api';
+
+interface FormValues {
+  userType: string;
+  [key: string]: any;
+}
 
 export const registrationService = {
   async registerUser(formValues: FormValues): Promise<{ id: string }> {

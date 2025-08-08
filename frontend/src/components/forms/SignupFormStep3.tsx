@@ -4,9 +4,10 @@ import { SignupFormStep3SelectSkills } from "./SignupFormStep3SelectSkills";
 import { SignupFormStep3SelectUserType } from "./SignupFormStep3SelectUserType";
 
 interface SignupFormStep3FormData {
-  userType: string;
-  skillsNeeds?: string;
-  aboutYou?: string;
+  tipoUsuario: string;
+  habilidades?: string;
+  necessidades?: string;
+  sobreMim?: string;
 }
 
 interface SignupFormStep3Props {
@@ -28,12 +29,18 @@ export const SignupFormStep3: React.FC<SignupFormStep3Props> = ({
   handleAvailableDaysChange,
 }) => {
   const handleSkillsChange = (skills: string[]) => {
-    updateFormData("skillsNeeds", skills.join(", "));
+    const fieldName =
+      formData.tipoUsuario === "ajudante" ? "habilidades" : "necessidades";
+    updateFormData(fieldName, skills.join(", "));
   };
 
-  const selectedSkills = formData.skillsNeeds
-    ? formData.skillsNeeds.split(", ").filter((s: string) => s.trim())
-    : [];
+  const getSelectedSkills = (): string[] => {
+    const skillsField =
+      formData.tipoUsuario === "ajudante"
+        ? formData.habilidades
+        : formData.necessidades;
+    return skillsField ? skillsField.split(", ").filter((s: string) => s.trim()) : [];
+  };
 
   return (
     <div className="space-y-8">
@@ -42,25 +49,25 @@ export const SignupFormStep3: React.FC<SignupFormStep3Props> = ({
       </h2>
 
       <SignupFormStep3SelectUserType
-        userType={formData.userType}
+        userType={formData.tipoUsuario}
         updateFormData={updateFormData}
       />
 
-      {formData.userType && (
+      {formData.tipoUsuario && (
         <SignupFormStep3SelectDiasDisponiveis
-          userType={formData.userType}
+          userType={formData.tipoUsuario}
           availableDays={availableDays}
           handleAvailableDaysChange={handleAvailableDaysChange}
         />
       )}
 
-      {formData.userType && (
+      {formData.tipoUsuario && (
         <div className="space-y-8">
           <SignupFormStep3SelectSkills
-            userType={formData.userType}
-            selectedSkills={selectedSkills}
+            userType={formData.tipoUsuario}
+            selectedSkills={getSelectedSkills()}
             onSkillChange={handleSkillsChange}
-            error={errors.skillsNeeds}
+            error={errors.habilidades || errors.necessidades}
           />
 
           <div className="space-y-2">
@@ -70,8 +77,8 @@ export const SignupFormStep3: React.FC<SignupFormStep3Props> = ({
             <textarea
               rows={4}
               placeholder="Conte um pouco sobre sua personalidade, hobbies, experiências..."
-              value={formData.aboutYou}
-              onChange={(e) => updateFormData("aboutYou", e.target.value)}
+              value={formData.sobreMim || ""}
+              onChange={(e) => updateFormData("sobreMim", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors resize-none"
             />
           </div>

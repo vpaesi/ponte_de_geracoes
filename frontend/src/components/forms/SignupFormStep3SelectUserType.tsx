@@ -10,7 +10,7 @@ export const SignupFormStep3SelectUserType: React.FC<
 > = ({ userType, updateFormData }) => {
   const userTypes = [
     {
-      value: "ajudado",
+      value: "assistido",
       icon: "🤝",
       title: "Preciso de Ajuda",
       description:
@@ -37,7 +37,7 @@ export const SignupFormStep3SelectUserType: React.FC<
         {userTypes.map((type) => (
           <div
             key={type.value}
-            onClick={() => updateFormData("userType", type.value)}
+            onClick={() => updateFormData("tipoUsuario", type.value)}
             className={`cursor-pointer p-6 rounded-xl border-2 transition-all duration-300 hover:shadow-lg ${
               userType === type.value
                 ? `border-${type.colorClass}-500 bg-${type.colorClass}-50 shadow-lg`
@@ -59,7 +59,7 @@ export const SignupFormStep3SelectUserType: React.FC<
                 name="userType"
                 value={type.value}
                 checked={userType === type.value}
-                onChange={() => updateFormData("userType", type.value)}
+                onChange={() => updateFormData("tipoUsuario", type.value)}
                 className={`mt-4 w-5 h-5 text-${type.colorClass}-600`}
               />
             </div>

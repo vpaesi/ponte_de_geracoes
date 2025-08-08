@@ -6,6 +6,7 @@ interface InputsFormsFormatadoProps {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
+  onBlur?: () => void;
   error?: string;
   required?: boolean;
   formatter?: (value: string) => string;
@@ -18,6 +19,7 @@ export const InputsFormsFormatado: React.FC<InputsFormsFormatadoProps> = ({
   placeholder,
   value,
   onChange,
+  onBlur,
   error,
   required = false,
   formatter,
@@ -42,6 +44,7 @@ export const InputsFormsFormatado: React.FC<InputsFormsFormatadoProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        onBlur={onBlur}
         maxLength={maxLength}
         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors ${
           error ? "border-red-500 focus:ring-red-500" : "border-gray-300"

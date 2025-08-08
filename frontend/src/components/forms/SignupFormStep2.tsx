@@ -1,14 +1,16 @@
 import React from "react";
+import { InputsFormsFormatado } from "./InputsFormsFormatado";
+import { formataCep } from "../../utils/formatadores";
 
 interface SignupFormStep2Props {
   dadosFormulario: {
     endereco: {
-      logradouro: string;
-      numero: string;
-      complemento: string;
-      cep: string;
-      cidade: string;
-      bairro: string;
+      street: string;
+      number: string;
+      complement?: string;
+      zipCode: string;
+      city: string;
+      neighborhood: string;
     };
   };
   erros: Record<string, boolean>;
@@ -23,8 +25,8 @@ export const SignupFormStep2: React.FC<SignupFormStep2Props> = ({
   buscarCep,
 }) => {
   const handleCepBlur = () => {
-    if (dadosFormulario.endereco.cep.length >= 8) {
-      buscarCep(dadosFormulario.endereco.cep);
+    if (dadosFormulario.endereco.zipCode.length >= 8) {
+      buscarCep(dadosFormulario.endereco.zipCode);
     }
   };
 
@@ -35,64 +37,64 @@ export const SignupFormStep2: React.FC<SignupFormStep2Props> = ({
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FormattedFormField
+        <InputsFormsFormatado
           label="CEP"
           type="text"
           placeholder="00000-000"
-          value={dadosFormulario.endereco.cep}
-          onChange={(valor) => atualizarCampo("endereco.cep", valor)}
+          value={dadosFormulario.endereco.zipCode}
+          onChange={(valor) => atualizarCampo("endereco.zipCode", valor)}
           onBlur={handleCepBlur}
-          error={erros["endereco.cep"] ? "CEP é obrigatório" : ""}
-          formatter={formatarCEP}
+          error={erros["endereco.zipCode"] ? "CEP é obrigatório" : ""}
+          formatter={formataCep}
           required
         />
 
-        <FormattedFormField
+        <InputsFormsFormatado
           label="Cidade"
           type="text"
           placeholder="Sua cidade"
-          value={dadosFormulario.endereco.cidade}
-          onChange={(valor) => atualizarCampo("endereco.cidade", valor)}
-          error={erros["endereco.cidade"] ? "Cidade é obrigatória" : ""}
+          value={dadosFormulario.endereco.city}
+          onChange={(valor) => atualizarCampo("endereco.city", valor)}
+          error={erros["endereco.city"] ? "Cidade é obrigatória" : ""}
           required
         />
 
-        <FormattedFormField
+        <InputsFormsFormatado
           label="Logradouro"
           type="text"
           placeholder="Rua, Avenida, etc."
-          value={dadosFormulario.endereco.logradouro}
-          onChange={(valor) => atualizarCampo("endereco.logradouro", valor)}
-          error={erros["endereco.logradouro"] ? "Logradouro é obrigatório" : ""}
+          value={dadosFormulario.endereco.street}
+          onChange={(valor) => atualizarCampo("endereco.street", valor)}
+          error={erros["endereco.street"] ? "Logradouro é obrigatório" : ""}
           required
         />
 
-        <FormattedFormField
+        <InputsFormsFormatado
           label="Número"
           type="text"
           placeholder="123"
-          value={dadosFormulario.endereco.numero}
-          onChange={(valor) => atualizarCampo("endereco.numero", valor)}
-          error={erros["endereco.numero"] ? "Número é obrigatório" : ""}
+          value={dadosFormulario.endereco.number}
+          onChange={(valor) => atualizarCampo("endereco.number", valor)}
+          error={erros["endereco.number"] ? "Número é obrigatório" : ""}
           required
         />
 
-        <FormattedFormField
+        <InputsFormsFormatado
           label="Bairro"
           type="text"
           placeholder="Seu bairro"
-          value={dadosFormulario.endereco.bairro}
-          onChange={(valor) => atualizarCampo("endereco.bairro", valor)}
-          error={erros["endereco.bairro"] ? "Bairro é obrigatório" : ""}
+          value={dadosFormulario.endereco.neighborhood}
+          onChange={(valor) => atualizarCampo("endereco.neighborhood", valor)}
+          error={erros["endereco.neighborhood"] ? "Bairro é obrigatório" : ""}
           required
         />
 
-        <FormattedFormField
+        <InputsFormsFormatado
           label="Complemento (opcional)"
           type="text"
           placeholder="Apto, Bloco, etc."
-          value={dadosFormulario.endereco.complemento}
-          onChange={(valor) => atualizarCampo("endereco.complemento", valor)}
+          value={dadosFormulario.endereco.complement || ""}
+          onChange={(valor) => atualizarCampo("endereco.complement", valor)}
         />
       </div>
     </div>

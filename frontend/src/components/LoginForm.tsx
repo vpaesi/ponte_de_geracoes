@@ -1,11 +1,12 @@
 import React from "react";
 import { InputsForms } from "./forms/InputsForms";
+import variantClassBtn from "./variantClassBtn";
 
 interface LoginFormProps {
   formData: {
     email: string;
     password: string;
-    userType: "ajudante" | "ajudado";
+    userType: "ajudante" | "assistido";
   };
   errors: Record<string, string>;
   isLoading: boolean;
@@ -22,43 +23,38 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <form onSubmit={onSubmit} className="space-y-6">
-      <InputsForms
-        label="Email"
-        type="email"
-        placeholder="digite@seuemail.com"
-        value={formData.email}
-        onChange={(value) => onUpdateFormData("email", value)}
-        error={errors.email}
-        required
-      />
+      <div className="space-y-4">
+        <InputsForms
+          label="Email"
+          type="email"
+          placeholder="seu@email.com"
+          value={formData.email}
+          onChange={(value) => onUpdateFormData("email", value)}
+          error={errors.email}
+          required
+        />
 
-      <InputsForms
-        label="Senha"
-        type="password"
-        placeholder="Digite sua senha"
-        value={formData.password}
-        onChange={(value) => onUpdateFormData("password", value)}
-        error={errors.password}
-        required
-      />
+        <InputsForms
+          label="Senha"
+          type="password"
+          placeholder="Sua senha"
+          value={formData.password}
+          onChange={(value) => onUpdateFormData("password", value)}
+          error={errors.password}
+          required
+        />
+      </div>
 
       {errors.submit && (
-        <div className="ml-4 mt-2">
-          <p className="text-red-600 text-sm">{errors.submit}</p>
-        </div>
+        <div className="text-red-600 text-sm text-center">{errors.submit}</div>
       )}
 
       <button
         type="submit"
         disabled={isLoading}
-        className={`w-full flex justify-center items-center space-x-2 ${
-          formData.userType === "ajudante" ? "btn-secondary" : "btn-primary"
-        } ${isLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+        className={`${variantClassBtn.primary} w-full`}
       >
-        {isLoading && (
-          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-        )}
-        <span>{isLoading ? "Entrando..." : "Login"}</span>
+        {isLoading ? "Entrando..." : "Entrar"}
       </button>
     </form>
   );

@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { apiService } from "../services/apiService";
 import { PageLayout } from "../components/PageLayout";
+import { apiService } from "../services/apiService";
 import BtnCriarConta from "../components/comuns/BtnCriarConta";
-import DescricaoPonteDeGeracoes from "../components/comuns/DescricaoPonteDeGeracoes";
-import iconeGenerico from "../assets/generic-icon.jpg";
-import { User } from "../types/index";
+import type { User } from "../types";
+
+interface ParametrosBusca {
+  page: number;
+  size: number;
+  city?: string;
+  isAvailable?: boolean;
+  day?: string;
+}
 
 const Users: React.FC = () => {
   const [usuarios, setUsuarios] = useState<User[]>([]);
@@ -20,13 +25,11 @@ const Users: React.FC = () => {
   useEffect(() => {
     const buscarCidades = async () => {
       try {
-        setCarregando(true);
-        const dadosCidades = await apiService.getCities();
-        setCidades(dadosCidades);
-      } catch (erro) {
-        console.error("Erro ao buscar cidades:", erro);
-      } finally {
-        setCarregando(false);
+        const cidadesData = await apiService.getCities();
+        setCidades(cidadesData);
+      } catch (error) {
+        console.error("Erro ao buscar cidades:", error);
+        setCidades([]);
       }
     };
 
@@ -38,22 +41,22 @@ const Users: React.FC = () => {
     const buscarDadosFiltrados = async () => {
       try {
         setCarregando(true);
-
+        
         const parametros: ParametrosBusca = {
-          pagina,
-          tamanho: 10,
-          cidade: cidadeSelecionada || undefined,
+          page: pagina,
+          size: 10,
+          ...(cidadeSelecionada && { city: cidadeSelecionada }),
+          isAvailable: true,
         };
 
-        const tipoUsuarioParaAPI = tipoUsuarioSelecionado === "ajudante" ? "helper" : "assisted";
-        const resposta = await apiService.getUsers(tipoUsuarioParaAPI, parametros);
-
-        setUsuarios(resposta.conteudo || []);
-        setTotalPaginas(resposta.pagina.totalPaginas || 1);
-      } catch (erro) {
-        console.error("Erro ao buscar dados:", erro);
+        const endpoint = tipoUsuarioSelecionado === "ajudante" ? "helper" : "assisted";
+        const resposta = await apiService.getUsers(endpoint as "helper" | "assisted", parametros);
+        
+        setUsuarios(resposta.content as User[]);
+        setTotalPaginas(resposta.page.totalPages);
+      } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
         setUsuarios([]);
-        setTotalPaginas(1);
       } finally {
         setCarregando(false);
       }
@@ -68,7 +71,8 @@ const Users: React.FC = () => {
     }
   };
 
-  const calcularIdade = (dataNascimento: string): number => {
+  const calcularIdade = (dataNascimento?: string): number => {
+    if (!dataNascimento) return 0;
     return new Date().getFullYear() - new Date(dataNascimento).getFullYear();
   };
 
@@ -78,285 +82,212 @@ const Users: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           {/* Cabeçalho */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-4">
-              Comunidade Ponte de Gerações
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+              Usuários Registrados
             </h1>
-            <p className="text-xl text-accent-600 max-w-3xl mx-auto">
-              Conheça os usuários cadastrados e encontre conexões incríveis
-              entre gerações
+            <p className="text-xl text-accent-600 max-w-2xl mx-auto">
+              Conecte-se com pessoas da sua comunidade
             </p>
           </div>
 
           {/* Filtros */}
           <div className="glass-card p-6 mb-8">
-            <div className="flex flex-col md:flex-row items-start md:items-end gap-6">
-              <div className="flex-1">
-                <label className="block text-sm font-semibold text-accent-700 mb-2">
-                  Tipo de usuário:
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tipo de usuário
                 </label>
                 <select
                   value={tipoUsuarioSelecionado}
-                  onChange={(e) => {
-                    setTipoUsuarioSelecionado(e.target.value);
-                    setPagina(0);
-                  }}
-                  className="input-field"
+                  onChange={(e) => setTipoUsuarioSelecionado(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
-                  <option value="ajudante">Ajudantes</option>
-                  <option value="ajudado">Ajudados</option>
+                  <option value="ajudante">Voluntários</option>
+                  <option value="assistido">Pessoas que precisam de ajuda</option>
                 </select>
               </div>
 
-              <div className="flex-1">
-                <label className="block text-sm font-semibold text-accent-700 mb-2">
-                  Cidade:
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Cidade
                 </label>
                 <select
                   value={cidadeSelecionada}
-                  onChange={(e) => {
-                    setCidadeSelecionada(e.target.value);
-                    setPagina(0);
-                  }}
-                  className="input-field"
+                  onChange={(e) => setCidadeSelecionada(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 >
                   <option value="">Todas as cidades</option>
-                  {cidades.map((cidade, indice) => (
-                    <option key={indice} value={cidade}>
+                  {cidades.map((cidade) => (
+                    <option key={cidade} value={cidade}>
                       {cidade}
                     </option>
                   ))}
                 </select>
               </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="text-sm text-accent-600">
-                  <span className="font-semibold">{usuarios.length}</span>{" "}
-                  pessoas encontradas
-                </div>
-              </div>
             </div>
           </div>
 
-          {/* Grade de Cartões */}
-          {carregando ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="glass-card p-8">
-                <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-xl font-semibold text-accent-700">
-                    Carregando...
-                  </span>
-                </div>
-              </div>
+          {/* Loading */}
+          {carregando && (
+            <div className="flex justify-center items-center py-16">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
             </div>
-          ) : usuarios.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-8">
+          )}
+
+          {/* Lista de usuários */}
+          {!carregando && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {usuarios.map((pessoa) => (
                 <div
                   key={pessoa.id}
-                  className="card hover:shadow-2xl hover:-translate-y-2"
+                  className="glass-card overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  <div className="relative">
-                    {/* Imagem de Perfil */}
-                    <div className="aspect-w-16 aspect-h-12 mb-6">
+                  {/* Imagem */}
+                  <div className="h-64 bg-gradient-to-br from-primary-100 to-secondary-100 relative overflow-hidden">
+                    {pessoa.profileImageUrl ? (
                       <img
-                        src={pessoa.profileImageUrl || iconeGenerico}
+                        src={`http://localhost:8080${pessoa.profileImageUrl}`}
                         alt={pessoa.name}
-                        className="w-full h-48 object-cover rounded-xl shadow-lg"
-                        onError={(e) => {
-                          e.currentTarget.src = iconeGenerico;
-                        }}
+                        className="w-full h-full object-cover"
                       />
-                    </div>
-
-                    {/* Badge Tipo de Usuário */}
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center">
+                          <span className="text-3xl text-primary-600">
+                            {pessoa.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                     <div className="absolute top-4 right-4">
                       <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
                           tipoUsuarioSelecionado === "ajudante"
-                            ? "bg-secondary-500 text-white"
-                            : "bg-primary-500 text-white"
+                            ? "bg-primary-100 text-primary-800"
+                            : "bg-secondary-100 text-secondary-800"
                         }`}
                       >
-                        {tipoUsuarioSelecionado === "ajudante" ? "Ajudante" : "Ajudado"}
+                        {tipoUsuarioSelecionado === "ajudante" ? "Voluntário" : "Assistido"}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-6">
-                    {/* Nome e Idade */}
-                    <h3 className="text-xl font-bold text-accent-800 mb-2">
-                      {pessoa.name}
-                    </h3>
-                    <p className="text-accent-600 mb-3">
-                      {calcularIdade(pessoa.birthDate)} anos
-                    </p>
+                  {/* Conteúdo */}
+                  <div className="p-6 space-y-4">
+                    <div className="text-center">
+                      <h3 className="text-xl font-bold text-accent-800 mb-1">
+                        {pessoa.name}
+                      </h3>
+                      <p className="text-accent-600">
+                        {calcularIdade(pessoa.birthDate)} anos
+                      </p>
+                    </div>
 
-                    {/* Localização */}
-                    <div className="flex items-center text-accent-600 mb-4">
-                      <svg
-                        className="w-4 h-4 mr-2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    {pessoa.address && (
+                      <div className="text-center">
+                        <p className="text-sm text-accent-600">
+                          📍 {pessoa.address.city}/RS
+                        </p>
+                      </div>
+                    )}
+
+                    {pessoa.aboutYou && (
+                      <div>
+                        <p className="text-sm text-accent-700 text-center line-clamp-3">
+                          {pessoa.aboutYou}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Habilidades/Necessidades */}
+                    {(pessoa.skills || pessoa.needs) && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-accent-700 mb-2">
+                          {tipoUsuarioSelecionado === "ajudante" ? "Habilidades:" : "Necessidades:"}
+                        </h4>
+                        <p className="text-sm text-accent-600 line-clamp-2">
+                          {pessoa.skills || pessoa.needs}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Dias disponíveis */}
+                    {pessoa.availableDays && pessoa.availableDays.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-accent-700 mb-2">
+                          Dias disponíveis:
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {pessoa.availableDays.map((dia, indice) => (
+                            <span
+                              key={indice}
+                              className="px-2 py-1 bg-accent-100 text-accent-700 rounded-full text-xs"
+                            >
+                              {dia}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Status */}
+                    <div className="flex justify-center">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          pessoa.available
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      <span className="text-sm font-medium">
-                        {pessoa.address.city}/RS
+                        {pessoa.available ? "Disponível" : "Indisponível"}
                       </span>
                     </div>
-
-                    {/* Sobre */}
-                    <p className="text-accent-700 text-sm mb-6 text-clamp-3">
-                      {pessoa.aboutYou || "Nenhuma descrição disponível."}
-                    </p>
-
-                    {/* Dias Disponíveis */}
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-accent-700 mb-3 text-sm">
-                        Disponível nos dias:
-                      </h4>
-                      <div className="flex flex-wrap gap-1">
-                        {pessoa.availableDays.map((dia, indice) => (
-                          <span
-                            key={indice}
-                            className="px-2 py-1 bg-primary-100 text-primary-700 rounded text-xs font-medium"
-                          >
-                            {dia.slice(0, 3)}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Botão de Contato */}
-                    <Link
-                      to={`/perfil/${pessoa.id}`}
-                      className={`w-full inline-block text-center font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-4 ${
-                        tipoUsuarioSelecionado === "ajudante"
-                          ? "bg-secondary-500 hover:bg-secondary-600 text-white focus:ring-secondary-200"
-                          : "bg-primary-500 hover:bg-primary-600 text-white focus:ring-primary-200"
-                      }`}
-                    >
-                      Entrar em Contato
-                    </Link>
                   </div>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="text-center py-20">
-              <div className="glass-card p-12 max-w-md mx-auto">
-                <div className="w-20 h-20 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-10 h-10 text-accent-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-accent-800 mb-2">
-                  Nenhum usuário encontrado
-                </h3>
-                <p className="text-accent-600">
-                  Tente ajustar os filtros para encontrar mais pessoas.
-                </p>
-              </div>
+          )}
+
+          {/* Mensagem quando não há usuários */}
+          {!carregando && usuarios.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-xl text-accent-600 mb-8">
+                Nenhum usuário encontrado com os filtros selecionados.
+              </p>
+              <BtnCriarConta 
+                to="/signup" 
+                variant="primary" 
+                size="lg"
+              >
+                Seja o primeiro a se cadastrar!
+              </BtnCriarConta>
             </div>
           )}
 
           {/* Paginação */}
-          {totalPaginas > 1 && (
-            <div className="flex justify-center items-center space-x-6 mb-12">
+          {!carregando && usuarios.length > 0 && totalPaginas > 1 && (
+            <div className="flex justify-center items-center space-x-4 mt-12">
               <button
                 onClick={() => mudarPagina(pagina - 1)}
                 disabled={pagina === 0}
-                className={`p-3 rounded-lg transition-all duration-300 ${
-                  pagina === 0
-                    ? "bg-accent-100 text-accent-400 cursor-not-allowed"
-                    : "bg-white hover:bg-primary-50 text-primary-600 hover:text-primary-700 shadow-md hover:shadow-lg"
-                }`}
+                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
+                Anterior
               </button>
-
-              <div className="flex items-center space-x-2">
-                <span className="text-accent-700 font-medium">
-                  Página {pagina + 1} de {totalPaginas}
-                </span>
-              </div>
-
+              
+              <span className="text-accent-600">
+                Página {pagina + 1} de {totalPaginas}
+              </span>
+              
               <button
                 onClick={() => mudarPagina(pagina + 1)}
-                disabled={pagina + 1 >= totalPaginas}
-                className={`p-3 rounded-lg transition-all duration-300 ${
-                  pagina + 1 >= totalPaginas
-                    ? "bg-accent-100 text-accent-400 cursor-not-allowed"
-                    : "bg-white hover:bg-primary-50 text-primary-600 hover:text-primary-700 shadow-md hover:shadow-lg"
-                }`}
+                disabled={pagina === totalPaginas - 1}
+                className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
               >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
+                Próxima
               </button>
             </div>
           )}
-
-          {/* Rodapé CTA */}
-          <div className="text-center bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-600 rounded-2xl p-12 shadow-2xl">
-            <h2 className="text-3xl font-bold mb-4">
-              Faça Parte Desta Comunidade!
-            </h2>
-            <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
-              <DescricaoPonteDeGeracoes />
-            </p>
-            <BtnCriarConta
-              to="/cadastro"
-              variante="contorno"
-              tamanho="grande"
-              className="bg-white text-primary-600 hover:bg-primary-50 border-white hover:border-primary-100"
-            />
-          </div>
         </div>
       </div>
     </PageLayout>
