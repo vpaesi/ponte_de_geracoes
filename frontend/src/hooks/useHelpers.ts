@@ -31,7 +31,7 @@ export const useHelpers = () => {
       id: helper.id || index,
       name: helper.name,
       age: helper.birthDate ? new Date().getFullYear() - new Date(helper.birthDate).getFullYear() : 0,
-      img: helper.profileImageUrl ? `http://localhost:8080${helper.profileImageUrl}` : '/default-avatar.png',
+      img: helper.profileImageUrl || '',
       description: helper.aboutYou || 'Sem descrição disponível',
       userType: 'helper' as const,
     }));

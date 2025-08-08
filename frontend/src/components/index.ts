@@ -1,10 +1,8 @@
-// // UI Components Export
-// export { default as BtnCriarConta } from './comuns/BtnCriarConta';
-// export { default as EncontrarUsuariosBtn } from './BtnEncontrarUsuarios';
-// export { default as IconWrapper } from './IconesLayout';
-// export { default as DescricaoPonteDeGeracoes } from './comuns/DescricaoPonteDeGeracoes';
-
-// // Types
-// export type { default as BridgeButtonProps } from './comuns/BtnCriarConta';
-// // export type { default as CommunityButtonProps } from './BtnEncontrarUsuarios';
-// export type { default as IconWrapperProps } from './IconesLayout';
+export { default as Header } from './Header';
+export { default as Footer } from './Footer';
+export { default as HeaderLinks } from './HeaderLinks';
+export { default as IconesLayout } from './IconesLayout';
+export { LoginFooter } from './LoginFooter';
+export { LoginForm } from './LoginForm';
+export { PageLayout } from './PageLayout';
+export { default as ProfileImage } from './comuns/ProfileImage';

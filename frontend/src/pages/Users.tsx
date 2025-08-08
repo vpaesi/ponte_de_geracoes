@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { PageLayout } from "../components/PageLayout";
 import { apiService } from "../services/apiService";
 import BtnCriarConta from "../components/comuns/BtnCriarConta";
+import ProfileImage from "../components/comuns/ProfileImage";
 import type { User } from "../types";
 
 interface ParametrosBusca {
@@ -143,32 +144,24 @@ const Users: React.FC = () => {
                   className="glass-card overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                   {/* Imagem */}
-                  <div className="h-64 bg-gradient-to-br from-primary-100 to-secondary-100 relative overflow-hidden">
-                    {pessoa.profileImageUrl ? (
-                      <img
-                        src={`http://localhost:8080${pessoa.profileImageUrl}`}
+                  <div className="p-6 pb-0 flex justify-center">
+                    <div className="relative">
+                      <ProfileImage
+                        src={pessoa.profileImageUrl}
                         alt={pessoa.name}
-                        className="w-full h-full object-cover"
+                        size="xl"
                       />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center">
-                          <span className="text-3xl text-primary-600">
-                            {pessoa.name.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
+                      <div className="absolute top-0 right-0">
+                        <span
+                          className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                            tipoUsuarioSelecionado === "ajudante"
+                              ? "bg-primary-100 text-primary-800"
+                              : "bg-secondary-100 text-secondary-800"
+                          }`}
+                        >
+                          {tipoUsuarioSelecionado === "ajudante" ? "Voluntário" : "Assistido"}
+                        </span>
                       </div>
-                    )}
-                    <div className="absolute top-4 right-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                          tipoUsuarioSelecionado === "ajudante"
-                            ? "bg-primary-100 text-primary-800"
-                            : "bg-secondary-100 text-secondary-800"
-                        }`}
-                      >
-                        {tipoUsuarioSelecionado === "ajudante" ? "Voluntário" : "Assistido"}
-                      </span>
                     </div>
                   </div>
 

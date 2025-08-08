@@ -4,6 +4,8 @@ import { API_BASE_URL } from "../constants/api";
 import { Link } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 import { PageLayout } from "../components/PageLayout";
+import ProfileImage from "../components/comuns/ProfileImage";
+
 interface Address {
   city: string;
   zipCode: string;
@@ -87,11 +89,11 @@ const Profile: React.FC = () => {
               <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8 mb-8">
                 {/* Profile Image */}
                 <div className="relative">
-                  <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden shadow-xl ring-4 ring-primary-100">
-                    <img
+                  <div className="shadow-xl ring-4 ring-primary-100">
+                    <ProfileImage
                       src={userProfile.profileImageUrl}
                       alt={`Foto de perfil de ${userProfile.name}`}
-                      className="w-full h-full object-cover"
+                      size="2xl"
                     />
                   </div>
                   <div className="absolute -bottom-2 -right-2">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { apiService } from "../../services/apiService";
+import ProfileImage from "./ProfileImage";
 import type { CarouselItem, User } from "../../types";
 
 interface CarrosselProps {
@@ -40,9 +41,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
           id: Number(user.id) || 0,
           name: user.name,
           age: calcularIdade(user.birthDate),
-          img: user.profileImageUrl
-            ? `http://localhost:8080${user.profileImageUrl}`
-            : "/default-avatar.png",
+          img: user.profileImageUrl || "",
           description: user.aboutYou || "Sem descrição disponível",
           userType: "helper" as const,
         }));
@@ -61,9 +60,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
           id: Number(user.id) + 1000 || 1000,
           name: user.name,
           age: calcularIdade(user.birthDate),
-          img: user.profileImageUrl
-            ? `http://localhost:8080${user.profileImageUrl}`
-            : "/default-avatar.png",
+          img: user.profileImageUrl || "",
           description: user.aboutYou || "Sem descrição disponível",
           userType: "assisted" as const,
         }));
@@ -137,24 +134,26 @@ const Carrossel: React.FC<CarrosselProps> = ({ title, city }) => {
             {usuariosVisiveis.map((usuario) => (
               <div
                 key={usuario.id}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                className="rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <img
-                  src={usuario.img}
-                  alt={usuario.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg text-gray-900 mb-1">
+                <div className="p-4 flex justify-center">
+                  <ProfileImage
+                    src={usuario.img}
+                    alt={usuario.name}
+                    size="xl"
+                  />
+                </div>
+                <div className="p-4 pt-0">
+                  <h3 className="font-semibold text-lg text-gray-900 mb-1 text-center">
                     {usuario.name}
                   </h3>
-                  <p className="text-gray-600 text-sm mb-2">
+                  <p className="text-gray-600 text-sm mb-2 text-center">
                     {usuario.age} anos
                   </p>
-                  <p className="text-gray-700 text-sm line-clamp-3">
+                  <p className="text-gray-700 text-sm line-clamp-3 text-center">
                     {usuario.description}
                   </p>
-                  <div className="mt-3">
+                  <div className="mt-3 text-center">
                     <span
                       className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
                         usuario.userType === "helper"
