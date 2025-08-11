@@ -26,9 +26,9 @@ const IconWrapper: React.FC<IconWrapperProps> = ({
 
   return (
     <div className={`relative group ${className}`}>
-      <div className="absolute inset-0 bg-gradient-to-r from-primary-100 to-secondary-100 rounded-full opacity-60 group-hover:opacity-80 transition-opacity duration-300 scale-125"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-100 to-red-100 rounded-full opacity-60 group-hover:opacity-80 transition-opacity duration-300 scale-125"></div>
       <div
-        className={`relative z-10 ${sizeClasses[size].container} flex items-center justify-center rounded-full bg-gradient-to-br ${bgColor} group-hover:from-primary-100 group-hover:to-secondary-100 transition-all duration-300`}
+        className={`relative z-10 ${sizeClasses[size].container} flex items-center justify-center rounded-full bg-gradient-to-br ${bgColor} transition-all duration-300`}
       >
         <IconComponent
           className={`${sizeClasses[size].icon} ${color} ${

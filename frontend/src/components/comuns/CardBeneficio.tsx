@@ -30,11 +30,7 @@ const CardBeneficio: React.FC<CardBeneficioProps> = ({
       <div className="flex flex-col items-center text-center space-y-4">
         {IconComponent && (
           <div className="mb-2">
-            <IconWrapper
-              icon={IconComponent}
-              size="lg"
-              color={iconColor}
-            />
+            <IconWrapper icon={IconComponent} size="md" color={iconColor} />
           </div>
         )}
 

@@ -3,19 +3,30 @@ const Footer = () => {
     <footer className="bg-gray-800 text-white mt-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center space-y-4">
-          <div className="flex justify-center items-center space-x-2">
-            <div className="w-6 h-1 bg-blue-500 rounded-full"></div>
-            <h3 className="text-lg font-semibold text-blue-300">Grupo 09</h3>
-            <div className="w-6 h-1 bg-blue-500 rounded-full"></div>
-          </div>
-
-          <div className="border-t border-gray-700 pt-4">
+          <div>
             <p className="text-gray-300 text-sm">
-              &copy; {new Date().getFullYear()} Ponte de Gerações. Todos os
-              direitos reservados.
+              &copy; {new Date().getFullYear()} Ponte de Gerações.
             </p>
-            <p className="text-gray-400 text-xs mt-2">
-              Conectando gerações, construindo pontes de solidariedade
+            <p className="text-gray-400 text-xs mt-1">
+              Projeto realizado por{" "}
+              <a
+                href="https://github.com/lucasdemattos8"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-blue-400"
+              >
+                Lucas Miranda
+              </a>{" "}
+              e{" "}
+              <a
+                href="https://github.com/vpaesi"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-blue-400"
+              >
+                Vitória de Camargo
+              </a>{" "}
+              durante o StartDB 2024.
             </p>
           </div>
         </div>

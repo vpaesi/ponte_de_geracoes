@@ -39,14 +39,16 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
       });
 
       if (helpersResponse.content && Array.isArray(helpersResponse.content)) {
-        const helpers = (helpersResponse.content as User[]).map((user: User) => ({
-          id: Number(user.id) || 0,
-          nome: user.nome || "Nome não informado",
-          age: calcularIdade(user.birthDate),
-          img: user.profileImageUrl || "",
-          descricao: user.aboutYou || "Sem descrição disponível",
-          userType: "helper" as const,
-        }));
+        const helpers = (helpersResponse.content as User[]).map(
+          (user: User) => ({
+            id: Number(user.id) || 0,
+            nome: user.nome || "Nome não informado",
+            age: calcularIdade(user.birthDate),
+            img: user.profileImageUrl || "",
+            descricao: user.aboutYou || "Sem descrição disponível",
+            userType: "helper" as const,
+          })
+        );
         todosUsuarios.push(...helpers);
       }
 
@@ -58,14 +60,16 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
       });
 
       if (assistedResponse.content && Array.isArray(assistedResponse.content)) {
-        const assisted = (assistedResponse.content as User[]).map((user: User) => ({
-          id: Number(user.id) + 1000 || 1000,
-          nome: user.nome || "Nome não informado",
-          age: calcularIdade(user.birthDate),
-          img: user.profileImageUrl || "",
-          descricao: user.aboutYou || "Sem descrição disponível",
-          userType: "assisted" as const,
-        }));
+        const assisted = (assistedResponse.content as User[]).map(
+          (user: User) => ({
+            id: Number(user.id) + 1000 || 1000,
+            nome: user.nome || "Nome não informado",
+            age: calcularIdade(user.birthDate),
+            img: user.profileImageUrl || "",
+            descricao: user.aboutYou || "Sem descrição disponível",
+            userType: "assisted" as const,
+          })
+        );
         todosUsuarios.push(...assisted);
       }
 
@@ -130,7 +134,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
               onClick={slideAnterior}
               className="p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-shadow z-10"
             >
-              <ChevronLeftIcon className="w-6 h-6 text-gray-600" />
+              <ChevronLeftIcon className="w-6 h-6 text-[#e76f51]" />
             </button>
           )}
 
@@ -180,7 +184,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
               onClick={proximoSlide}
               className="p-2 rounded-full bg-white shadow-lg hover:shadow-xl transition-shadow z-10"
             >
-              <ChevronRightIcon className="w-6 h-6 text-gray-600" />
+              <ChevronRightIcon className="w-6 h-6 text-[#e76f51]" />
             </button>
           )}
         </div>
