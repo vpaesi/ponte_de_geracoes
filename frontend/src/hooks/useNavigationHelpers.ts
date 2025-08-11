@@ -1,27 +1,15 @@
 import { useLocation } from 'react-router-dom';
 
-interface UseNavigationHelpers {
-  isCurrentPage: (path: string) => boolean;
-  isHomePage: boolean;
-  isRegisterPage: boolean;
-  isRegisteredPage: boolean;
-  isEditRegistrationPage: boolean;
-  isLoginPage: boolean;
-  isProfilePage: boolean;
-}
-
-export const useNavigationHelpers = (): UseNavigationHelpers => {
+export const useNavigationHelpers = () => {
   const location = useLocation();
-
-  const isCurrentPage = (path: string): boolean => location.pathname === path;
-
+  
   return {
-    isCurrentPage,
-    isHomePage: isCurrentPage('/'),
-    isRegisterPage: isCurrentPage('/signup'),
-    isRegisteredPage: isCurrentPage('/users'),
-    isEditRegistrationPage: isCurrentPage('/edit-profile'),
-    isLoginPage: isCurrentPage('/login'),
-    isProfilePage: isCurrentPage('/profile'),
+    isHomePage: location.pathname === '/',
+    isRegisterPage: location.pathname === '/signup',
+    isRegisteredPage: false, // implementar conforme necessário
+    isEditRegistrationPage: location.pathname === '/atualizar-perfil',
+    isLoginPage: location.pathname === '/login',
+    isProfilePage: location.pathname.startsWith('/profile'),
+    isUsersPage: location.pathname.startsWith('/users'),
   };
 };

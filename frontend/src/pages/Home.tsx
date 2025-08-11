@@ -1,31 +1,27 @@
-import React from "react";
-import { useUser } from "../hooks/useUser";
-import { useHelpers } from "../hooks/useHelpers";
-import SecaoBeneficios from "../components/secoes/SecaoBeneficios";
-import SecaoCarrossel from "../components/secoes/SecaoCarrossel";
-import HeroSection from "../components/secoes/SecaoHero";
+import React, { useEffect } from 'react';
+import { PageLayout } from '../components/PageLayout';
+import SecaoHero from '../components/secoes/SecaoHero';
+import SecaoBeneficios from '../components/secoes/SecaoBeneficios';
+import SecaoCarrossel from '../components/secoes/SecaoCarrossel';
+import { useHelpers } from '../hooks/useHelpers';
 
 const Home: React.FC = () => {
-  const { user } = useUser();
-  const { userType } = user || {};
-  const { getCarouselItems, loading, error } = useHelpers();
+  const { loading, error, fetchHelpers } = useHelpers();
 
-  const carouselItems = getCarouselItems();
+  useEffect(() => {
+    fetchHelpers({ page: 0, size: 10 });
+  }, [fetchHelpers]);
 
   if (error) {
-    console.error("Erro ao carregar ajudantes:", error);
+    console.error('Erro ao carregar ajudantes:', error);
   }
 
   return (
-    <div className="min-h-screen mx-20">
-      <HeroSection userType={userType} />
-      <hr className="border-gray-200 m-4" />
-
+    <PageLayout>
+      <SecaoHero />
       <SecaoBeneficios />
-      <hr className="border-gray-200 m-4" />
-
-      <SecaoCarrossel loading={loading} carouselItems={carouselItems} />
-    </div>
+      <SecaoCarrossel loading={loading} carouselItems={[]} />
+    </PageLayout>
   );
 };
 

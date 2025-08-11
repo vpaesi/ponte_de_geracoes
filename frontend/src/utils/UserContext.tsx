@@ -1,37 +1,76 @@
-import React, { useState } from "react";
-import { User } from "../types";
-import { UserContext } from "../contexts/UserContext";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [user, setUserState] = useState<User>({
-    id: null,
-    userType: "default",
-    nome: "",
-    email: "",
-  });
-
-  const setUser = (newUser: User) => {
-    setUserState(newUser);
-    localStorage.setItem("user", JSON.stringify(newUser));
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  userType: string;
+  phone: string;
+  isAvailable: boolean;
+  profileImageUrl?: string;
+  availableDays?: string[];
+  needsAndSkills?: string[];
+  aboutYou?: string;
+  address?: {
+    city: string;
+    street: string;
+    number: string;
+    zipCode: string;
   };
+}
 
-  const clearUser = () => {
-    setUserState({ id: null, userType: "default", nome: "", email: "" });
-    localStorage.removeItem("user");
-  };
+interface UserContextType {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  logout: () => void;
+  isLoggedIn: boolean;
+}
 
-  React.useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUserState(JSON.parse(storedUser));
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  // Carregar usuário do localStorage ao inicializar
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Erro ao carregar usuário do localStorage:', error);
+        localStorage.removeItem('currentUser');
+      }
     }
   }, []);
 
+  // Salvar usuário no localStorage quando mudar
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('currentUser');
+    }
+  }, [user]);
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('currentUser');
+  };
+
+  const isLoggedIn = !!user;
+
   return (
-    <UserContext.Provider value={{ user, setUser, clearUser }}>
+    <UserContext.Provider value={{ user, setUser, logout, isLoggedIn }}>
       {children}
     </UserContext.Provider>
   );
+};
+
+export const useUser = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser deve ser usado dentro de um UserProvider');
+  }
+  return context;
 };

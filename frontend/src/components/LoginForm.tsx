@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { InputsForms } from "./forms/InputsForms";
 import Button from "./comuns/Button";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../services/authService";
+import { useUser } from "../utils/UserContext";
 
 interface LoginFormProps {
   formData: {
@@ -15,22 +18,43 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
-  formData,
   errors,
   isLoading,
-  onUpdateFormData,
-  onSubmit,
 }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const { setUser } = useUser();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const user = await authService.login({ email, password });
+      setUser(user);
+      navigate("/profile");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao fazer login");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <InputsForms
           label="Email"
           type="email"
           placeholder="seu@email.com"
-          value={formData.email}
-          onChange={(value) => onUpdateFormData("email", value)}
-          error={errors.email}
+          value={email}
+          onChange={setEmail}
+          error={errors.email || error}
           required
         />
 
@@ -38,24 +62,24 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           label="Senha"
           type="password"
           placeholder="Sua senha"
-          value={formData.password}
-          onChange={(value) => onUpdateFormData("password", value)}
+          value={password}
+          onChange={setPassword}
           error={errors.password}
           required
-        />        
+        />
 
-      {errors.submit && (
-        <div className="text-red-600 text-sm text-center">{errors.submit}</div>
-      )}
+        {error && (
+          <div className="text-red-500 text-sm mt-2">{error}</div>
+        )}
       </div>
 
-      <Button 
+      <Button
         type="submit"
-        variant="primary" 
+        variant="primary"
         className="w-full"
-        disabled={isLoading}
+        disabled={loading || isLoading}
       >
-        {isLoading ? "Entrando..." : "Entrar"}
+        {loading || isLoading ? "Entrando..." : "Entrar"}
       </Button>
     </form>
   );

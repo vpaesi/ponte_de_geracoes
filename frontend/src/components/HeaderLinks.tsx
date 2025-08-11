@@ -1,14 +1,16 @@
+import React from "react";
 import { Link } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useUser } from "../utils/UserContext";
 import { useNavigationHelpers } from "../hooks/useNavigationHelpers";
 
-interface NavigationLinksProps {
-  className: string;
+interface HeaderLinksProps {
+  className?: string;
 }
 
-const NavigationLinks: React.FC<NavigationLinksProps> = ({ className }) => {
-  const { user } = useUser();
-  const { userType } = user || {};
+const HeaderLinks: React.FC<HeaderLinksProps> = ({ className }) => {
+  const { user, isLoggedIn } = useUser();
+
+const { userType } = user || {};
   const {
     isHomePage,
     isRegisterPage,
@@ -17,7 +19,7 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({ className }) => {
     isLoginPage,
     isProfilePage,
   } = useNavigationHelpers();
-
+  
   const shouldShowRegisterLink =
     userType === "default" &&
     !isRegisterPage &&
@@ -55,44 +57,33 @@ const NavigationLinks: React.FC<NavigationLinksProps> = ({ className }) => {
     !isProfilePage;
 
   return (
-    <nav className="header-nav">
-      {!isHomePage && (
-        <Link to="/" className={className}>
-          Página Inicial
-        </Link>
-      )}
-
-      {shouldShowRegisterLink && (
-        <Link to="/signup" className={className}>
-          Sign Up
-        </Link>
-      )}
-
-      {shouldShowRegisteredLink && (
-        <Link to="/users" className={className}>
-          Encontrar usuários
-        </Link>
-      )}
-
-      {shouldShowEditRegistrationLink && (
-        <Link to="/edit-profile" className={className}>
-          Editar Cadastro
-        </Link>
-      )}
-
-      {shouldShowLoginLink && (
-        <Link to="/login" className={className}>
-          Login
-        </Link>
-      )}
-
-      {shouldShowProfileLink && (
-        <Link to="/profile" className={className}>
-          Ver perfil
-        </Link>
-      )}
-    </nav>
+    <div className={className}>
+      <div className="flex items-center space-x-4">
+        {isLoggedIn? (
+          <>
+            <span className="text-gray-700">Olá, {user?.name}</span>
+            {shouldShowProfileLink && (
+              <Link to="/profile" className="btn-outline">
+                Meu Perfil
+              </Link>
+            )}
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn-outline">
+              Entrar
+            </Link>
+            <Link
+              to="/signup"
+              className="btn-primary"
+            >
+              Cadastrar
+            </Link>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
-export default NavigationLinks;
+export default HeaderLinks;

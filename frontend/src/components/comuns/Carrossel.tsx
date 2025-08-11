@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { apiService } from "../../services/apiService";
+import { userService } from "../../services/userService";
 import ProfileImage from "./ProfileImage";
 import { useEmbaralhaLista } from "../../hooks/useEmbaralhaLista";
 import type { CarouselItem, User } from "../../types";
@@ -31,7 +31,8 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
       setLoading(true);
       const todosUsuarios: CarouselItem[] = [];
 
-      const helpersResponse = await apiService.getUsers("helper", {
+      // Buscar helpers usando userService
+      const helpersResponse = await userService.getHelpers({
         page: 0,
         size: 10,
         ...(city && { city }),
@@ -41,7 +42,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         const helpers = (helpersResponse.content as User[]).map(
           (user: User) => ({
             id: Number(user.id) || 0,
-            nome: user.nome || "Nome não informado",
+            nome: user.name || "Nome não informado", // Corrigido: user.name ao invés de user.nome
             age: calcularIdade(user.birthDate),
             img: user.profileImageUrl || "",
             descricao: user.aboutYou || "Sem descrição disponível",
@@ -51,7 +52,8 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         todosUsuarios.push(...helpers);
       }
 
-      const assistedResponse = await apiService.getUsers("assisted", {
+      // Buscar assisted usando userService
+      const assistedResponse = await userService.getAssisted({
         page: 0,
         size: 10,
         ...(city && { city }),
@@ -61,7 +63,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         const assisted = (assistedResponse.content as User[]).map(
           (user: User) => ({
             id: Number(user.id) + 1000 || 1000,
-            nome: user.nome || "Nome não informado",
+            nome: user.name || "Nome não informado", // Corrigido: user.name ao invés de user.nome
             age: calcularIdade(user.birthDate),
             img: user.profileImageUrl || "",
             descricao: user.aboutYou || "Sem descrição disponível",

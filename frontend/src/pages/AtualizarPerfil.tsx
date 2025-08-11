@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useUser } from "../utils/UserContext";
 import { PageLayout } from "../components/PageLayout";
 import { DadosPessoaisSection } from "../components/forms/sections/DadosPessoaisSection";
 import { EnderecoSection } from "../components/forms/sections/EnderecoSection";

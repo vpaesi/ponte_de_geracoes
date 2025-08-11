@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { PageLayout } from "../components/PageLayout";
-import { apiService } from "../services/apiService";
 import { userService } from "../services/userService";
+import apiService from "../services/apiService";
 import BtnCriarConta from "../components/comuns/BtnCriarConta";
 import UserCard from "../components/comuns/UserCard";
 import UserFilters from "../components/comuns/UserFilters";
@@ -19,6 +20,7 @@ interface ParametrosBusca {
 }
 
 const Users: React.FC = () => {
+  const { userType } = useParams<{ userType: string }>();
   const [usuarios, setUsuarios] = useState<User[]>([]);
   const [pagina, setPagina] = useState<number>(0);
   const [totalPaginas, setTotalPaginas] = useState<number>(1);
@@ -34,7 +36,11 @@ const Users: React.FC = () => {
     const buscarCidades = async () => {
       try {
         const cidadesData = await apiService.getCities();
-        setCidades(cidadesData);
+        if (Array.isArray(cidadesData)) {
+          setCidades(cidadesData);
+        } else {
+          setCidades([]);
+        }
       } catch (error) {
         console.error("Erro ao buscar cidades:", error);
         setCidades([]);
@@ -55,14 +61,19 @@ const Users: React.FC = () => {
           ...(cidadeSelecionada && { city: cidadeSelecionada }),
         };
 
-        const resposta = await userService.searchUsers(
-          tipoUsuarioSelecionado,
-          parametros
-        );
+        let response;
+        if (userType === "helper") {
+          response = await userService.getHelpers(parametros);
+        } else if (userType === "assisted") {
+          response = await userService.getAssisted(parametros);
+        } else {
+          throw new Error("Tipo de usuário inválido");
+        }
 
-        const usuariosEmbaralhados = shuffleArray(resposta.content);
+        const usuariosEmbaralhados = shuffleArray(response.content) as User[];
         setUsuarios(usuariosEmbaralhados);
-        setTotalPaginas(resposta.page.totalPages);
+        setTotalPaginas(response.totalPages || 0);
+        setPagina(pagina);
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
         setUsuarios([]);
@@ -72,8 +83,10 @@ const Users: React.FC = () => {
       }
     };
 
-    buscarDadosFiltrados();
-  }, [pagina, cidadeSelecionada, tipoUsuarioSelecionado, shuffleArray]);
+    if (userType) {
+      buscarDadosFiltrados();
+    }
+  }, [pagina, cidadeSelecionada, tipoUsuarioSelecionado, shuffleArray, userType]);
 
   useEffect(() => {
     setPagina(0);
@@ -95,6 +108,27 @@ const Users: React.FC = () => {
 
     return "ajudante";
   };
+
+  const handleFilterChange = (newFilters: typeof ParametrosBusca) => {
+    setCidadeSelecionada(newFilters.city);
+    setTipoUsuarioSelecionado(newFilters.userType);
+  };
+
+  const handlePageChange = (page: number) => {
+    setPagina(page);
+  };
+
+  if (!userType || (userType !== "helper" && userType !== "assisted")) {
+    return (
+      <PageLayout>
+        <div className="text-center py-8">
+          <h1 className="text-2xl font-bold text-red-600">
+            Tipo de usuário inválido
+          </h1>
+        </div>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>

@@ -1,93 +1,69 @@
-import { apiService } from "./apiService";
-import { USER_TYPES } from "../constants/userTypes";
-import type { User } from "../types";
+import apiService from './apiService';
+import { API_ENDPOINTS } from '../constants/api';
 
-interface SearchParams {
-  page: number;
-  size: number;
-  city?: string;
+interface UserParams {
+  page?: number;
+  size?: number;
   isAvailable?: boolean;
+  city?: string;
   day?: string;
 }
 
-interface PaginatedResponse {
-  content: User[];
-  page: {
-    totalPages: number;
-    totalElements: number;
-    size: number;
-    number: number;
-  };
-}
-
 export const userService = {
-  async searchUsers(userType: string, params: SearchParams): Promise<PaginatedResponse> {
-    try {
-      if (userType === USER_TYPES.ALL) {
-        const [helpersResponse, assistedResponse] = await Promise.all([
-          apiService.getUsers("helper", params),
-          apiService.getUsers("assisted", { ...params, page: 0 })
-        ]);
+  // Buscar helpers
+  async getHelpers(params: UserParams = {}) {
+    const queryParams = new URLSearchParams();
+    
+    if (params.page !== undefined) queryParams.append('page', params.page.toString());
+    if (params.size !== undefined) queryParams.append('size', params.size.toString());
+    if (params.isAvailable !== undefined) queryParams.append('isAvailable', params.isAvailable.toString());
+    if (params.city) queryParams.append('city', params.city);
+    if (params.day) queryParams.append('day', params.day);
 
-        const helpers = (helpersResponse.content || []).map((user: User) => ({
-          ...user,
-          userType: 'ajudante' as const,
-          available: user.available ?? true
-        }));
+    const queryString = queryParams.toString();
+    const endpoint = `${API_ENDPOINTS.USERS_HELPER}${queryString ? `?${queryString}` : ''}`;
+    
+    return apiService.get(endpoint);
+  },
 
-        const assisted = (assistedResponse.content || []).map((user: User) => ({
-          ...user,
-          userType: 'assistido' as const,
-          available: user.available ?? !user.needsHelp
-        }));
+  // Buscar assisted
+  async getAssisted(params: UserParams = {}) {
+    const queryParams = new URLSearchParams();
+    
+    if (params.page !== undefined) queryParams.append('page', params.page.toString());
+    if (params.size !== undefined) queryParams.append('size', params.size.toString());
+    if (params.isAvailable !== undefined) queryParams.append('isAvailable', params.isAvailable.toString());
+    if (params.city) queryParams.append('city', params.city);
+    if (params.day) queryParams.append('day', params.day);
 
-        const allUsers = [...helpers, ...assisted];
+    const queryString = queryParams.toString();
+    const endpoint = `${API_ENDPOINTS.USERS_ASSISTED}${queryString ? `?${queryString}` : ''}`;
+    
+    return apiService.get(endpoint);
+  },
 
-        const filteredUsers = params.city 
-          ? allUsers.filter(user => user.address?.city === params.city)
-          : allUsers;
+  // Buscar usuário por ID
+  async getUserById(id: number) {
+    return apiService.get(`${API_ENDPOINTS.USER_DETAILS}/${id}`);
+  },
 
-        const totalElements = filteredUsers.length;
-        const totalPages = Math.ceil(totalElements / params.size);
-        const startIndex = params.page * params.size;
-        const endIndex = startIndex + params.size;
-        const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+  // Criar usuário
+  async createUser(userData: any) {
+    return apiService.post(API_ENDPOINTS.USERS, userData);
+  },
 
-        return {
-          content: paginatedUsers as User[],
-          page: {
-            totalPages,
-            totalElements,
-            size: params.size,
-            number: params.page
-          }
-        };
-      } else {
-        const endpoint = userType === USER_TYPES.HELPER ? "helper" : "assisted";
-        const response = await apiService.getUsers(endpoint as "helper" | "assisted", params);
-        
-        const usersWithType = (response.content || []).map((user: User) => ({
-          ...user,
-          userType: userType as 'ajudante' | 'assistido',
-          available: user.available ?? (userType === USER_TYPES.ASSISTED ? !user.needsHelp : true)
-        }));
+  // Atualizar usuário
+  async updateUser(id: number, userData: any) {
+    return apiService.put(`${API_ENDPOINTS.USERS}/${id}`, userData);
+  },
 
-        return {
-          content: usersWithType as User[],
-          page: response.page
-        };
-      }
-    } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-      return {
-        content: [],
-        page: {
-          totalPages: 0,
-          totalElements: 0,
-          size: params.size,
-          number: params.page
-        }
-      };
-    }
-  }
+  // Deletar usuário
+  async deleteUser(id: number) {
+    return apiService.delete(`${API_ENDPOINTS.USERS}/${id}`);
+  },
+
+  // Upload de imagem
+  async uploadImage(userId: number, file: File) {
+    return apiService.uploadFile(`${API_ENDPOINTS.UPLOAD_IMAGE}/${userId}`, file);
+  },
 };

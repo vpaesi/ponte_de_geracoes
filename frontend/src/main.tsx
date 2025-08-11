@@ -1,32 +1,28 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./index.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "./components/Header.tsx";
-import Footer from "./components/Footer.tsx";
-import Home from "./pages/Home.tsx";
-import SignUp from "./pages/SignUp.tsx";
-import AtualizarPerfil from "./pages/AtualizarPerfil.tsx";
-import Login from "./pages/Login.tsx";
-import Users from "./pages/Users.tsx";
-import Profile from "./pages/Profile.tsx";
-import { UserProvider } from "./utils/UserContext.tsx";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { UserProvider } from './utils/UserContext';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import Users from './pages/Users';
+import Profile from './pages/Profile';
+import AtualizarPerfil from './pages/AtualizarPerfil';
+import './index.css';
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
     <UserProvider>
-      <BrowserRouter>
-        <Header />
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/edit-profile" element={<AtualizarPerfil />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/users/:userType" element={<Users />} />
+          <Route path="/profile/:id?" element={<Profile />} />
+          <Route path="/atualizar-perfil" element={<AtualizarPerfil />} />
         </Routes>
-        <Footer />
-      </BrowserRouter>
+      </Router>
     </UserProvider>
-  </StrictMode>
+  </React.StrictMode>
 );

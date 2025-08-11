@@ -1,20 +1,26 @@
 export interface User {
   id: number;
-  nome?: string; 
+  name: string;
+  email: string;
+  phone: string;
+  userType: string;
+  isAvailable: boolean;
   birthDate?: string;
   cpf?: string;
-  email: string;
-  phone?: string;
   password?: string;
-  availableDays?: string[];
-  aboutYou?: string;
+  confirmPassword?: string;
   profileImageUrl?: string;
-  available?: boolean;
-  address?: Address;
-  skills?: string;
-  needs?: string;
-  needsHelp?: boolean;
-  userType?: 'ajudante' | 'assistido';
+  availableDays?: string[];
+  needsAndSkills?: string[];
+  aboutYou?: string;
+  address?: {
+    id?: number;
+    street: string;
+    number: string;
+    complement?: string;
+    zipCode: string;
+    city: string;
+  };
 }
 
 export interface UserContextType {
@@ -89,10 +95,8 @@ export interface ValidationResult {
 
 export interface ApiResponse<T> {
   content: T[];
-  page: {
-    size: number;
-    number: number;
-    totalPages: number;
-    totalElements: number;
-  };
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
 }
