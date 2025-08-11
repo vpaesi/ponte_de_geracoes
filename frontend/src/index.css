@@ -18,7 +18,7 @@
   }
   
   .btn-primary {
-    @apply btn bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+    @apply btn bg-[#e76f51] text-white hover:bg-red-100 hover:text-[#e76f51] border border-[#e76f51] focus:ring-[#d65a43];
   }
   
   .btn-secondary {
@@ -26,7 +26,7 @@
   }
   
   .btn-outline {
-    @apply btn border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500;
+    @apply btn border border-[#e76f51] text-[#e76f51] hover:bg-red-100 hover:text-[#e76f51] focus:ring-[#d65a43];
   }
   
   .input-field {

@@ -40,7 +40,7 @@ const Button: React.FC<ButtonProps> = ({
       hover:bg-red-100 hover:text-[#e76f51] 
       text-white 
       focus:ring-primary-500 
-      border border-primary-600
+      border border-[#e76f51]
     `,
     secondary: `
       bg-secondary-600 hover:bg-secondary-700 

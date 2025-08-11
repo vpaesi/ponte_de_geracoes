@@ -52,7 +52,7 @@ export const InputsFormsFormatado: React.FC<InputsFormsFormatadoProps> = ({
         required={required}
       />
       {error && (
-        <div className="ml-4 mt-1">
+        <div className="ml-2 mt-1">
           <p className="text-red-600 text-sm">{error}</p>
         </div>
       )}
