@@ -22,7 +22,6 @@ public class Assisted {
 
     private String name;
     private LocalDate birthDate;
-    private String rg;
     private String cpf;
     private String email;
     private String phone;
@@ -66,14 +65,6 @@ public class Assisted {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public String getRg() {
-        return rg;
-    }
-
-    public void setRg(String rg) {
-        this.rg = rg;
     }
 
     public String getCpf() {
