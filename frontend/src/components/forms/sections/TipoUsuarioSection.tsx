@@ -11,10 +11,16 @@ export const TipoUsuarioSection: React.FC<TipoUsuarioSectionProps> = ({
   atualizarCampo,
   erro,
 }) => {
+  const getErrorMessage = (): string => {
+    if (typeof erro === "string") return erro;
+    if (erro === true) return "Selecione o tipo de usuário";
+    return "";
+  };
+
   return (
     <div className="space-y-4">
       <label className="block text-sm font-semibold text-accent-700">
-        Você é um:
+        Você é um: <span className="text-red-500 ml-1">*</span>
       </label>
       <div className="flex space-x-6">
         <label className="flex items-center space-x-2 cursor-pointer">
@@ -42,9 +48,9 @@ export const TipoUsuarioSection: React.FC<TipoUsuarioSectionProps> = ({
           </span>
         </label>
       </div>
-      {erro && (
+      {getErrorMessage() && (
         <p className="text-red-500 text-sm">
-          Selecione o tipo de usuário
+          {getErrorMessage()}
         </p>
       )}
     </div>

@@ -1,12 +1,10 @@
 import React from "react";
 import { DadosPessoaisSection } from "./sections/DadosPessoaisSection";
-import { TipoUsuarioSection } from "./sections/TipoUsuarioSection";
 
 interface PropsFormularioCadastroEtapa1 {
   dadosFormulario: {
     nome: string;
     dataNascimento: string;
-    rg: string;
     cpf: string;
     email: string;
     telefone: string;

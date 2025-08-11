@@ -91,11 +91,6 @@ export const validarFormularioCadastro = (
     mensagens.push({ campo: 'cpf', mensagem: 'CPF inválido' });
   }
 
-  if (!validadores.campoPreenchido(dados.rg)) {
-    erros.rg = true;
-    mensagens.push({ campo: 'rg', mensagem: 'RG é obrigatório' });
-  }
-
   if (!validadores.campoPreenchido(dados.telefone)) {
     erros.telefone = true;
     mensagens.push({ campo: 'telefone', mensagem: 'Telefone é obrigatório' });

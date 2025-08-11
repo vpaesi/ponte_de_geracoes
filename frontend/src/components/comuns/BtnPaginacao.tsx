@@ -4,13 +4,21 @@ interface BtnPaginacaoProps {
   currentStep: number;
   isLoading: boolean;
   setCurrentStep: (step: number) => void;
+  onValidateStep: (step: number) => boolean;
 }
 
 export const BtnPaginacao: React.FC<BtnPaginacaoProps> = ({
   currentStep,
   isLoading,
   setCurrentStep,
+  onValidateStep,
 }) => {
+  const handleNext = () => {
+    if (onValidateStep(currentStep)) {
+      setCurrentStep(Math.min(3, currentStep + 1));
+    }
+  };
+
   return (
     <div className="flex justify-between items-center pt-8 border-t border-accent-200">
       <button
@@ -30,7 +38,7 @@ export const BtnPaginacao: React.FC<BtnPaginacaoProps> = ({
         {currentStep < 3 ? (
           <button
             type="button"
-            onClick={() => setCurrentStep(Math.min(3, currentStep + 1))}
+            onClick={handleNext}
             className="btn-primary"
           >
             Próximo

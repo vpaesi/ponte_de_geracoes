@@ -14,7 +14,6 @@ export const useFormularioCadastro = () => {
   const [dadosFormulario, setDadosFormulario] = useState<FormData>({
     nome: "",
     dataNascimento: "",
-    rg: "",
     cpf: "",
     email: "",
     telefone: "",
@@ -93,7 +92,6 @@ export const useFormularioCadastro = () => {
       const dadosParaAPI = {
         nome: dadosFormulario.nome,
         birthDate: dadosFormulario.dataNascimento,
-        rg: dadosFormulario.rg,
         cpf: dadosFormulario.cpf,
         email: dadosFormulario.email,
         phone: dadosFormulario.telefone,
@@ -136,6 +134,26 @@ export const useFormularioCadastro = () => {
     }
   };
 
+  const atualizarErros = (novosErros: Record<string, boolean | string>) => {
+    setErros(prevErros => {
+      const errosAtualizados = { ...prevErros };
+      
+      // Para cada novo erro
+      Object.keys(novosErros).forEach(campo => {
+        const valor = novosErros[campo];
+        if (valor === "" || valor === false) {
+          // Se o valor for vazio ou false, remover o erro
+          delete errosAtualizados[campo];
+        } else {
+          // Caso contrário, adicionar/atualizar o erro
+          errosAtualizados[campo] = Boolean(valor);
+        }
+      });
+      
+      return errosAtualizados;
+    });
+  };
+
   return {
     dadosFormulario,
     imagemPerfilPreview,
@@ -146,5 +164,6 @@ export const useFormularioCadastro = () => {
     alterarDiasDisponiveis,
     buscarCep,
     enviarFormulario,
+    atualizarErros,
   };
 };

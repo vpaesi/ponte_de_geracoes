@@ -18,7 +18,6 @@ const AtualizarPerfil: React.FC = () => {
   const [dadosUsuario, setDadosUsuario] = useState<Partial<User>>({
     nome: "",
     birthDate: "",
-    rg: "",
     cpf: "",
     email: "",
     phone: "",

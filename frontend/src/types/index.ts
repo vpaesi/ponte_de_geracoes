@@ -3,7 +3,6 @@ export interface User {
   name?: string; // Para compatibilidade com APIs diferentes
   nome?: string; // Para compatibilidade com dados mockados
   birthDate?: string;
-  rg?: string;
   cpf?: string;
   email: string;
   phone?: string;
@@ -58,7 +57,6 @@ export interface CarouselItem {
 export interface FormData {
   nome: string;
   dataNascimento: string;
-  rg: string;
   cpf: string;
   email: string;
   telefone: string;

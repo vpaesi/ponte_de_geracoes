@@ -18,7 +18,6 @@ interface UserProfile {
   id: number;
   nome: string;
   birthDate: string;
-  rg: string;
   cpf: string;
   email: string;
   phone: string;
@@ -186,7 +185,6 @@ const Profile: React.FC = () => {
                         "pt-BR"
                       ),
                     },
-                    { label: "RG", value: userProfile.rg },
                     { label: "CPF", value: userProfile.cpf },
                     { label: "Telefone", value: userProfile.phone },
                     { label: "Email", value: userProfile.email },

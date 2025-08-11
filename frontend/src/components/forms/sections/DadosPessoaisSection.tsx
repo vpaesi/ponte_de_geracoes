@@ -10,7 +10,6 @@ interface DadosPessoaisSectionProps {
     dataNascimento?: string;
     phone?: string;
     telefone?: string;
-    rg?: string;
     cpf?: string;
     senha?: string;
     confirmarSenha?: string;
