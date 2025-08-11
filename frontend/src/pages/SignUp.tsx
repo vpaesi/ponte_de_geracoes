@@ -70,11 +70,11 @@ const SignUp: React.FC = () => {
 
   return (
     <PageLayout>
-      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-12 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-8 px-4">
         <div className="max-w-4xl mx-auto">
           <SignUpFormHeader />
           <IndicativoDePaginas currentStep={etapaAtual} />
-          <div className="glass-card p-8">
+          <div className="glass-card p-1">
             <form onSubmit={enviarFormulario}>
               {renderizarEtapaAtual()}
               <BtnPaginacao

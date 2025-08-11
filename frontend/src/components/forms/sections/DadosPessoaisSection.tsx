@@ -5,7 +5,6 @@ import { formataCpf, formataCelular } from "../../../utils/formatadores";
 interface DadosPessoaisSectionProps {
   dados: {
     nome?: string;
-    nome?: string;
     email: string;
     birthDate?: string;
     dataNascimento?: string;
@@ -52,7 +51,6 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
   const emailField = dados.email ?? "";
   const nascimentoField = dados.birthDate ?? dados.dataNascimento ?? "";
   const telefoneField = dados.phone ?? dados.telefone ?? "";
-  const rgField = dados.rg ?? "";
   const cpfField = dados.cpf ?? "";
   const senhaField = dados.senha ?? "";
   const confirmarSenhaField = dados.confirmarSenha ?? "";
@@ -94,7 +92,7 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
           <InputsFormsFormatado
             label="Email"
             type="email"
-            placeholder="seu@email.com"
+            placeholder="email@exemplo.com"
             value={emailField}
             onChange={(valor) => atualizarCampo("email", valor)}
             error={getErrorMessage("email", "Email válido é obrigatório")}
@@ -103,7 +101,7 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
         </div>
 
         {/* Campos secundários */}
-        <div className={`grid grid-cols-1 ${showPasswords ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'} gap-6`}>
+        <div className={`grid grid-cols-1 ${showPasswords ? 'md:grid-cols-2 lg:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-4'} gap-6`}>
           <InputsFormsFormatado
             label="Data de nascimento"
             type="date"
@@ -115,62 +113,68 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
           />
 
           <InputsFormsFormatado
-            label="Telefone"
-            type="tel"
-            placeholder="(00) 00000-0000"
-            value={telefoneField}
-            onChange={(valor) => atualizarCampo(dados.phone !== undefined ? "phone" : "telefone", valor)}
-            error={getErrorMessage(dados.phone !== undefined ? "phone" : "telefone", "Telefone é obrigatório")}
-            formatter={formataCelular}
-            required
-          />
-
-          <InputsFormsFormatado
-            label="RG"
-            type="text"
-            placeholder="00.000.000-0"
-            value={rgField}
-            onChange={(valor) => atualizarCampo("rg", valor)}
-            error={getErrorMessage("rg", "RG é obrigatório")}
-            required
-          />
-
-          <InputsFormsFormatado
             label="CPF"
             type="text"
-            placeholder="000.000.000-00"
+            placeholder="123.456.789-00"
             value={cpfField}
             onChange={(valor) => atualizarCampo("cpf", valor)}
             error={getErrorMessage("cpf", "CPF é obrigatório")}
             formatter={formataCpf}
             required
           />
-
-          {/* Campos de senha */}
-          {showPasswords && (
-            <>
-              <InputsFormsFormatado
-                label="Senha"
-                type="password"
-                placeholder="Mínimo 6 caracteres"
-                value={senhaField}
-                onChange={(valor) => atualizarCampo("senha", valor)}
-                error={getErrorMessage("senha", "Senha é obrigatória")}
-                required
-              />
-
-              <InputsFormsFormatado
-                label="Confirmar senha"
-                type="password"
-                placeholder="Digite a senha novamente"
-                value={confirmarSenhaField}
-                onChange={(valor) => atualizarCampo("confirmarSenha", valor)}
-                error={getErrorMessage("confirmarSenha", "As senhas não coincidem")}
-                required
-              />
-            </>
-          )}
         </div>
+
+        {/* Linha de telefone, senha e confirmar senha */}
+        {showPasswords && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <InputsFormsFormatado
+              label="Telefone"
+              type="tel"
+              placeholder="(51) 91234-5678"
+              value={telefoneField}
+              onChange={(valor) => atualizarCampo(dados.phone !== undefined ? "phone" : "telefone", valor)}
+              error={getErrorMessage(dados.phone !== undefined ? "phone" : "telefone", "Telefone é obrigatório")}
+              formatter={formataCelular}
+              required
+            />
+
+            <InputsFormsFormatado
+              label="Senha"
+              type="password"
+              placeholder="Mínimo 6 caracteres"
+              value={senhaField}
+              onChange={(valor) => atualizarCampo("senha", valor)}
+              error={getErrorMessage("senha", "Senha é obrigatória")}
+              required
+            />
+
+            <InputsFormsFormatado
+              label="Confirmar senha"
+              type="password"
+              placeholder="Digite a senha novamente"
+              value={confirmarSenhaField}
+              onChange={(valor) => atualizarCampo("confirmarSenha", valor)}
+              error={getErrorMessage("confirmarSenha", "As senhas não coincidem")}
+              required
+            />
+          </div>
+        )}
+
+        {/* Telefone fora da linha de senha, caso não mostre senha */}
+        {!showPasswords && (
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
+            <InputsFormsFormatado
+              label="Telefone"
+              type="tel"
+              placeholder="(00) 00000-0000"
+              value={telefoneField}
+              onChange={(valor) => atualizarCampo(dados.phone !== undefined ? "phone" : "telefone", valor)}
+              error={getErrorMessage(dados.phone !== undefined ? "phone" : "telefone", "Telefone é obrigatório")}
+              formatter={formataCelular}
+              required
+            />
+          </div>
+        )}
       </div>
     </div>
   );

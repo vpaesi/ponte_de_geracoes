@@ -35,12 +35,6 @@ export const SignupFormStep1: React.FC<PropsFormularioCadastroEtapa1> = ({
         showFileUpload={true}
         onImageChange={setImagemPerfilPreview}
       />
-
-      <TipoUsuarioSection
-        tipoUsuario={dadosFormulario.tipoUsuario}
-        atualizarCampo={atualizarCampo}
-        erro={erros.tipoUsuario}
-      />
     </div>
   );
 };
