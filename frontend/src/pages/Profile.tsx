@@ -72,7 +72,6 @@ const Profile: React.FC = () => {
     <PageLayout>
       <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent mb-4">
               Meu Perfil
@@ -83,10 +82,8 @@ const Profile: React.FC = () => {
           </div>
 
           <div className="space-y-8">
-            {/* Profile Card */}
             <div className="glass-card p-8">
               <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8 mb-8">
-                {/* Profile Image */}
                 <div className="relative">
                   <div className="shadow-xl ring-4 ring-primary-100">
                     <ProfileImage
@@ -106,7 +103,6 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Profile Info Header */}
                 <div className="flex-1 text-center lg:text-left">
                   <h2 className="text-3xl font-bold text-accent-800 mb-2">
                     {userProfile.nome}
@@ -128,7 +124,6 @@ const Profile: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Edit Button */}
                 <div className="flex flex-col items-center lg:items-end gap-4">
                   <Link
                     to="/edit-profile"
@@ -153,9 +148,7 @@ const Profile: React.FC = () => {
               </div>
             </div>
 
-            {/* Information Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Personal Information */}
               <div className="glass-card p-6">
                 <h3 className="text-2xl font-bold text-accent-800 mb-6 flex items-center">
                   <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center mr-3">
@@ -204,7 +197,6 @@ const Profile: React.FC = () => {
                 </div>
               </div>
 
-              {/* Address Information */}
               <div className="glass-card p-6">
                 <h3 className="text-2xl font-bold text-accent-800 mb-6 flex items-center">
                   <div className="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center mr-3">
@@ -261,7 +253,6 @@ const Profile: React.FC = () => {
               </div>
             </div>
 
-            {/* Skills and Availability */}
             <div className="glass-card p-8">
               <h3 className="text-2xl font-bold text-accent-800 mb-6 flex items-center">
                 <div className="w-8 h-8 bg-warm-100 rounded-lg flex items-center justify-center mr-3">

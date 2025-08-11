@@ -19,7 +19,6 @@ export default function SecaoCarrossel({ loading }: ListaOfUsersSectionProps) {
           </div>
         ) : (
           <div className="">
-            {/* Carousel único com todos os tipos de usuários */}
             <Carrossel titulo="Conecte-se com nossa Comunidade" city="" />
           </div>
         )}

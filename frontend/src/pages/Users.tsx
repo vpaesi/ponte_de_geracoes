@@ -30,7 +30,6 @@ const Users: React.FC = () => {
   const [carregando, setCarregando] = useState<boolean>(false);
   const { shuffleArray } = useEmbaralhaLista();
 
-  // Buscar cidades
   useEffect(() => {
     const buscarCidades = async () => {
       try {
@@ -45,7 +44,6 @@ const Users: React.FC = () => {
     buscarCidades();
   }, []);
 
-  // Buscar dados filtrados
   useEffect(() => {
     const buscarDadosFiltrados = async () => {
       try {
@@ -62,7 +60,6 @@ const Users: React.FC = () => {
           parametros
         );
 
-        // Embaralhar os usuários antes de definir no state
         const usuariosEmbaralhados = shuffleArray(resposta.content);
         setUsuarios(usuariosEmbaralhados);
         setTotalPaginas(resposta.page.totalPages);
@@ -78,7 +75,6 @@ const Users: React.FC = () => {
     buscarDadosFiltrados();
   }, [pagina, cidadeSelecionada, tipoUsuarioSelecionado, shuffleArray]);
 
-  // Reset da página quando mudar filtros
   useEffect(() => {
     setPagina(0);
   }, [cidadeSelecionada, tipoUsuarioSelecionado]);
@@ -88,19 +84,15 @@ const Users: React.FC = () => {
     return new Date().getFullYear() - new Date(dataNascimento).getFullYear();
   };
 
-  // Determinar o tipo de usuário para o UserCard
   const getUserTypeForCard = (user: User): "ajudante" | "assistido" => {
-    // Priorizar o userType que vem do serviço
     if (user.userType) {
       return user.userType;
     }
 
-    // Fallback para o tipo selecionado (quando não é "todos")
     if (tipoUsuarioSelecionado !== USER_TYPES.ALL) {
       return tipoUsuarioSelecionado as "ajudante" | "assistido";
     }
 
-    // Último fallback
     return "ajudante";
   };
 
@@ -108,7 +100,6 @@ const Users: React.FC = () => {
     <PageLayout>
       <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 pt-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Cabeçalho */}
           <div className="text-center mb-12">
             <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text">
               Usuários Registrados
@@ -118,7 +109,6 @@ const Users: React.FC = () => {
             </p>
           </div>
 
-          {/* Filtros */}
           <UserFilters
             selectedUserType={tipoUsuarioSelecionado}
             onUserTypeChange={setTipoUsuarioSelecionado}
@@ -129,7 +119,6 @@ const Users: React.FC = () => {
             showAllUsersOption={true}
           />
 
-          {/* Loading */}
           {carregando && (
             <div className="flex justify-center items-center py-16">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
@@ -137,7 +126,6 @@ const Users: React.FC = () => {
             </div>
           )}
 
-          {/* Lista de usuários */}
           {!carregando && usuarios.length > 0 && (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -153,7 +141,6 @@ const Users: React.FC = () => {
             </>
           )}
 
-          {/* Mensagem quando não há usuários */}
           {!carregando && usuarios.length === 0 && (
             <div className="text-center py-16">
               <div className="max-w-md mx-auto">
@@ -177,7 +164,6 @@ const Users: React.FC = () => {
             </div>
           )}
 
-          {/* Contador de resultados */}
           <div className="m-6 text-center">
             <p className="text-gray-600">
               Encontrados {usuarios.length} usuário
@@ -186,7 +172,6 @@ const Users: React.FC = () => {
             </p>
           </div>
 
-          {/* Paginação */}
           {!carregando && usuarios.length > 0 && totalPaginas > 1 && (
             <Pagination
               currentPage={pagina}

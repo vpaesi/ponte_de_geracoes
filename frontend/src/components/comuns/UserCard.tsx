@@ -7,31 +7,32 @@ import type { User } from "../../types";
 
 interface UserCardProps {
   user: User;
-  userType: 'ajudante' | 'assistido';
+  userType: "ajudante" | "assistido";
   calculateAge: (birthDate?: string) => number;
   className?: string;
 }
 
-const UserCard: React.FC<UserCardProps> = ({ 
-  user, 
-  userType, 
-  calculateAge, 
-  className = "" 
+const UserCard: React.FC<UserCardProps> = ({
+  user,
+  userType,
+  calculateAge,
+  className = "",
 }) => {
   const isHelper = userType === "ajudante";
 
   return (
-    <div className={`
+    <div
+      className={`
       glass-card overflow-hidden hover:shadow-xl 
       transition-all duration-300 transform hover:-translate-y-1 
       bg-white ${className} border border-gray-200 rounded-lg
-    `}>
-      {/* Imagem */}
+    `}
+    >
       <div className="p-6 pb-0 flex justify-center">
         <div className="relative">
           <ProfileImage
             src={user.profileImageUrl}
-            alt={user.nome || user.name || "Usuário sem nome"}
+            alt={user.nome || "Usuário sem nome"}
             size="xl"
           />
           <div className="absolute top-0 right-0">
@@ -40,22 +41,17 @@ const UserCard: React.FC<UserCardProps> = ({
         </div>
       </div>
 
-      {/* Conteúdo */}
       <div className="p-6 space-y-4">
         <div className="text-center">
           <h3 className="text-xl font-bold text-accent-800 mb-1">
-            {user.nome || user.name}
+            {user.nome}
           </h3>
-          <p className="text-accent-600">
-            {calculateAge(user.birthDate)} anos
-          </p>
+          <p className="text-accent-600">{calculateAge(user.birthDate)} anos</p>
         </div>
 
         {user.address && (
           <div className="text-center">
-            <p className="text-sm text-accent-600">
-              📍 {user.address.city}/RS
-            </p>
+            <p className="text-sm text-accent-600">📍 {user.address.city}/RS</p>
           </div>
         )}
 
@@ -67,7 +63,6 @@ const UserCard: React.FC<UserCardProps> = ({
           </div>
         )}
 
-        {/* Habilidades/Necessidades */}
         {(user.skills || user.needs) && (
           <div>
             <h4 className="text-sm font-semibold text-accent-700 mb-2">
@@ -79,10 +74,8 @@ const UserCard: React.FC<UserCardProps> = ({
           </div>
         )}
 
-        {/* Dias disponíveis */}
         <AvailableDays days={user.availableDays || []} />
 
-        {/* Status - usar o available do próprio usuário */}
         <div className="flex justify-center">
           <StatusBadge available={user.available ?? false} />
         </div>

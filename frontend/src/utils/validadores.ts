@@ -70,7 +70,6 @@ export const validarFormularioCadastro = (
   const erros: Record<string, boolean> = {};
   const mensagens: ValidationError[] = [];
 
-  // Validar dados pessoais
   if (!validadores.campoPreenchido(dados.nome)) {
     erros.nome = true;
     mensagens.push({ campo: 'nome', mensagem: 'Nome é obrigatório' });
@@ -102,7 +101,6 @@ export const validarFormularioCadastro = (
     mensagens.push({ campo: 'senha', mensagem: 'Senhas não coincidem ou são muito curtas' });
   }
 
-  // Validar endereço
   if (!validadores.campoPreenchido(dados.endereco.zipCode)) {
     erros['endereco.zipCode'] = true;
     mensagens.push({ campo: 'endereco.zipCode', mensagem: 'CEP é obrigatório' });
@@ -128,7 +126,6 @@ export const validarFormularioCadastro = (
     mensagens.push({ campo: 'endereco.number', mensagem: 'Número é obrigatório' });
   }
 
-  // Validar tipo de usuário e campos específicos
   if (!dados.tipoUsuario || (dados.tipoUsuario !== 'ajudante' && dados.tipoUsuario !== 'assistido')) {
     erros.tipoUsuario = true;
     mensagens.push({ campo: 'tipoUsuario', mensagem: 'Tipo de usuário é obrigatório' });

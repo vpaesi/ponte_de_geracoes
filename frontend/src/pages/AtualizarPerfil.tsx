@@ -27,28 +27,31 @@ const AtualizarPerfil: React.FC = () => {
       complement: "",
       zipCode: "",
       city: "",
-      neighborhood: ""
+      neighborhood: "",
     },
     aboutYou: "",
     skills: "",
     needs: "",
-    availableDays: []
+    availableDays: [],
   });
 
   const [carregando, setCarregando] = useState(false);
 
-  const atualizarCampo = (campo: keyof User | string, valor: string | string[]) => {
-    if (campo.startsWith('address.')) {
-      const subcampo = campo.split('.')[1];
-      setDadosUsuario(prev => ({
+  const atualizarCampo = (
+    campo: keyof User | string,
+    valor: string | string[]
+  ) => {
+    if (campo.startsWith("address.")) {
+      const subcampo = campo.split(".")[1];
+      setDadosUsuario((prev) => ({
         ...prev,
         address: {
           ...prev.address!,
-          [subcampo]: valor
-        }
+          [subcampo]: valor,
+        },
       }));
     } else {
-      setDadosUsuario(prev => ({ ...prev, [campo]: valor }));
+      setDadosUsuario((prev) => ({ ...prev, [campo]: valor }));
     }
   };
 
@@ -58,11 +61,14 @@ const AtualizarPerfil: React.FC = () => {
   ) => {
     const isChecked = event.target.checked;
     const diasAtuais = dadosUsuario.availableDays || [];
-    
+
     if (isChecked) {
-      atualizarCampo('availableDays', [...diasAtuais, dia]);
+      atualizarCampo("availableDays", [...diasAtuais, dia]);
     } else {
-      atualizarCampo('availableDays', diasAtuais.filter(d => d !== dia));
+      atualizarCampo(
+        "availableDays",
+        diasAtuais.filter((d) => d !== dia)
+      );
     }
   };
 
@@ -72,36 +78,36 @@ const AtualizarPerfil: React.FC = () => {
       try {
         const endereco = await cepService.fetchAddressByCep(cep);
         if (endereco.logradouro) {
-          atualizarCampo('address.street', endereco.logradouro);
+          atualizarCampo("address.street", endereco.logradouro);
         }
         if (endereco.localidade) {
-          atualizarCampo('address.city', endereco.localidade);
+          atualizarCampo("address.city", endereco.localidade);
         }
         if (endereco.bairro) {
-          atualizarCampo('address.neighborhood', endereco.bairro);
+          atualizarCampo("address.neighborhood", endereco.bairro);
         }
       } catch (error) {
-        console.error('Erro ao buscar CEP:', error);
+        console.error("Erro ao buscar CEP:", error);
       }
     }
   };
 
   const handleImageChange = (file: File | null) => {
     if (file) {
-      console.log('Imagem selecionada:', file);
-      // Implementar upload da imagem aqui
+      console.log("Imagem selecionada:", file);
     }
   };
 
   useEffect(() => {
     const carregarPerfilUsuario = async () => {
       if (!id || !userType) return;
-      
+
       try {
         setCarregando(true);
-        const endpoint = userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
+        const endpoint =
+          userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
         const response = await fetch(`${URL_BASE_API}${endpoint}`);
-        
+
         if (response.ok) {
           const userData = await response.json();
           setDadosUsuario({
@@ -112,12 +118,12 @@ const AtualizarPerfil: React.FC = () => {
               complement: "",
               zipCode: "",
               city: "",
-              neighborhood: ""
-            }
+              neighborhood: "",
+            },
           });
         }
       } catch (error) {
-        console.error('Erro ao carregar perfil:', error);
+        console.error("Erro ao carregar perfil:", error);
       } finally {
         setCarregando(false);
       }
@@ -128,28 +134,29 @@ const AtualizarPerfil: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       setCarregando(true);
-      const endpoint = userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
-      
+      const endpoint =
+        userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
+
       const response = await fetch(`${URL_BASE_API}${endpoint}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(dadosUsuario),
       });
 
       if (response.ok) {
-        alert('Perfil atualizado com sucesso!');
-        navegar('/profile');
+        alert("Perfil atualizado com sucesso!");
+        navegar("/profile");
       } else {
-        throw new Error('Erro ao atualizar perfil');
+        throw new Error("Erro ao atualizar perfil");
       }
     } catch (error) {
-      console.error('Erro ao atualizar perfil:', error);
-      alert('Erro ao atualizar perfil. Tente novamente.');
+      console.error("Erro ao atualizar perfil:", error);
+      alert("Erro ao atualizar perfil. Tente novamente.");
     } finally {
       setCarregando(false);
     }
@@ -179,7 +186,7 @@ const AtualizarPerfil: React.FC = () => {
             <DadosPessoaisSection
               dados={{
                 ...dadosUsuario,
-                email: dadosUsuario.email ?? ""
+                email: dadosUsuario.email ?? "",
               }}
               atualizarCampo={atualizarCampo}
               showFileUpload={true}
@@ -190,7 +197,7 @@ const AtualizarPerfil: React.FC = () => {
             <EnderecoSection
               endereco={{
                 ...dadosUsuario.address!,
-                neighborhood: dadosUsuario.address?.neighborhood ?? ""
+                neighborhood: dadosUsuario.address?.neighborhood ?? "",
               }}
               atualizarCampo={atualizarCampo}
               onCepBlur={handleCepBlur}
@@ -203,7 +210,6 @@ const AtualizarPerfil: React.FC = () => {
               onDiasDisponiveisChange={handleDiasDisponiveisChange}
             />
 
-            {/* Botões */}
             <div className="flex justify-between items-center pt-8 border-t border-accent-200">
               <button
                 type="button"

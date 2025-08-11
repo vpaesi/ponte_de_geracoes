@@ -31,7 +31,6 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
       setLoading(true);
       const todosUsuarios: CarouselItem[] = [];
 
-      // Buscar helpers
       const helpersResponse = await apiService.getUsers("helper", {
         page: 0,
         size: 10,
@@ -52,7 +51,6 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         todosUsuarios.push(...helpers);
       }
 
-      // Buscar assisted
       const assistedResponse = await apiService.getUsers("assisted", {
         page: 0,
         size: 10,
@@ -73,7 +71,6 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         todosUsuarios.push(...assisted);
       }
 
-      // Embaralhar a lista de usuários antes de definir no state
       const usuariosEmbaralhados = shuffleArray(todosUsuarios);
       setUsuarios(usuariosEmbaralhados);
     } catch (error) {

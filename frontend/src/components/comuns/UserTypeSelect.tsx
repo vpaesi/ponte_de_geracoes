@@ -7,8 +7,8 @@ interface UserTypeSelectProps {
   includeAllOption?: boolean;
   className?: string;
   label?: string;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'select' | 'tabs' | 'radio';
+  size?: "sm" | "md" | "lg";
+  variant?: "select" | "tabs" | "radio";
 }
 
 const UserTypeSelect: React.FC<UserTypeSelectProps> = ({
@@ -17,37 +17,41 @@ const UserTypeSelect: React.FC<UserTypeSelectProps> = ({
   includeAllOption = false,
   className = "",
   label = "Tipo de usuário",
-  size = 'md',
-  variant = 'select',
+  size = "md",
+  variant = "select",
 }) => {
   const options = [
-    ...(includeAllOption ? [{
-      value: USER_TYPES.ALL,
-      label: 'Todos',
-      icon: '👥',
-      description: 'Voluntários e assistidos'
-    }] : []),
+    ...(includeAllOption
+      ? [
+          {
+            value: USER_TYPES.ALL,
+            label: "Todos",
+            icon: "👥",
+            description: "Voluntários e assistidos",
+          },
+        ]
+      : []),
     {
       value: USER_TYPES.HELPER,
-      label: 'Voluntários',
-      icon: '🤝',
-      description: 'Pessoas que oferecem ajuda'
+      label: "Voluntários",
+      icon: "🤝",
+      description: "Pessoas que oferecem ajuda",
     },
     {
       value: USER_TYPES.ASSISTED,
-      label: 'Assistidos',
-      icon: '🙏',
-      description: 'Pessoas que precisam de ajuda'
-    }
+      label: "Assistidos",
+      icon: "🙏",
+      description: "Pessoas que precisam de ajuda",
+    },
   ];
 
   const sizeClasses = {
-    sm: 'text-sm px-2 py-1',
-    md: 'text-base px-3 py-2',
-    lg: 'text-lg px-4 py-3'
+    sm: "text-sm px-2 py-1",
+    md: "text-base px-3 py-2",
+    lg: "text-lg px-4 py-3",
   };
 
-  if (variant === 'tabs') {
+  if (variant === "tabs") {
     return (
       <div className={className}>
         {label && (
@@ -63,9 +67,10 @@ const UserTypeSelect: React.FC<UserTypeSelectProps> = ({
               className={`
                 flex-1 ${sizeClasses[size]} rounded-md font-medium
                 transition-all duration-200 text-center
-                ${value === option.value
-                  ? 'bg-white text-primary-600 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-800'
+                ${
+                  value === option.value
+                    ? "bg-white text-primary-600 shadow-sm"
+                    : "text-gray-600 hover:text-gray-800"
                 }
               `}
             >
@@ -78,7 +83,7 @@ const UserTypeSelect: React.FC<UserTypeSelectProps> = ({
     );
   }
 
-  if (variant === 'radio') {
+  if (variant === "radio") {
     return (
       <div className={className}>
         {label && (
@@ -107,9 +112,7 @@ const UserTypeSelect: React.FC<UserTypeSelectProps> = ({
                     {option.label}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600">
-                  {option.description}
-                </p>
+                <p className="text-sm text-gray-600">{option.description}</p>
               </div>
             </label>
           ))}
@@ -118,7 +121,6 @@ const UserTypeSelect: React.FC<UserTypeSelectProps> = ({
     );
   }
 
-  // Variant: 'select' (default)
   return (
     <div className={className}>
       <label className="block text-sm font-medium text-gray-700 mb-2">

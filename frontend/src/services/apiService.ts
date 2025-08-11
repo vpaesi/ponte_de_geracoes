@@ -88,7 +88,6 @@ export const apiService = {
       const response = await fetch(url);
       
       if (!response.ok) {
-        // Fallback para dados mockados em caso de erro
         console.warn('API não disponível, usando dados mockados');
         return userType === "helper" ? mockUsers.helpers : mockUsers.assisted;
       }
@@ -104,7 +103,6 @@ export const apiService = {
     try {
       const response = await fetch(`${API_BASE_URL}/cities`);
       if (!response.ok) {
-        // Fallback para cidades mockadas
         return ["Porto Alegre", "Canoas", "Novo Hamburgo", "São Leopoldo", "Gravataí"];
       }
       return await response.json();

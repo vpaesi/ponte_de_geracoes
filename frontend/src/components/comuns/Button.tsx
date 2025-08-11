@@ -24,7 +24,6 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   icon,
 }) => {
-  // Estilos base
   const baseClasses = `
     inline-flex items-center justify-center gap-2
     font-semibold rounded-lg 
@@ -33,7 +32,6 @@ const Button: React.FC<ButtonProps> = ({
     disabled:opacity-50 disabled:cursor-not-allowed
   `;
 
-  // Variantes de estilo
   const variantClasses = {
     primary: `
       bg-[#e76f51] 
@@ -57,7 +55,6 @@ const Button: React.FC<ButtonProps> = ({
     `,
   };
 
-  // Tamanhos
   const sizeClasses = {
     sm: "px-3 py-2 text-sm",
     md: "px-4 py-2 text-base",
@@ -80,7 +77,6 @@ const Button: React.FC<ButtonProps> = ({
     </>
   );
 
-  // Se tem link e não está desabilitado, renderiza como Link
   if (to && !disabled) {
     return (
       <Link to={to} className={finalClasses}>
@@ -89,7 +85,6 @@ const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  // Senão, renderiza como button
   return (
     <button
       type={type}

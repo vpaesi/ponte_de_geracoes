@@ -1,7 +1,6 @@
 export interface User {
   id: number;
-  name?: string; // Para compatibilidade com APIs diferentes
-  nome?: string; // Para compatibilidade com dados mockados
+  nome?: string; 
   birthDate?: string;
   cpf?: string;
   email: string;
@@ -14,7 +13,7 @@ export interface User {
   address?: Address;
   skills?: string;
   needs?: string;
-  needsHelp?: boolean; // Para assistidos
+  needsHelp?: boolean;
   userType?: 'ajudante' | 'assistido';
 }
 

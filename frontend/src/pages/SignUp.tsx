@@ -29,45 +29,43 @@ const SignUp: React.FC = () => {
     alterarDiasDisponiveis(day, event.target.checked);
   };
 
-  // Validação dos campos por etapa
   const validateStep = (step: number): boolean => {
     const newErrors: Record<string, boolean | string> = {};
 
     switch (step) {
       case 1:
-        // Validação dos dados pessoais
         if (!dadosFormulario.nome?.trim()) {
           newErrors.nome = "Nome é obrigatório";
         }
-        
+
         if (!dadosFormulario.email?.trim()) {
           newErrors.email = "Email é obrigatório";
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dadosFormulario.email)) {
           newErrors.email = "Email deve ter um formato válido";
         }
-        
+
         if (!dadosFormulario.dataNascimento) {
           newErrors.dataNascimento = "Data de nascimento é obrigatória";
         }
-        
+
         if (!dadosFormulario.cpf?.trim()) {
           newErrors.cpf = "CPF é obrigatório";
         } else if (dadosFormulario.cpf.replace(/\D/g, "").length !== 11) {
           newErrors.cpf = "CPF deve ter 11 dígitos";
         }
-        
+
         if (!dadosFormulario.telefone?.trim()) {
           newErrors.telefone = "Telefone é obrigatório";
         } else if (dadosFormulario.telefone.replace(/\D/g, "").length < 10) {
           newErrors.telefone = "Telefone deve ter pelo menos 10 dígitos";
         }
-        
+
         if (!dadosFormulario.senha?.trim()) {
           newErrors.senha = "Senha é obrigatória";
         } else if (dadosFormulario.senha.length < 6) {
           newErrors.senha = "Senha deve ter pelo menos 6 caracteres";
         }
-        
+
         if (!dadosFormulario.confirmarSenha?.trim()) {
           newErrors.confirmarSenha = "Confirmação de senha é obrigatória";
         } else if (dadosFormulario.senha !== dadosFormulario.confirmarSenha) {
@@ -76,52 +74,46 @@ const SignUp: React.FC = () => {
         break;
 
       case 2:
-        // Validação do endereço
         if (!dadosFormulario.endereco.zipCode?.trim()) {
           newErrors["endereco.zipCode"] = "CEP é obrigatório";
-        } else if (dadosFormulario.endereco.zipCode.replace(/\D/g, "").length !== 8) {
+        } else if (
+          dadosFormulario.endereco.zipCode.replace(/\D/g, "").length !== 8
+        ) {
           newErrors["endereco.zipCode"] = "CEP deve ter 8 dígitos";
         }
-        
+
         if (!dadosFormulario.endereco.city?.trim()) {
           newErrors["endereco.city"] = "Cidade é obrigatória";
         }
-        
+
         if (!dadosFormulario.endereco.street?.trim()) {
           newErrors["endereco.street"] = "Logradouro é obrigatório";
         }
-        
+
         if (!dadosFormulario.endereco.number?.trim()) {
           newErrors["endereco.number"] = "Número é obrigatório";
         }
-        
+
         if (!dadosFormulario.endereco.neighborhood?.trim()) {
           newErrors["endereco.neighborhood"] = "Bairro é obrigatório";
         }
         break;
 
       case 3:
-        // Validação do perfil - apenas para finalizar cadastro
         if (!dadosFormulario.tipoUsuario) {
           newErrors.tipoUsuario = "Selecione o tipo de usuário";
         }
-        
         if (dadosFormulario.diasDisponiveis.length === 0) {
           newErrors.diasDisponiveis = "Selecione pelo menos um dia disponível";
         }
-        
-        // VALIDAÇÃO DE HABILIDADES/NECESSIDADES REMOVIDA DAQUI
-        // Será validada apenas no momento de enviar o formulário
         break;
     }
 
-    // Se houver erros, atualizar o state de erros e retornar false
     if (Object.keys(newErrors).length > 0) {
       atualizarErros(newErrors);
       return false;
     }
 
-    // Se não há erros, limpar os erros da etapa atual
     const errosParaLimpar: Record<string, boolean | string> = {};
     switch (step) {
       case 1:
@@ -143,7 +135,6 @@ const SignUp: React.FC = () => {
       case 3:
         errosParaLimpar.tipoUsuario = "";
         errosParaLimpar.diasDisponiveis = "";
-        // NÃO limpar habilidades/necessidades aqui
         break;
     }
     atualizarErros(errosParaLimpar);
@@ -151,21 +142,17 @@ const SignUp: React.FC = () => {
     return true;
   };
 
-  // Validação específica para finalizar cadastro
   const validateFinalSubmit = (): boolean => {
     const newErrors: Record<string, boolean | string> = {};
-    
-    // Validar se tipo de usuário está selecionado
+
     if (!dadosFormulario.tipoUsuario) {
       newErrors.tipoUsuario = "Selecione o tipo de usuário";
     }
-    
-    // Validar se dias disponíveis foram selecionados
+
     if (dadosFormulario.diasDisponiveis.length === 0) {
       newErrors.diasDisponiveis = "Selecione pelo menos um dia disponível";
     }
-    
-    // Validar habilidades/necessidades apenas no momento de finalizar
+
     if (dadosFormulario.tipoUsuario === "ajudante") {
       if (!dadosFormulario.habilidades?.trim()) {
         newErrors.habilidades = "Selecione pelo menos uma habilidade";
@@ -176,7 +163,6 @@ const SignUp: React.FC = () => {
       }
     }
 
-    // Se houver erros, atualizar o state de erros e retornar false
     if (Object.keys(newErrors).length > 0) {
       atualizarErros(newErrors);
       return false;
@@ -187,8 +173,7 @@ const SignUp: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validar antes de enviar
+
     if (validateFinalSubmit()) {
       enviarFormulario(e);
     }

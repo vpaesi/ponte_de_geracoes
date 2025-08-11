@@ -138,14 +138,11 @@ export const useFormularioCadastro = () => {
     setErros(prevErros => {
       const errosAtualizados = { ...prevErros };
       
-      // Para cada novo erro
       Object.keys(novosErros).forEach(campo => {
         const valor = novosErros[campo];
         if (valor === "" || valor === false) {
-          // Se o valor for vazio ou false, remover o erro
           delete errosAtualizados[campo];
         } else {
-          // Caso contrário, adicionar/atualizar o erro
           errosAtualizados[campo] = Boolean(valor);
         }
       });

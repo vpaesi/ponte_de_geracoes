@@ -19,6 +19,5 @@ export const formataCep = (value: string): string => {
   return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`;
 };
 
-// Exportações com nomes antigos para compatibilidade
 export const formatadorCpf = formataCpf;
 export const formatarCEP = formataCep;

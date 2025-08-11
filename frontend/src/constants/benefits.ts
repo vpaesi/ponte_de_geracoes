@@ -17,7 +17,6 @@ export interface Benefit {
   categoria?: 'social' | 'health' | 'learning' | 'personal' | 'security';
 }
 
-// Cores padronizadas para os ícones
 export const ICON_COLORS = {
   warm: "text-warm-600",
   red: "text-red-500",
@@ -78,10 +77,8 @@ export const BENEFITS: Benefit[] = [
   }
 ];
 
-// Função utilitária para filtrar benefícios por categoria
 export const getBenefitsBycategoria = (categoria: Benefit['categoria']) => 
   BENEFITS.filter(benefit => benefit.categoria === categoria);
 
-// Função utilitária para buscar benefício por ID
 export const getBenefitById = (id: string) => 
   BENEFITS.find(benefit => benefit.id === id);

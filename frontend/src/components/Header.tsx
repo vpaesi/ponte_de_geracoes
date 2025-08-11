@@ -25,7 +25,6 @@ const Header = () => {
           <div className="hidden md:block">
             <NavigationLinks className="btn-secondary px-4 py-2 rounded-lg  transition-colors font-medium" />
           </div>
-          {/* Mobile menu button - pode ser implementado depois */}
           <div className="md:hidden">
             <button className="p-2 rounded-lg hover:bg-gray-50 transition-colors">
               <svg

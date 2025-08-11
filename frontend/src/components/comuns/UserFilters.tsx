@@ -1,6 +1,10 @@
 import React from "react";
 import FilterSelect from "./FilterSelect";
-import { USER_TYPES, USER_TYPE_LABELS, USER_TYPE_DESCRIPTIONS } from "../../constants/userTypes";
+import {
+  USER_TYPES,
+  USER_TYPE_LABELS,
+  USER_TYPE_DESCRIPTIONS,
+} from "../../constants/userTypes";
 
 interface UserFiltersProps {
   selectedUserType: string;
@@ -21,15 +25,13 @@ const UserFilters: React.FC<UserFiltersProps> = ({
   className = "",
   showAllUsersOption = true,
 }) => {
-  // Opções de tipo de usuário com descrições mais claras
   const userTypeOptions = [];
 
-  // Sempre incluir opção "Todos" como primeira opção
   if (showAllUsersOption) {
     userTypeOptions.push({
       value: USER_TYPES.ALL,
       label: USER_TYPE_LABELS[USER_TYPES.ALL],
-      description: USER_TYPE_DESCRIPTIONS[USER_TYPES.ALL]
+      description: USER_TYPE_DESCRIPTIONS[USER_TYPES.ALL],
     });
   }
 
@@ -37,19 +39,19 @@ const UserFilters: React.FC<UserFiltersProps> = ({
     {
       value: USER_TYPES.HELPER,
       label: USER_TYPE_LABELS[USER_TYPES.HELPER],
-      description: USER_TYPE_DESCRIPTIONS[USER_TYPES.HELPER]
+      description: USER_TYPE_DESCRIPTIONS[USER_TYPES.HELPER],
     },
     {
       value: USER_TYPES.ASSISTED,
       label: USER_TYPE_LABELS[USER_TYPES.ASSISTED],
-      description: USER_TYPE_DESCRIPTIONS[USER_TYPES.ASSISTED]
+      description: USER_TYPE_DESCRIPTIONS[USER_TYPES.ASSISTED],
     }
   );
 
-  const cityOptions = cities.map(city => ({
+  const cityOptions = cities.map((city) => ({
     value: city,
     label: city,
-    description: `Usuários localizados em ${city}`
+    description: `Usuários localizados em ${city}`,
   }));
 
   return (
@@ -62,7 +64,7 @@ const UserFilters: React.FC<UserFiltersProps> = ({
           Use os filtros abaixo para encontrar pessoas na sua região
         </p>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <FilterSelect
           label="Tipo de usuário"

@@ -56,10 +56,8 @@ export const useLoginForm = () => {
     setIsLoading(true);
 
     try {
-      // Simular login - aqui você faria a requisição real para o backend
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Simular resposta do backend
       const userData = {
         id: "1",
         nome: "Usuário Teste",
