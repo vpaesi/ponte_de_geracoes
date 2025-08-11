@@ -22,7 +22,7 @@
   }
   
   .btn-secondary {
-    @apply btn bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500;
+    @apply btn bg-transparent text-[#e76f51] hover:bg-red-100 hover:text-[#e76f51] focus:ring-[#d65a43];
   }
   
   .btn-outline {
