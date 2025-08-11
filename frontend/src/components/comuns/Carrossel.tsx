@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { apiService } from "../../services/apiService";
 import ProfileImage from "./ProfileImage";
+import { useEmbaralhaLista } from "../../hooks/useEmbaralhaLista";
 import type { CarouselItem, User } from "../../types";
 
 interface CarrosselProps {
@@ -13,6 +14,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [usuarios, setUsuarios] = useState<CarouselItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const { shuffleArray } = useEmbaralhaLista();
 
   const visibleItems = 4;
   const totalItems = usuarios.length;
@@ -67,14 +69,16 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         todosUsuarios.push(...assisted);
       }
 
-      setUsuarios(todosUsuarios);
+      // Embaralhar a lista de usuários antes de definir no state
+      const usuariosEmbaralhados = shuffleArray(todosUsuarios);
+      setUsuarios(usuariosEmbaralhados);
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);
       setUsuarios([]);
     } finally {
       setLoading(false);
     }
-  }, [city, calcularIdade]);
+  }, [city, calcularIdade, shuffleArray]);
 
   useEffect(() => {
     buscarUsuarios();

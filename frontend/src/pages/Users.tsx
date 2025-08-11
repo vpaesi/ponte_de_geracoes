@@ -6,6 +6,7 @@ import BtnCriarConta from "../components/comuns/BtnCriarConta";
 import UserCard from "../components/comuns/UserCard";
 import UserFilters from "../components/comuns/UserFilters";
 import Pagination from "../components/comuns/Pagination";
+import { useEmbaralhaLista } from "../hooks/useEmbaralhaLista";
 import { USER_TYPES } from "../constants/userTypes";
 import type { User } from "../types";
 
@@ -27,6 +28,7 @@ const Users: React.FC = () => {
     USER_TYPES.ALL
   );
   const [carregando, setCarregando] = useState<boolean>(false);
+  const { shuffleArray } = useEmbaralhaLista();
 
   // Buscar cidades
   useEffect(() => {
@@ -53,15 +55,16 @@ const Users: React.FC = () => {
           page: pagina,
           size: 10,
           ...(cidadeSelecionada && { city: cidadeSelecionada }),
-          // Não filtrar por available quando estamos mostrando todos ou específicos
-          // isAvailable: true,
         };
 
         const resposta = await userService.searchUsers(
           tipoUsuarioSelecionado,
           parametros
         );
-        setUsuarios(resposta.content);
+
+        // Embaralhar os usuários antes de definir no state
+        const usuariosEmbaralhados = shuffleArray(resposta.content);
+        setUsuarios(usuariosEmbaralhados);
         setTotalPaginas(resposta.page.totalPages);
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
@@ -73,7 +76,7 @@ const Users: React.FC = () => {
     };
 
     buscarDadosFiltrados();
-  }, [pagina, cidadeSelecionada, tipoUsuarioSelecionado]);
+  }, [pagina, cidadeSelecionada, tipoUsuarioSelecionado, shuffleArray]);
 
   // Reset da página quando mudar filtros
   useEffect(() => {
