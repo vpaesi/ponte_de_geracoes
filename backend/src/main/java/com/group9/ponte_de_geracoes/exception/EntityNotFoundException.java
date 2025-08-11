@@ -3,25 +3,22 @@ package com.group9.ponte_de_geracoes.exception;
 import java.util.List;
 
 public class EntityNotFoundException extends RuntimeException {
-    private String message;
-    private List<String> errors;
+    private List<String> userMessages;
 
-    public EntityNotFoundException(String message){
+    public EntityNotFoundException(String message, List<String> userMessages) {
         super(message);
-        this.message = message;
+        this.userMessages = userMessages;
     }
 
-    public EntityNotFoundException(String message, List<String> errors){
-        super(message);
-        this.message = message;
-        this.errors = errors;
+    public List<String> getUserMessages() {
+        return userMessages;
     }
 
-    public String getMessage() {
-        return message;
+    public void setUserMessages(List<String> userMessages) {
+        this.userMessages = userMessages;
     }
 
-    public List<String> getErrors() {
-        return errors;
+    public String getErrors() {
+        return "";
     }
 }

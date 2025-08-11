@@ -85,51 +85,81 @@ public class SwaggerJsonExamplesUtil {
         "content": [
             {
                 "id": 1,
-                "name": "João Paulo",
-                "birthDate": "2005-05-12",
-                "rg": "123456789",
-                "cpf": "123.456.789-10",
-                "email": "joaopaulo@example.com",
-                "phone": "(11) 98765-4321",
-                "password": "password123",
-                "needs": "Preciso de ajuda na Cozinha e tarefas básicas",
-                "needsHelp": true,
-                "profileImageUrl": "/uploads/generic-icon.jpg",
-                "availableDays": [
-                    "Segunda, Quarta, Sexta"
-                ],
-                "aboutYou": "Adoro ajudar em tarefas domésticas e jardinagem.",
+                "userType": "assisted",
+                "name": "Maria Silva",
+                "email": "maria@email.com",
+                "phone": "(11) 99999-9999",
+                "birthDate": "1940-03-25",
+                "cpf": "123.456.789-00",
+                "profileImageUrl": "/uploads/assisted/maria.jpg",
+                "isAvailable": true,
+                "availableDays": ["Segunda", "Quarta", "Sexta"],
+                "needsAndSkills": ["Compras", "Companhia"],
+                "aboutYou": "Gosto de conversar e receber visitas",
                 "address": {
-                    "id": 3,
-                    "city": "São Paulo",
-                    "zipCode": "01000-000",
-                    "street": "Rua Exemplo",
+                    "street": "Rua das Flores",
                     "number": "123",
-                    "complement": "Apt. 45"
+                    "city": "São Paulo",
+                    "zipCode": "01234-567"
                 }
             }
         ],
-        "page": {
-            "size": 10,
-            "number": 0,
-            "totalElements": 1,
-            "totalPages": 1
-        }
+        "pageable": {
+            "sort": {
+                "sorted": true,
+                "unsorted": false,
+                "empty": false
+            },
+            "pageNumber": 0,
+            "pageSize": 10,
+            "offset": 0,
+            "paged": true,
+            "unpaged": false
+        },
+        "totalElements": 1,
+        "totalPages": 1,
+        "last": true,
+        "first": true,
+        "numberOfElements": 1,
+        "size": 10,
+        "number": 0,
+        "sort": {
+            "sorted": true,
+            "unsorted": false,
+            "empty": false
+        },
+        "empty": false
     }
     """;
 
     public static final String ASSISTEDS_PAGE_EMPTY_LIST_EXAMPLE = """
     {
         "content": [],
-        "page": {
-            "size": 10,
-            "number": 0,
-            "totalElements": 0,
-            "totalPages": 0
-        }
+        "pageable": {
+            "sort": {
+                "sorted": true,
+                "unsorted": false,
+                "empty": false
+            },
+            "pageNumber": 0,
+            "pageSize": 10,
+            "offset": 0,
+            "paged": true,
+            "unpaged": false
+        },
+        "totalElements": 0,
+        "totalPages": 0,
+        "last": true,
+        "first": true,
+        "numberOfElements": 0,
+        "size": 10,
+        "number": 0,
+        "sort": {
+            "sorted": true,
+            "unsorted": false,
+            "empty": false
+        },
+        "empty": true
     }
     """;
-
-
-
 }

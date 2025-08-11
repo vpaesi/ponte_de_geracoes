@@ -10,39 +10,34 @@ import org.springframework.stereotype.Service;
 
 import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
 import com.group9.ponte_de_geracoes.model.AssistanceLog;
-import com.group9.ponte_de_geracoes.model.Assisted;
-import com.group9.ponte_de_geracoes.model.Helper;
+import com.group9.ponte_de_geracoes.model.User;
 import com.group9.ponte_de_geracoes.repository.AssistanceLogRepository;
-import com.group9.ponte_de_geracoes.repository.AssistedRepository;
-import com.group9.ponte_de_geracoes.repository.HelperRepository;
+import com.group9.ponte_de_geracoes.repository.UserRepository;
 
 
 @Service
 public class AssistanceLogService {
 
     @Autowired
-    private HelperRepository helperRepository;
-
-    @Autowired
-    private AssistedRepository assistedRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AssistanceLogRepository assistanceLogRepository;
 
     public AssistanceLog createLog(AssistanceLog log) {
         if (log.getHelper() != null && log.getHelper().getId() != null) {
-            Optional<Helper> helper = helperRepository.findById(log.getHelper().getId());
+            Optional<User> helper = userRepository.findById(log.getHelper().getId());
 
-            if (helper.isEmpty()){
-                throw new EntityNotFoundException("Helper not founded", List.of("O Ajudante informado não foi encontrado."));
+            if (helper.isEmpty() || !"helper".equals(helper.get().getUserType())) {
+                throw new EntityNotFoundException("Helper not found", List.of("O Ajudante informado não foi encontrado."));
             }
             log.setHelper(helper.get());
         }
 
         if (log.getAssisted() != null && log.getAssisted().getId() != null) {
-            Optional<Assisted> assisted = assistedRepository.findById(log.getAssisted().getId());
-            if (assisted.isEmpty()){
-                throw new EntityNotFoundException("Assisted not founded", List.of("O Ajudado informado não foi encontrado."));
+            Optional<User> assisted = userRepository.findById(log.getAssisted().getId());
+            if (assisted.isEmpty() || !"assisted".equals(assisted.get().getUserType())) {
+                throw new EntityNotFoundException("Assisted not found", List.of("O Ajudado informado não foi encontrado."));
             }
             log.setAssisted(assisted.get());
         }
@@ -50,12 +45,12 @@ public class AssistanceLogService {
     }
 
     public AssistanceLog findById(Long id) {
-        Optional<AssistanceLog> assitanceLog = assistanceLogRepository.findById(id);
+        Optional<AssistanceLog> assistanceLog = assistanceLogRepository.findById(id);
 
-        if (assitanceLog.isEmpty()){
-            throw new EntityNotFoundException("Log not founded", List.of("O registro de encontro informado não foi encontrado."));
+        if (assistanceLog.isEmpty()) {
+            throw new EntityNotFoundException("Log not found", List.of("O registro de encontro informado não foi encontrado."));
         }
-        return assitanceLog.get();
+        return assistanceLog.get();
     }
 
     public Page<AssistanceLog> findAll(Pageable pageable) {

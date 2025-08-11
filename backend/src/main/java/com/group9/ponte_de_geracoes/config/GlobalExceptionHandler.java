@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
         ErrorResponseDTO response = new ErrorResponseDTO();
         response.setStatus(HttpStatus.NOT_FOUND.value());
         response.setMessage(ex.getMessage());
-        response.setTimestamp(LocalDateTime.now().toString());
-        response.setErrors(ex.getErrors());
+        response.setTimestamp(LocalDateTime.parse(LocalDateTime.now().toString()));
+        response.setError(ex.getErrors());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
@@ -35,8 +35,8 @@ public class GlobalExceptionHandler {
         ErrorResponseDTO response = new ErrorResponseDTO();
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         response.setMessage(ex.getMessage());
-        response.setTimestamp(LocalDateTime.now().toString());
-        response.setErrors(ex.getErrors());
+        response.setTimestamp(LocalDateTime.parse(LocalDateTime.now().toString()));
+        response.setError(ex.getErrors());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -45,8 +45,8 @@ public class GlobalExceptionHandler {
         ErrorResponseDTO response = new ErrorResponseDTO();
         response.setStatus(HttpStatus.BAD_REQUEST.value());
         response.setMessage("Current request is not a multipart request");
-        response.setTimestamp(LocalDateTime.now().toString());
-        response.setErrors(List.of("A requisição feita não é uma requisição multipart com imagem"));
+        response.setTimestamp(LocalDateTime.parse(LocalDateTime.now().toString()));
+        response.setError(String.valueOf(List.of("A requisição feita não é uma requisição multipart com imagem")));
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
     
@@ -58,8 +58,8 @@ public class GlobalExceptionHandler {
         ErrorResponseDTO response = new ErrorResponseDTO();
         response.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
         response.setMessage(message);
-        response.setTimestamp(LocalDateTime.now().toString());
-        response.setErrors(List.of(error));
+        response.setTimestamp(LocalDateTime.parse(LocalDateTime.now().toString()));
+        response.setError(String.valueOf(List.of(error)));
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -68,8 +68,8 @@ public class GlobalExceptionHandler {
         ErrorResponseDTO response = new ErrorResponseDTO();
         response.setStatus(HttpStatus.NOT_FOUND.value());
         response.setMessage(e.getMessage());
-        response.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-        response.setErrors(List.of("O recurso solicitado não foi encontrado."));
+        response.setTimestamp(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
+        response.setError(String.valueOf(List.of("O recurso solicitado não foi encontrado.")));
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }

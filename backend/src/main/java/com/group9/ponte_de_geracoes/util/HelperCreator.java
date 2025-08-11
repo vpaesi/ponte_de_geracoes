@@ -15,12 +15,12 @@ public class HelperCreator {
         
         helper.setName("João Paulo");
         helper.setBirthDate(LocalDate.of(2005, 05, 12));
-        helper.setRg("123456789");
         helper.setCpf("123.456.789-10");
         helper.setEmail("joaopaulo@example.com");
         helper.setPhone("(11) 98765-4321");
         helper.setPassword("password123");
-        helper.setSkills("Ajudo na Cozinha e tarefas básicas");
+        helper.setConfirmPassword("password123");
+        helper.setNeedsAndSkills(Arrays.asList("Ajudo na Cozinha", "Tarefas básicas"));
         helper.setAvailable(true);
         helper.setProfileImageUrl(null);
         helper.setAvailableDays(Arrays.asList("Segunda", "Quarta", "Sexta"));

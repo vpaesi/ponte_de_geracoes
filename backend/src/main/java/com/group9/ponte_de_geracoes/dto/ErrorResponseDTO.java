@@ -1,38 +1,59 @@
 package com.group9.ponte_de_geracoes.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ErrorResponseDTO {
-    private String message;
+    private String error;
+    private List<String> messages;
+    private LocalDateTime timestamp;
     private int status;
-    private String timestamp;
-    private List<String> errors;
 
-    public ErrorResponseDTO(){
+    public ErrorResponseDTO(String error, List<String> messages) {
+        this.error = error;
+        this.messages = messages;
+        this.timestamp = LocalDateTime.now();
     }
 
-    public String getMessage() {
-        return message;
+    public ErrorResponseDTO() {
+
     }
-    public void setMessage(String message) {
-        this.message = message;
+
+    public String getError() {
+        return error;
     }
-    public int getStatus() {
-        return status;
+
+    public void setError(String error) {
+        this.error = error;
     }
+
+    public List<String> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<String> messages) {
+        this.messages = messages;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public void setStatus(int status) {
         this.status = status;
     }
-    public String getTimestamp() {
-        return timestamp;
+
+    public int getStatus() {
+        return status;
     }
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
+
+
+    public void setMessage(String message) {
     }
-    public List<String> getErrors() {
-        return errors;
-    }
-    public void setErrors(List<String> errors) {
-        this.errors = errors;
-    }    
+
+
 }

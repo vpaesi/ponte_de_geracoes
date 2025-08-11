@@ -27,11 +27,11 @@ public class AssistanceLog {
 
     @ManyToOne
     @JoinColumn(name = "helper_id", nullable = false)
-    private Helper helper;
+    private User helper;
 
     @ManyToOne
     @JoinColumn(name = "assisted_id", nullable = false)
-    private Assisted assisted;
+    private User assisted;
 
     public AssistanceLog(){
     }
@@ -60,19 +60,19 @@ public class AssistanceLog {
         this.status = status;
     }
 
-    public Helper getHelper() {
+    public User getHelper() {
         return helper;
     }
 
-    public void setHelper(Helper helper) {
+    public void setHelper(User helper) {
         this.helper = helper;
     }
 
-    public Assisted getAssisted() {
+    public User getAssisted() {
         return assisted;
     }
 
-    public void setAssisted(Assisted assisted) {
+    public void setAssisted(User assisted) {
         this.assisted = assisted;
     }
 }
