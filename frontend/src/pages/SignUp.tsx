@@ -7,6 +7,7 @@ import { SignupFormStep1 } from "../components/forms/SignupFormStep1";
 import { SignupFormStep2 } from "../components/forms/SignupFormStep2";
 import { SignupFormStep3 } from "../components/forms/SignupFormStep3";
 import { BtnPaginacao } from "../components/comuns/BtnPaginacao";
+import { validadores } from "../utils/validadores";
 
 const SignUp: React.FC = () => {
   const [etapaAtual, setEtapaAtual] = useState(1);
@@ -34,76 +35,82 @@ const SignUp: React.FC = () => {
 
     switch (step) {
       case 1:
-        if (!dadosFormulario.nome?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.nome || "")) {
           newErrors.nome = "Nome é obrigatório";
         }
 
         if (!dadosFormulario.email?.trim()) {
           newErrors.email = "Email é obrigatório";
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(dadosFormulario.email)) {
+        } else if (!validadores.email(dadosFormulario.email)) {
           newErrors.email = "Email deve ter um formato válido";
         }
 
         if (!dadosFormulario.dataNascimento) {
           newErrors.dataNascimento = "Data de nascimento é obrigatória";
+        } else if (!validadores.maiorIdade(dadosFormulario.dataNascimento)) {
+          newErrors.dataNascimento = "Deve ser maior de 18 anos";
         }
 
         if (!dadosFormulario.cpf?.trim()) {
           newErrors.cpf = "CPF é obrigatório";
-        } else if (dadosFormulario.cpf.replace(/\D/g, "").length !== 11) {
-          newErrors.cpf = "CPF deve ter 11 dígitos";
+        } else if (!validadores.cpf(dadosFormulario.cpf)) {
+          newErrors.cpf = "CPF inválido";
         }
 
-        if (!dadosFormulario.telefone?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.telefone || "")) {
           newErrors.telefone = "Telefone é obrigatório";
         } else if (dadosFormulario.telefone.replace(/\D/g, "").length < 10) {
           newErrors.telefone = "Telefone deve ter pelo menos 10 dígitos";
         }
 
-        if (!dadosFormulario.senha?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.senha || "")) {
           newErrors.senha = "Senha é obrigatória";
         } else if (dadosFormulario.senha.length < 6) {
           newErrors.senha = "Senha deve ter pelo menos 6 caracteres";
         }
 
-        if (!dadosFormulario.confirmarSenha?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.confirmarSenha || "")) {
           newErrors.confirmarSenha = "Confirmação de senha é obrigatória";
-        } else if (dadosFormulario.senha !== dadosFormulario.confirmarSenha) {
-          newErrors.confirmarSenha = "As senhas não coincidem";
+        } else if (
+          !validadores.senhasIguais(
+            dadosFormulario.senha || "",
+            dadosFormulario.confirmarSenha || ""
+          )
+        ) {
+          newErrors.confirmarSenha = "As senhas não coincidem ou são muito curtas";
         }
         break;
 
       case 2:
-        if (!dadosFormulario.endereco.zipCode?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.endereco.zipCode || "")) {
           newErrors["endereco.zipCode"] = "CEP é obrigatório";
-        } else if (
-          dadosFormulario.endereco.zipCode.replace(/\D/g, "").length !== 8
-        ) {
+        } else if (dadosFormulario.endereco.zipCode.replace(/\D/g, "").length !== 8) {
           newErrors["endereco.zipCode"] = "CEP deve ter 8 dígitos";
         }
 
-        if (!dadosFormulario.endereco.city?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.endereco.city || "")) {
           newErrors["endereco.city"] = "Cidade é obrigatória";
         }
 
-        if (!dadosFormulario.endereco.street?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.endereco.street || "")) {
           newErrors["endereco.street"] = "Logradouro é obrigatório";
         }
 
-        if (!dadosFormulario.endereco.number?.trim()) {
+        if (!validadores.numeroValido(dadosFormulario.endereco.number || "")) {
           newErrors["endereco.number"] = "Número é obrigatório";
         }
 
-        if (!dadosFormulario.endereco.neighborhood?.trim()) {
+        if (!validadores.campoPreenchido(dadosFormulario.endereco.neighborhood || "")) {
           newErrors["endereco.neighborhood"] = "Bairro é obrigatório";
         }
         break;
 
       case 3:
-        if (!dadosFormulario.tipoUsuario) {
+        if (!dadosFormulario.tipoUsuario || 
+            (dadosFormulario.tipoUsuario !== 'ajudante' && dadosFormulario.tipoUsuario !== 'assistido')) {
           newErrors.tipoUsuario = "Selecione o tipo de usuário";
         }
-        if (dadosFormulario.diasDisponiveis.length === 0) {
+        if (!validadores.arrayNaoVazio(dadosFormulario.diasDisponiveis)) {
           newErrors.diasDisponiveis = "Selecione pelo menos um dia disponível";
         }
         break;
@@ -145,20 +152,21 @@ const SignUp: React.FC = () => {
   const validateFinalSubmit = (): boolean => {
     const newErrors: Record<string, boolean | string> = {};
 
-    if (!dadosFormulario.tipoUsuario) {
+    if (!dadosFormulario.tipoUsuario || 
+        (dadosFormulario.tipoUsuario !== 'ajudante' && dadosFormulario.tipoUsuario !== 'assistido')) {
       newErrors.tipoUsuario = "Selecione o tipo de usuário";
     }
 
-    if (dadosFormulario.diasDisponiveis.length === 0) {
+    if (!validadores.arrayNaoVazio(dadosFormulario.diasDisponiveis)) {
       newErrors.diasDisponiveis = "Selecione pelo menos um dia disponível";
     }
 
     if (dadosFormulario.tipoUsuario === "ajudante") {
-      if (!dadosFormulario.habilidades?.trim()) {
+      if (!validadores.campoPreenchido(dadosFormulario.habilidades || "")) {
         newErrors.habilidades = "Selecione pelo menos uma habilidade";
       }
     } else if (dadosFormulario.tipoUsuario === "assistido") {
-      if (!dadosFormulario.necessidades?.trim()) {
+      if (!validadores.campoPreenchido(dadosFormulario.necessidades || "")) {
         newErrors.necessidades = "Selecione pelo menos uma necessidade";
       }
     }
