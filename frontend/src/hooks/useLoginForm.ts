@@ -1,24 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../utils/UserContext";
+import { authService } from "../services/authService";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export const useLoginForm = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginFormData>({
     email: "",
-    password: "",
-    userType: "ajudante" as "ajudante" | "assistido"
+    password: ""
   });
+  
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
-  const { setUser } = useUser();
   const navigate = useNavigate();
 
-  const updateFormData = (field: string, value: string) => {
+  const updateField = (field: keyof LoginFormData, value: string) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
     
+    // Limpar erro quando usuário digitar
     if (errors[field]) {
       setErrors(prev => ({
         ...prev,
@@ -32,11 +37,11 @@ export const useLoginForm = () => {
 
     if (!formData.email.trim()) {
       newErrors.email = "Email é obrigatório";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Email inválido";
     }
 
-    if (!formData.password.trim()) {
+    if (!formData.password) {
       newErrors.password = "Senha é obrigatória";
     } else if (formData.password.length < 6) {
       newErrors.password = "Senha deve ter pelo menos 6 caracteres";
@@ -54,33 +59,39 @@ export const useLoginForm = () => {
     }
 
     setIsLoading(true);
+    setErrors({});
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const user = await authService.login(formData);
       
-      const userData = {
-        id: "1",
-        name: "Usuário Teste",
-        email: formData.email,
-        userType: formData.userType as "ajudante" | "assistido",
-      };
-
-      setUser(userData);
+      // Salvar dados do usuário
+      authService.saveUser(user);
+      
+      console.log("✅ Login realizado:", user);
+      
+      // Redirecionar para home ou dashboard
       navigate("/");
-    } catch (error) {
-      setErrors({
-        submit: "Erro ao fazer login. Verifique suas credenciais."
+    } catch (error: any) {
+      console.error("❌ Erro no login:", error);
+      setErrors({ 
+        submit: error.message || "Erro ao fazer login. Tente novamente." 
       });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const clearErrors = () => {
+    setErrors({});
+  };
+
   return {
     formData,
     errors,
     isLoading,
-    updateFormData,
-    handleSubmit
+    updateField,
+    handleSubmit,
+    clearErrors,
+    validateForm
   };
 };

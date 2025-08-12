@@ -167,4 +167,86 @@ public class UserService {
     public Page<String> getAllDistinctCities(Pageable pageable) {
         return userRepository.findAllDistinctCities(pageable);
     }
+
+    // Adicionar este método no UserService:
+    public Optional<User> authenticateUser(String email, String password) {
+        try {
+            System.out.println("🔍 Tentando autenticar: " + email); // Debug
+            
+            // Buscar usuário por email
+            Optional<User> userOptional = userRepository.findByEmail(email);
+            
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                System.out.println("✅ Usuário encontrado: " + user.getName()); // Debug
+                
+                // Verificar senha (em produção, usar hash/BCrypt)
+                if (password.equals(user.getPassword())) {
+                    System.out.println("✅ Senha correta!"); // Debug
+                    return Optional.of(user);
+                } else {
+                    System.out.println("❌ Senha incorreta!"); // Debug
+                }
+            } else {
+                System.out.println("❌ Usuário não encontrado!"); // Debug
+            }
+            
+            return Optional.empty();
+        } catch (Exception e) {
+            System.err.println("❌ Erro na autenticação: " + e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    // Adicionar logs no método que cria usuários (provavelmente insertUser ou similar):
+    public User insertUser(User user) {
+        try {
+            System.out.println("=== INÍCIO CADASTRO USUÁRIO ===");
+            System.out.println("📥 Dados recebidos:");
+            System.out.println("  Nome: " + user.getName());
+            System.out.println("  Email: " + user.getEmail());
+            System.out.println("  CPF: " + user.getCpf());
+            System.out.println("  Telefone: " + user.getPhone());
+            System.out.println("  Tipo: " + user.getUserType());
+            System.out.println("  Data Nascimento: " + user.getBirthDate());
+            
+            if (user.getAddress() != null) {
+                System.out.println("  Endereço:");
+                System.out.println("    Cidade: " + user.getAddress().getCity());
+                System.out.println("    CEP: " + user.getAddress().getZipCode());
+                System.out.println("    Rua: " + user.getAddress().getStreet());
+                System.out.println("    Número: " + user.getAddress().getNumber());
+            } else {
+                System.out.println("  ❌ Endereço é NULL!");
+            }
+            
+            System.out.println("  Dias Disponíveis: " + user.getAvailableDays());
+            System.out.println("  Necessidades/Habilidades: " + user.getNeedsAndSkills());
+            System.out.println("  Sobre Você: " + user.getAboutYou());
+            
+            // Verificar se email já existe
+            System.out.println("🔍 Verificando se email já existe...");
+            Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+            if (existingUser.isPresent()) {
+                System.out.println("❌ ERRO: Email já existe no banco!");
+                throw new RuntimeException("Email já cadastrado: " + user.getEmail());
+            }
+            System.out.println("✅ Email disponível!");
+            
+            // Tentar salvar
+            System.out.println("💾 Tentando salvar no banco...");
+            User savedUser = userRepository.save(user);
+            System.out.println("✅ Usuário salvo com sucesso! ID: " + savedUser.getId());
+            System.out.println("=== FIM CADASTRO USUÁRIO ===");
+            
+            return savedUser;
+            
+        } catch (Exception e) {
+            System.err.println("❌ ERRO NO CADASTRO:");
+            System.err.println("Tipo do erro: " + e.getClass().getSimpleName());
+            System.err.println("Mensagem: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

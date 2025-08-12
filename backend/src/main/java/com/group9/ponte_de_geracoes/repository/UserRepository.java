@@ -1,5 +1,7 @@
 package com.group9.ponte_de_geracoes.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Query("SELECT DISTINCT u.address.city FROM User u WHERE u.address.city IS NOT NULL")
     Page<String> findAllDistinctCities(Pageable pageable);
+
+    Optional<User> findByEmail(String email);
 }

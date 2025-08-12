@@ -61,8 +61,25 @@ export const userService = {
     return apiService.get(`${API_ENDPOINTS.USER_DETAILS}/${id}`);
   },
 
-  async createUser(userData: any) {
-    return apiService.post(API_ENDPOINTS.USERS, userData);
+  async createUser(userData: any): Promise<any> {
+    try {
+      console.log('=== USER SERVICE: CREATE USER ===');
+      console.log('📤 Dados recebidos para criação:');
+      console.log(JSON.stringify(userData, null, 2));
+      
+      console.log('🌐 Fazendo POST para /users...');
+      const response = await apiService.post('/users', userData);
+      
+      console.log('✅ Resposta do backend:');
+      console.log(JSON.stringify(response, null, 2));
+      console.log('=== FIM USER SERVICE ===');
+      
+      return response;
+    } catch (error) {
+      console.error('❌ ERRO NO USER SERVICE:');
+      console.error(error);
+      throw error;
+    }
   },
 
   async updateUser(id: number, userData: any) {

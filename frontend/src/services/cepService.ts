@@ -1,4 +1,7 @@
 interface CepResponse {
+  city: string;
+  street: string;
+  neighborhood: string;
   logradouro?: string;
   localidade?: string;
   bairro?: string;
