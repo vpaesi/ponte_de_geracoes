@@ -55,7 +55,7 @@ const UserFilters: React.FC<UserFiltersProps> = ({
   }));
 
   return (
-    <div className={`glass-card p-6 ${className}`}>
+    <div className={`glass-card p-2 ${className}`}>
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-gray-800 mb-2">
           Filtros de Busca

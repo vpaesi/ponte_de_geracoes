@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
-import { PageLayout } from '../components/PageLayout';
-import SecaoHero from '../components/secoes/SecaoHero';
-import SecaoBeneficios from '../components/secoes/SecaoBeneficios';
-import SecaoCarrossel from '../components/secoes/SecaoCarrossel';
-import { useHelpers } from '../hooks/useHelpers';
+import React, { useEffect } from "react";
+import { PageLayout } from "../components/PageLayout";
+import SecaoHero from "../components/secoes/SecaoHero";
+import SecaoBeneficios from "../components/secoes/SecaoBeneficios";
+import SecaoCarrossel from "../components/secoes/SecaoCarrossel";
+import { useHelpers } from "../hooks/useHelpers";
 
 const Home: React.FC = () => {
   const { loading, error, fetchHelpers } = useHelpers();
@@ -13,13 +13,15 @@ const Home: React.FC = () => {
   }, [fetchHelpers]);
 
   if (error) {
-    console.error('Erro ao carregar ajudantes:', error);
+    console.error("Erro ao carregar ajudantes:", error);
   }
 
   return (
     <PageLayout>
       <SecaoHero />
+      <hr className="my-8 border-t border-gray-200" />
       <SecaoBeneficios />
+      <hr className="my-8 border-t border-gray-200" />
       <SecaoCarrossel loading={loading} carouselItems={[]} />
     </PageLayout>
   );

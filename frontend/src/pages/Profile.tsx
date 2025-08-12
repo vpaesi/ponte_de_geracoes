@@ -110,13 +110,15 @@ const Profile: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-8">
             {/* Foto e informações básicas */}
             <div className="md:w-1/3">
-              <ProfileImage
-                src={user.profileImageUrl}
-                alt={user.name}
-                size="lg"
-              />
+              <div className="flex justify-center"> 
+                <ProfileImage
+                  src={user.profileImageUrl}
+                  alt={user.name}
+                  size="lg"
+                />
+              </div>
               <div className="mt-4 text-center">
-                <h1 className="text-2xl font-bold text-gray-800">
+                <h1 className="text-2xl font-bold text-gray-800 pb-4">
                   {user.name}
                 </h1>
                 <div className="mt-2">
