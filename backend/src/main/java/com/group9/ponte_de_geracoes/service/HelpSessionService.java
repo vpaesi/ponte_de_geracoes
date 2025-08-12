@@ -22,7 +22,7 @@ public class HelpSessionService {
     private UserRepository userRepository;
 
     @Autowired
-    private HelpSessionRepository assistanceLogRepository;
+    private HelpSessionRepository helpSessionRepository;
 
     public HelpSession createLog(HelpSession log) {
         if (log.getHelper() != null && log.getHelper().getId() != null) {
@@ -41,20 +41,20 @@ public class HelpSessionService {
             }
             log.setAssisted(assisted.get());
         }
-        return assistanceLogRepository.save(log);
+        return helpSessionRepository.save(log);
     }
 
     public HelpSession findById(Long id) {
-        Optional<HelpSession> assistanceLog = assistanceLogRepository.findById(id);
+        Optional<HelpSession> helpSession = helpSessionRepository.findById(id);
 
-        if (assistanceLog.isEmpty()) {
+        if (helpSession.isEmpty()) {
             throw new EntityNotFoundException("Log not found", List.of("O registro de encontro informado não foi encontrado."));
         }
-        return assistanceLog.get();
+        return helpSession.get();
     }
 
     public Page<HelpSession> findAll(Pageable pageable) {
-        return assistanceLogRepository.findAll(pageable);
+        return helpSessionRepository.findAll(pageable);
     }
 }
 

@@ -3,6 +3,7 @@ package com.group9.ponte_de_geracoes.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.group9.ponte_de_geracoes.model.User;
@@ -18,4 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findByIsAvailable(Boolean isAvailable, Pageable pageable);
     Page<User> findByAddress_City(String city, Pageable pageable);
     Page<User> findByAddress_CityAndIsAvailable(String city, Boolean isAvailable, Pageable pageable);
+    
+    @Query("SELECT DISTINCT u.address.city FROM User u WHERE u.address.city IS NOT NULL")
+    Page<String> findAllDistinctCities(Pageable pageable);
 }

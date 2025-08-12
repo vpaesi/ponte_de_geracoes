@@ -1,23 +1,19 @@
 package com.group9.ponte_de_geracoes.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+@Embeddable // ✅ Apenas @Embeddable, NÃO @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private Long id;
-
+    
     @Column(nullable = false)
     private String city;
 
@@ -30,5 +26,5 @@ public class Address {
     @Column(nullable = false)
     private String number;
 
-    private String complement;   
+    private String complement;
 }

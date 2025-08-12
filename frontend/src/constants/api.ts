@@ -6,8 +6,8 @@ export const API_ENDPOINTS = {
   USERS_ASSISTED: '/users/assisted',
   USER_DETAILS: '/users/details',
   UPLOAD_IMAGE: '/users/upload-image',
+  USER_CITIES: '/users/cities', // ✅ MUDAR para /users/cities
   
-  ASSISTANCE_LOGS: '/assistance-logs',
+  ASSISTANCE_LOGS: '/help-session',
   
-  ADDRESSES: '/addresses',
 } as const;

@@ -26,12 +26,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/assistance-logs")
+@RequestMapping("/help-session")
 @Tag(name = "HelpSession API", description = "Gerencia os registros de assistência entre ajudantes e assistidos.")
 public class HelpSessionController {
 
     @Autowired
-    private HelpSessionService assistanceLogService;
+    private HelpSessionService helpSessionService;
 
     @Operation(
         summary = "Cria um novo registro de assistência",
@@ -54,7 +54,7 @@ public class HelpSessionController {
     )
     @PostMapping
     public ResponseEntity<HelpSession> createLog(@RequestBody HelpSession log) {
-        HelpSession savedLog = assistanceLogService.createLog(log);
+        HelpSession savedLog = helpSessionService.createLog(log);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLog);
     }
 
@@ -79,7 +79,7 @@ public class HelpSessionController {
     )
     @GetMapping("/{id}")
     public ResponseEntity<HelpSession> getLogById(@PathVariable Long id) {
-        HelpSession log = assistanceLogService.findById(id);
+        HelpSession log = helpSessionService.findById(id);
         if (log != null) {
             return ResponseEntity.ok(log);
         }
@@ -127,7 +127,7 @@ public class HelpSessionController {
     )
     @GetMapping
     public ResponseEntity<Page<HelpSession>> getAllLogs(@Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
-        Page<HelpSession> pageLogs = assistanceLogService.findAll(pageable);
+        Page<HelpSession> pageLogs = helpSessionService.findAll(pageable);
         return ResponseEntity.ok(pageLogs);
     }
 }

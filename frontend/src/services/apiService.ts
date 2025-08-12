@@ -71,15 +71,8 @@ class ApiService {
 
   async getCities(): Promise<string[]> {
     try {
-      const response = await fetch(`${this.baseURL}${API_ENDPOINTS.ADDRESSES}/cities`);
-      
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar cidades: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      return data.content || [];
+      const response = await this.get(`${API_ENDPOINTS.USER_CITIES}`);
+      return response.content || [];
     } catch (error) {
       console.error('Erro ao buscar cidades:', error);
       return [];

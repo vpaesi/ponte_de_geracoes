@@ -61,7 +61,7 @@ public class UserController {
             @RequestParam(required = false) String userType,
             @RequestParam(required = false) Boolean isAvailable,
             @RequestParam(required = false) String city,
-            @RequestParam(required = false) String day            
+            @RequestParam(required = false) String day
     ) {
         Page<User> page = userService.getUsers(userType, isAvailable, city, day, pageable);
         return ResponseEntity.ok(page);
@@ -69,10 +69,15 @@ public class UserController {
 
     @Operation(
         summary = "Lista usuários por tipo",
-        description = "Retorna uma página de usuários filtrados por tipo. Para testar, adicione o userType (helper ou assisted)"
+        description = "Retorna uma página de usuários filtrados por tipo específico de usuário."
     )
     @GetMapping("/{userType}")
     public ResponseEntity<Page<User>> getUsersByType(
+            @Parameter(
+                name = "userType",
+                description = "Tipo de usuário",
+                example = "helper"
+            )
             @PathVariable String userType,
             @Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}) Pageable pageable,
             @RequestParam(required = false) Boolean isAvailable,
@@ -136,5 +141,15 @@ public class UserController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @Operation(
+        summary = "Lista cidades cadastradas",
+        description = "Retorna uma lista de cidades onde há usuários cadastrados."
+    )
+    @GetMapping("/cities")
+    public ResponseEntity<Page<String>> getCities(@Parameter(hidden = true) Pageable pageable) {
+        Page<String> cities = userService.getAllDistinctCities(pageable);
+        return ResponseEntity.ok(cities);
     }
 }

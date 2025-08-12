@@ -19,18 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
 import com.group9.ponte_de_geracoes.exception.ImageStorageException;
 import com.group9.ponte_de_geracoes.model.User;
-import com.group9.ponte_de_geracoes.model.Address;
+
 import com.group9.ponte_de_geracoes.repository.UserRepository;
-import com.group9.ponte_de_geracoes.repository.AddressRepository;
 
 @Service
 public class UserService {
     
     @Autowired
     private UserRepository userRepository;
-    
-    @Autowired
-    private AddressRepository addressRepository;
     
     private static final List<String> ALLOWED_FILE_TYPES = List.of(
         "image/jpeg",
@@ -70,20 +66,10 @@ public class UserService {
     }
 
     public User insertNewUser(User user) {
-        if (user.getAddress() != null && user.getAddress().getId() != null) {
-            Address managedAddress = addressRepository.findById(user.getAddress().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Address not found", List.of("O endereço informado não foi encontrado.")));
-            user.setAddress(managedAddress);
-        }
-        
         return userRepository.save(user);
     }
     
     public User insertNewUserWithNewAddress(User user) {
-        if (user.getAddress() != null) {
-            user.getAddress().setId(null);
-        }
-        
         return userRepository.save(user);
     }
 
@@ -175,5 +161,10 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    // ✅ ADICIONAR: Método para buscar cidades distintas
+    public Page<String> getAllDistinctCities(Pageable pageable) {
+        return userRepository.findAllDistinctCities(pageable);
     }
 }

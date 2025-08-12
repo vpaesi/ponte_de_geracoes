@@ -3,18 +3,17 @@ package com.group9.ponte_de_geracoes.model;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
 import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,7 +38,7 @@ public class User {
     @Column(nullable = false, name = "tipo_usuario")
     private String userType;
 
-    @Column(nullable = false, name = "name")
+    @Column(nullable = false, name = "nome")
     private String name;
 
     @Column(nullable = false, name = "data_nascimento")
@@ -77,6 +76,6 @@ public class User {
     @Column(name = "sobre_voce")
     private String aboutYou;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @Embedded
     private Address address;
 }
