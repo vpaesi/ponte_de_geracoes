@@ -31,7 +31,7 @@ export interface UserContextType {
 
 export interface RegisteredPerson {
   id: number;
-  nome: string;
+  name: string;
   age: number;
   profileImageUrl: string;
   aboutYou: string;
@@ -52,7 +52,7 @@ export interface Address {
 
 export interface CarouselItem {
   id: number;
-  nome: string;
+  name: string;
   age: number;
   img: string;
   descricao: string;
@@ -60,7 +60,7 @@ export interface CarouselItem {
 }
 
 export interface FormData {
-  nome: string;
+  name: string;
   dataNascimento: string;
   cpf: string;
   email: string;

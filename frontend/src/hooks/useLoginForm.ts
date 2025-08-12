@@ -60,7 +60,7 @@ export const useLoginForm = () => {
       
       const userData = {
         id: "1",
-        nome: "Usuário Teste",
+        name: "Usuário Teste",
         email: formData.email,
         userType: formData.userType as "ajudante" | "assistido",
       };

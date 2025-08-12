@@ -35,8 +35,8 @@ const SignUp: React.FC = () => {
 
     switch (step) {
       case 1:
-        if (!validadores.campoPreenchido(dadosFormulario.nome || "")) {
-          newErrors.nome = "Nome é obrigatório";
+        if (!validadores.campoPreenchido(dadosFormulario.name || "")) {
+          newErrors.name = "Nome é obrigatório";
         }
 
         if (!dadosFormulario.email?.trim()) {
@@ -124,7 +124,7 @@ const SignUp: React.FC = () => {
     const errosParaLimpar: Record<string, boolean | string> = {};
     switch (step) {
       case 1:
-        errosParaLimpar.nome = "";
+        errosParaLimpar.name = "";
         errosParaLimpar.email = "";
         errosParaLimpar.dataNascimento = "";
         errosParaLimpar.cpf = "";

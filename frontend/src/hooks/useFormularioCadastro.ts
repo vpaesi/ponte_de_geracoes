@@ -12,7 +12,7 @@ export const useFormularioCadastro = () => {
   const navegar = useNavigate();
   
   const [dadosFormulario, setDadosFormulario] = useState<FormData>({
-    nome: "",
+    name: "",
     dataNascimento: "",
     cpf: "",
     email: "",
@@ -90,7 +90,7 @@ export const useFormularioCadastro = () => {
       setEnviando(true);
       
       const dadosParaAPI = {
-        nome: dadosFormulario.nome,
+        name: dadosFormulario.name,
         birthDate: dadosFormulario.dataNascimento,
         cpf: dadosFormulario.cpf,
         email: dadosFormulario.email,

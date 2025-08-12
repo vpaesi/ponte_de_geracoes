@@ -19,14 +19,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
 import com.group9.ponte_de_geracoes.exception.ImageStorageException;
 import com.group9.ponte_de_geracoes.model.User;
+import com.group9.ponte_de_geracoes.model.Address; // ADICIONAR ESTE IMPORT
 import com.group9.ponte_de_geracoes.repository.UserRepository;
+import com.group9.ponte_de_geracoes.repository.AddressRepository;
 
 @Service
 public class UserService {
-
+    
     @Autowired
     private UserRepository userRepository;
-
+    
+    @Autowired
+    private AddressRepository addressRepository;
+    
     private static final List<String> ALLOWED_FILE_TYPES = List.of(
         "image/jpeg",
         "image/png", 
@@ -54,10 +59,23 @@ public class UserService {
     }
 
     public User insertNewUser(User user) {
-        user.setId(null);
-        if (user.getProfileImageUrl() == null) {
-            user.setProfileImageUrl("/uploads/generic-icon.jpg");
+        // Se o address tem ID, buscar a entidade gerenciada
+        if (user.getAddress() != null && user.getAddress().getId() != null) {
+            Address managedAddress = addressRepository.findById(user.getAddress().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Address not found", List.of("O endereço informado não foi encontrado.")));
+            user.setAddress(managedAddress);
         }
+        
+        return userRepository.save(user);
+    }
+    
+    // Método alternativo para criar sempre um novo address
+    public User insertNewUserWithNewAddress(User user) {
+        // Garantir que o address não tenha ID para criar um novo
+        if (user.getAddress() != null) {
+            user.getAddress().setId(null);
+        }
+        
         return userRepository.save(user);
     }
 

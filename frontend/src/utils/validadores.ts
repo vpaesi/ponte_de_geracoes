@@ -70,9 +70,9 @@ export const validarFormularioCadastro = (
   const erros: Record<string, boolean> = {};
   const mensagens: ValidationError[] = [];
 
-  if (!validadores.campoPreenchido(dados.nome)) {
-    erros.nome = true;
-    mensagens.push({ campo: 'nome', mensagem: 'Nome é obrigatório' });
+  if (!validadores.campoPreenchido(dados.name)) {
+    erros.name = true;
+    mensagens.push({ campo: 'name', mensagem: 'Nome é obrigatório' });
   }
 
   if (!validadores.email(dados.email)) {

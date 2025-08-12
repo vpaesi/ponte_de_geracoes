@@ -32,7 +32,7 @@ const UserCard: React.FC<UserCardProps> = ({
         <div className="relative">
           <ProfileImage
             src={user.profileImageUrl}
-            alt={user.nome || "Usuário sem nome"}
+            alt={user.name || "Usuário sem name"}
             size="xl"
           />
           <div className="absolute top-0 right-0">
@@ -44,7 +44,7 @@ const UserCard: React.FC<UserCardProps> = ({
       <div className="p-6 space-y-4">
         <div className="text-center">
           <h3 className="text-xl font-bold text-accent-800 mb-1">
-            {user.nome}
+            {user.name}
           </h3>
           <p className="text-accent-600">{calculateAge(user.birthDate)} anos</p>
         </div>

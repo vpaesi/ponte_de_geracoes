@@ -3,7 +3,7 @@ import { DadosPessoaisSection } from "./sections/DadosPessoaisSection";
 
 interface PropsFormularioCadastroEtapa1 {
   dadosFormulario: {
-    nome: string;
+    name: string;
     dataNascimento: string;
     cpf: string;
     email: string;

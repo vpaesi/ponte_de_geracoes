@@ -39,7 +39,7 @@ public class User {
     @Column(nullable = false, name = "tipo_usuario")
     private String userType;
 
-    @Column(nullable = false, name = "nome")
+    @Column(nullable = false, name = "name")
     private String name;
 
     @Column(nullable = false, name = "data_nascimento")

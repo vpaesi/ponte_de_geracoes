@@ -16,7 +16,7 @@ const AtualizarPerfil: React.FC = () => {
   const navegar = useNavigate();
 
   const [dadosUsuario, setDadosUsuario] = useState<Partial<User>>({
-    nome: "",
+    name: "",
     birthDate: "",
     cpf: "",
     email: "",

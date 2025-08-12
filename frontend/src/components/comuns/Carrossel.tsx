@@ -42,7 +42,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         const helpers = (helpersResponse.content as User[]).map(
           (user: User) => ({
             id: Number(user.id) || 0,
-            nome: user.name || "Nome não informado", // Corrigido: user.name ao invés de user.nome
+            name: user.name || "Nome não informado", // Corrigido: user.name ao invés de user.name
             age: calcularIdade(user.birthDate),
             img: user.profileImageUrl || "",
             descricao: user.aboutYou || "Sem descrição disponível",
@@ -63,7 +63,7 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
         const assisted = (assistedResponse.content as User[]).map(
           (user: User) => ({
             id: Number(user.id) + 1000 || 1000,
-            nome: user.name || "Nome não informado", // Corrigido: user.name ao invés de user.nome
+            name: user.name || "Nome não informado", // Corrigido: user.name ao invés de user.name
             age: calcularIdade(user.birthDate),
             img: user.profileImageUrl || "",
             descricao: user.aboutYou || "Sem descrição disponível",
@@ -146,13 +146,13 @@ const Carrossel: React.FC<CarrosselProps> = ({ titulo, city }) => {
                 <div className="mb-2 flex justify-center bg-transparent">
                   <ProfileImage
                     src={usuario.img}
-                    alt={usuario.nome}
+                    alt={usuario.name}
                     size="xl"
                   />
                 </div>
                 <div className="p-4 pt-2 bg-white rounded-lg shadow-md">
                   <h3 className="font-semibold text-lg text-gray-900 mb-1 text-center">
-                    {usuario.nome}
+                    {usuario.name}
                   </h3>
                   <p className="text-gray-600 text-sm mb-2 text-center">
                     {usuario.age} anos
