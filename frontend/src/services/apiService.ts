@@ -1,14 +1,15 @@
-import { API_BASE_URL } from '../constants/api';
+import { API_BASE_URL, API_ENDPOINTS } from '../constants/api';
 
 interface RequestConfig extends RequestInit {
   headers?: Record<string, string>;
 }
 
 class ApiService {
-  getCities() {
-    throw new Error("Method not implemented.");
+  private baseURL: string;
+
+  constructor() {
+    this.baseURL = API_BASE_URL;
   }
-  private baseURL = API_BASE_URL;
 
   private async request(endpoint: string, options: RequestConfig = {}): Promise<any> {
     const url = `${this.baseURL}${endpoint}`;
@@ -67,6 +68,24 @@ class ApiService {
       body: formData,
     });
   }
+
+  async getCities(): Promise<string[]> {
+    try {
+      const response = await fetch(`${this.baseURL}${API_ENDPOINTS.ADDRESSES}/cities`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro ao buscar cidades: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      return data.content || [];
+    } catch (error) {
+      console.error('Erro ao buscar cidades:', error);
+      return [];
+    }
+  }
 }
 
-export default new ApiService();
+const apiService = new ApiService();
+export default apiService;

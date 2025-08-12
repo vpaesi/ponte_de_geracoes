@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { PageLayout } from "../components/PageLayout";
 import { userService } from "../services/userService";
-import apiService from "../services/apiService";
+import { addressService } from "../services/addressService";
 import BtnCriarConta from "../components/comuns/BtnCriarConta";
 import UserCard from "../components/comuns/UserCard";
 import UserFilters from "../components/comuns/UserFilters";
@@ -36,14 +36,19 @@ const Users: React.FC = () => {
   useEffect(() => {
     const buscarCidades = async () => {
       try {
-        const cidadesData = await apiService.getCities();
+        console.log('🔍 Buscando cidades...'); // Debug
+        const cidadesData = await addressService.getCities();
+        console.log('📍 Cidades recebidas:', cidadesData); // Debug
+        
         if (Array.isArray(cidadesData)) {
           setCidades(cidadesData);
+          console.log('✅ Cidades definidas:', cidadesData.length); // Debug
         } else {
+          console.warn('⚠️ Dados de cidades não são array:', cidadesData);
           setCidades([]);
         }
       } catch (error) {
-        console.error("Erro ao buscar cidades:", error);
+        console.error("❌ Erro ao buscar cidades:", error);
         setCidades([]);
       }
     };
