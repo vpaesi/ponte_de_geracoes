@@ -6,7 +6,7 @@ export const useNavigationHelpers = () => {
   return {
     isHomePage: location.pathname === '/',
     isRegisterPage: location.pathname === '/signup',
-    isRegisteredPage: false, // implementar conforme necessário
+    isRegisteredPage: false,
     isEditRegistrationPage: location.pathname === '/atualizar-perfil',
     isLoginPage: location.pathname === '/login',
     isProfilePage: location.pathname.startsWith('/profile'),

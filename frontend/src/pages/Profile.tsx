@@ -38,17 +38,14 @@ const Profile: React.FC = () => {
       try {
         setLoading(true);
 
-        // Se tem ID na URL, busca esse usuário
         if (id) {
           const userData = await userService.getUserById(parseInt(id));
           setUser(userData);
         }
-        // Se não tem ID na URL mas tem usuário logado, mostra o perfil do usuário logado
         else if (currentUser) {
           const userData = await userService.getUserById(currentUser.id);
           setUser(userData);
         }
-        // Se não tem ID nem usuário logado, erro
         else {
           setError("Usuário não encontrado. Faça login para ver seu perfil.");
         }

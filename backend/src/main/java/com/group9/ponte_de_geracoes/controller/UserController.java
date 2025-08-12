@@ -53,7 +53,7 @@ public class UserController {
 
     @Operation(
         summary = "Lista usuários",
-        description = "Retorna uma lista paginada de usuários com base nos filtros fornecidos."
+        description = "Retorna uma lista paginada com todos os usuários cadastrados. Para testar, não adicione parâmetros."
     )
     @GetMapping
     public ResponseEntity<Page<User>> getUsers(
@@ -61,7 +61,7 @@ public class UserController {
             @RequestParam(required = false) String userType,
             @RequestParam(required = false) Boolean isAvailable,
             @RequestParam(required = false) String city,
-            @RequestParam(required = false) String day
+            @RequestParam(required = false) String day            
     ) {
         Page<User> page = userService.getUsers(userType, isAvailable, city, day, pageable);
         return ResponseEntity.ok(page);
@@ -69,7 +69,7 @@ public class UserController {
 
     @Operation(
         summary = "Lista usuários por tipo",
-        description = "Retorna uma página de usuários filtrados por tipo (helper/assisted)."
+        description = "Retorna uma página de usuários filtrados por tipo. Para testar, adicione o userType (helper ou assisted)"
     )
     @GetMapping("/{userType}")
     public ResponseEntity<Page<User>> getUsersByType(
@@ -83,6 +83,10 @@ public class UserController {
         return ResponseEntity.ok(page);
     }
 
+    @Operation(
+        summary = "Busca usuário por ID",
+        description = "Retorna os detalhes de um usuário específico pelo ID. Para testar, adicione o userId de um usuário cadastrado."
+    )
     @GetMapping("/details/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         Optional<User> user = userService.getUserById(userId);
@@ -92,9 +96,12 @@ public class UserController {
         throw new EntityNotFoundException("User not found", List.of("O usuário informado não foi encontrado."));
     }
 
+    @Operation(
+        summary = "Insere um novo usuário",
+        description = "Cria um novo usuário no sistema. Para testar, envie um objeto User válido no corpo da requisição, sem id."
+    )
     @PostMapping
     public ResponseEntity<User> insertNewUser(@RequestBody User user) {
-        // Usar o método que sempre cria um novo address
         User insertedUser = userService.insertNewUserWithNewAddress(user);
         URI locator = createNewURIById(insertedUser);
         return ResponseEntity.created(locator).body(insertedUser);
@@ -106,6 +113,10 @@ public class UserController {
         return ResponseEntity.ok(Collections.singletonMap("url", fileUrl));
     }
 
+    @Operation(
+        summary = "Atualiza um usuário",
+        description = "Atualiza os dados de um usuário existente. Para testar, informe o ID do usuário no Parameters e envie um objeto User válido no corpo da requisição, incluindo o ID do usuário."
+    )
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Validated @RequestBody User requestUser) {
         User updatedUser = userService.updateUser(id, requestUser);
@@ -115,33 +126,15 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(
+        summary = "Deleta um usuário",
+        description = "Remove um usuário do sistema pelo ID. Para testar, informe o ID do usuário no Parameters."
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         if (userService.deleteUser(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    @GetMapping("/helper")
-    public ResponseEntity<Page<User>> getHelpers(
-        @Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}) Pageable pageable,
-        @RequestParam(required = false) Boolean isAvailable,
-        @RequestParam(required = false) String city,
-        @RequestParam(required = false) String day
-    ) {
-        Page<User> page = userService.getUsers("helper", isAvailable, city, day, pageable);
-        return ResponseEntity.ok(page);
-    }
-
-    @GetMapping("/assisted")
-    public ResponseEntity<Page<User>> getAssisted(
-        @Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}) Pageable pageable,
-        @RequestParam(required = false) Boolean isAvailable,
-        @RequestParam(required = false) String city,
-        @RequestParam(required = false) String day
-    ) {
-        Page<User> page = userService.getUsers("assisted", isAvailable, city, day, pageable);
-        return ResponseEntity.ok(page);
     }
 }

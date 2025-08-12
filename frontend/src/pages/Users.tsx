@@ -17,6 +17,7 @@ interface ParametrosBusca {
   city?: string;
   isAvailable?: boolean;
   day?: string;
+  userType?: string;
 }
 
 const Users: React.FC = () => {
@@ -61,14 +62,17 @@ const Users: React.FC = () => {
           ...(cidadeSelecionada && { city: cidadeSelecionada }),
         };
 
-        let response;
-        if (userType === "helper") {
-          response = await userService.getHelpers(parametros);
-        } else if (userType === "assisted") {
-          response = await userService.getAssisted(parametros);
-        } else {
-          throw new Error("Tipo de usuário inválido");
+        const tipoParaBuscar =
+          userType ||
+          (tipoUsuarioSelecionado !== USER_TYPES.ALL
+            ? tipoUsuarioSelecionado
+            : undefined);
+
+        if (tipoParaBuscar) {
+          parametros.userType = tipoParaBuscar;
         }
+
+        const response = await userService.getAllUsers(parametros);
 
         const usuariosEmbaralhados = shuffleArray(response.content) as User[];
         setUsuarios(usuariosEmbaralhados);
@@ -83,9 +87,7 @@ const Users: React.FC = () => {
       }
     };
 
-    if (userType) {
-      buscarDadosFiltrados();
-    }
+    buscarDadosFiltrados();
   }, [pagina, cidadeSelecionada, tipoUsuarioSelecionado, shuffleArray, userType]);
 
   useEffect(() => {
@@ -99,48 +101,32 @@ const Users: React.FC = () => {
 
   const getUserTypeForCard = (user: User): "ajudante" | "assistido" => {
     if (user.userType) {
-      return user.userType;
+      return user.userType === "helper" ? "ajudante" : "assistido";
     }
 
     if (tipoUsuarioSelecionado !== USER_TYPES.ALL) {
-      return tipoUsuarioSelecionado as "ajudante" | "assistido";
+      return tipoUsuarioSelecionado === "helper" ? "ajudante" : "assistido";
     }
 
     return "ajudante";
-  };
-
-  const handleFilterChange = (newFilters: typeof ParametrosBusca) => {
-    setCidadeSelecionada(newFilters.city);
-    setTipoUsuarioSelecionado(newFilters.userType);
   };
 
   const handlePageChange = (page: number) => {
     setPagina(page);
   };
 
-  if (!userType || (userType !== "helper" && userType !== "assisted")) {
-    return (
-      <PageLayout>
-        <div className="text-center py-8">
-          <h1 className="text-2xl font-bold text-red-600">
-            Tipo de usuário inválido
-          </h1>
-        </div>
-      </PageLayout>
-    );
-  }
-
   return (
     <PageLayout>
       <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 pt-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text">
-              Usuários Registrados
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              {userType === "helper"
+                ? "Ajudantes"
+                : userType === "assisted"
+                ? "Pessoas que Precisam de Ajuda"
+                : "Todos os Usuários"}
             </h1>
-            <p className="text-xl text-accent-600 max-w-2xl mx-auto">
-              Conecte-se com pessoas da sua comunidade
-            </p>
           </div>
 
           <UserFilters

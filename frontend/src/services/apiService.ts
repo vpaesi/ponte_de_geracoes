@@ -63,7 +63,7 @@ class ApiService {
 
     return this.request(endpoint, {
       method: 'POST',
-      headers: {}, // Remove Content-Type para FormData
+      headers: {},
       body: formData,
     });
   }

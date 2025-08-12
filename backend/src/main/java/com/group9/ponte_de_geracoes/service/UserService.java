@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
 import com.group9.ponte_de_geracoes.exception.ImageStorageException;
 import com.group9.ponte_de_geracoes.model.User;
-import com.group9.ponte_de_geracoes.model.Address; // ADICIONAR ESTE IMPORT
+import com.group9.ponte_de_geracoes.model.Address;
 import com.group9.ponte_de_geracoes.repository.UserRepository;
 import com.group9.ponte_de_geracoes.repository.AddressRepository;
 
@@ -40,7 +40,18 @@ public class UserService {
     );
 
     public Page<User> getUsers(String userType, Boolean isAvailable, String city, String day, Pageable pageable) {
-        // Corrigindo a ordem dos parâmetros nas chamadas
+        if (userType == null) {
+            if (city != null && isAvailable != null) {
+                return userRepository.findByAddress_CityAndIsAvailable(city, isAvailable, pageable);
+            } else if (isAvailable != null) {
+                return userRepository.findByIsAvailable(isAvailable, pageable);
+            } else if (city != null) {
+                return userRepository.findByAddress_City(city, pageable);
+            } else {
+                return userRepository.findAll(pageable);
+            }
+        }
+        
         if (city != null && day != null && isAvailable != null) {
             return userRepository.findByUserTypeAndAddress_CityAndIsAvailable(userType, city, isAvailable, pageable);
         } else if (day != null && isAvailable != null) {
@@ -59,7 +70,6 @@ public class UserService {
     }
 
     public User insertNewUser(User user) {
-        // Se o address tem ID, buscar a entidade gerenciada
         if (user.getAddress() != null && user.getAddress().getId() != null) {
             Address managedAddress = addressRepository.findById(user.getAddress().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Address not found", List.of("O endereço informado não foi encontrado.")));
@@ -69,9 +79,7 @@ public class UserService {
         return userRepository.save(user);
     }
     
-    // Método alternativo para criar sempre um novo address
     public User insertNewUserWithNewAddress(User user) {
-        // Garantir que o address não tenha ID para criar um novo
         if (user.getAddress() != null) {
             user.getAddress().setId(null);
         }

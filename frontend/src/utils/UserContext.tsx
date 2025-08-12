@@ -31,7 +31,6 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // Carregar usuário do localStorage ao inicializar
   useEffect(() => {
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
@@ -44,7 +43,6 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
 
-  // Salvar usuário no localStorage quando mudar
   useEffect(() => {
     if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
