@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group9.ponte_de_geracoes.model.AssistanceLog;
-import com.group9.ponte_de_geracoes.service.AssistanceLogService;
+import com.group9.ponte_de_geracoes.model.HelpSession;
+import com.group9.ponte_de_geracoes.service.HelpSessionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,11 +27,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/assistance-logs")
-@Tag(name = "AssistanceLog API", description = "Gerencia os registros de assistência entre ajudantes e assistidos.")
-public class AssistanceLogController {
+@Tag(name = "HelpSession API", description = "Gerencia os registros de assistência entre ajudantes e assistidos.")
+public class HelpSessionController {
 
     @Autowired
-    private AssistanceLogService assistanceLogService;
+    private HelpSessionService assistanceLogService;
 
     @Operation(
         summary = "Cria um novo registro de assistência",
@@ -42,7 +42,7 @@ public class AssistanceLogController {
                 description = "Log de assistência criado com sucesso",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = AssistanceLog.class)
+                    schema = @Schema(implementation = HelpSession.class)
                 )
             ),
             @ApiResponse(
@@ -53,8 +53,8 @@ public class AssistanceLogController {
         }
     )
     @PostMapping
-    public ResponseEntity<AssistanceLog> createLog(@RequestBody AssistanceLog log) {
-        AssistanceLog savedLog = assistanceLogService.createLog(log);
+    public ResponseEntity<HelpSession> createLog(@RequestBody HelpSession log) {
+        HelpSession savedLog = assistanceLogService.createLog(log);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedLog);
     }
 
@@ -67,7 +67,7 @@ public class AssistanceLogController {
                 description = "Log de assistência encontrado com sucesso",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = AssistanceLog.class)
+                    schema = @Schema(implementation = HelpSession.class)
                 )
             ),
             @ApiResponse(
@@ -78,8 +78,8 @@ public class AssistanceLogController {
         }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<AssistanceLog> getLogById(@PathVariable Long id) {
-        AssistanceLog log = assistanceLogService.findById(id);
+    public ResponseEntity<HelpSession> getLogById(@PathVariable Long id) {
+        HelpSession log = assistanceLogService.findById(id);
         if (log != null) {
             return ResponseEntity.ok(log);
         }
@@ -126,8 +126,8 @@ public class AssistanceLogController {
         }
     )
     @GetMapping
-    public ResponseEntity<Page<AssistanceLog>> getAllLogs(@Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
-        Page<AssistanceLog> pageLogs = assistanceLogService.findAll(pageable);
+    public ResponseEntity<Page<HelpSession>> getAllLogs(@Parameter(hidden = true) @PageableDefault(size = 10, sort = {"id"}) Pageable pageable) {
+        Page<HelpSession> pageLogs = assistanceLogService.findAll(pageable);
         return ResponseEntity.ok(pageLogs);
     }
 }

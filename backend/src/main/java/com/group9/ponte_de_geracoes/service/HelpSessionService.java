@@ -9,22 +9,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.group9.ponte_de_geracoes.exception.EntityNotFoundException;
-import com.group9.ponte_de_geracoes.model.AssistanceLog;
+import com.group9.ponte_de_geracoes.model.HelpSession;
 import com.group9.ponte_de_geracoes.model.User;
-import com.group9.ponte_de_geracoes.repository.AssistanceLogRepository;
+import com.group9.ponte_de_geracoes.repository.HelpSessionRepository;
 import com.group9.ponte_de_geracoes.repository.UserRepository;
 
 
 @Service
-public class AssistanceLogService {
+public class HelpSessionService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private AssistanceLogRepository assistanceLogRepository;
+    private HelpSessionRepository assistanceLogRepository;
 
-    public AssistanceLog createLog(AssistanceLog log) {
+    public HelpSession createLog(HelpSession log) {
         if (log.getHelper() != null && log.getHelper().getId() != null) {
             Optional<User> helper = userRepository.findById(log.getHelper().getId());
 
@@ -44,8 +44,8 @@ public class AssistanceLogService {
         return assistanceLogRepository.save(log);
     }
 
-    public AssistanceLog findById(Long id) {
-        Optional<AssistanceLog> assistanceLog = assistanceLogRepository.findById(id);
+    public HelpSession findById(Long id) {
+        Optional<HelpSession> assistanceLog = assistanceLogRepository.findById(id);
 
         if (assistanceLog.isEmpty()) {
             throw new EntityNotFoundException("Log not found", List.of("O registro de encontro informado não foi encontrado."));
@@ -53,7 +53,7 @@ public class AssistanceLogService {
         return assistanceLog.get();
     }
 
-    public Page<AssistanceLog> findAll(Pageable pageable) {
+    public Page<HelpSession> findAll(Pageable pageable) {
         return assistanceLogRepository.findAll(pageable);
     }
 }

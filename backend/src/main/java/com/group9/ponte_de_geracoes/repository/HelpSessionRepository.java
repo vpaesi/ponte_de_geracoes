@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNull;
 
-import com.group9.ponte_de_geracoes.model.AssistanceLog;
+import com.group9.ponte_de_geracoes.model.HelpSession;
 
-public interface AssistanceLogRepository extends JpaRepository<AssistanceLog, Long> {
+public interface HelpSessionRepository extends JpaRepository<HelpSession, Long> {
     @NonNull
-    Page<AssistanceLog> findAll(@NonNull Pageable pageable);
+    Page<HelpSession> findAll(@NonNull Pageable pageable);
 }

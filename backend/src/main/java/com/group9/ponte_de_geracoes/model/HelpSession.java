@@ -14,7 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class AssistanceLog {
+public class HelpSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class AssistanceLog {
     @JoinColumn(name = "assisted_id", nullable = false)
     private User assisted;
 
-    public AssistanceLog(){
+    public HelpSession(){
     }
 
     public Long getId() {
