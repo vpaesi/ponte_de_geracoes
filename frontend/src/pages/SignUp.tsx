@@ -98,11 +98,7 @@ const SignUp: React.FC = () => {
 
         if (!validadores.numeroValido(dadosFormulario.endereco.number || "")) {
           newErrors["endereco.number"] = "Número é obrigatório";
-        }
-
-        if (!validadores.campoPreenchido(dadosFormulario.endereco.neighborhood || "")) {
-          newErrors["endereco.neighborhood"] = "Bairro é obrigatório";
-        }
+        }       
         break;
 
       case 3:
@@ -137,7 +133,6 @@ const SignUp: React.FC = () => {
         errosParaLimpar["endereco.city"] = "";
         errosParaLimpar["endereco.street"] = "";
         errosParaLimpar["endereco.number"] = "";
-        errosParaLimpar["endereco.neighborhood"] = "";
         break;
       case 3:
         errosParaLimpar.tipoUsuario = "";

@@ -20,8 +20,7 @@
           "zipCode": "01000-000",
           "street": "Rua das Flores",
           "number": "123",
-          "complement": "Apt. 45",
-          "neighborhood": "Centro"
+          "complement": "Apt. 45"
         },
         "available": true,
         "userType": "ajudante"
@@ -45,8 +44,7 @@
           "zipCode": "20000-000",
           "street": "Avenida Copacabana",
           "number": "456",
-          "complement": "Casa 2",
-          "neighborhood": "Copacabana"
+          "complement": "Casa 2"
         },
         "available": true,
         "userType": "ajudante"
@@ -70,8 +68,7 @@
           "zipCode": "30000-000",
           "street": "Rua da Liberdade",
           "number": "789",
-          "complement": "",
-          "neighborhood": "Centro"
+          "complement": ""
         },
         "available": false,
         "userType": "ajudante"
@@ -95,8 +92,7 @@
           "zipCode": "90000-000",
           "street": "Rua dos Andradas",
           "number": "321",
-          "complement": "Bloco A",
-          "neighborhood": "Centro Histórico"
+          "complement": "Bloco A"
         },
         "available": false,
         "userType": "ajudante"
@@ -120,8 +116,7 @@
           "zipCode": "40000-000",
           "street": "Avenida Sete de Setembro",
           "number": "654",
-          "complement": "Apt. 12",
-          "neighborhood": "Pelourinho"
+          "complement": "Apt. 12"
         },
         "available": true,
         "userType": "ajudante"
@@ -156,8 +151,7 @@
           "zipCode": "02000-000",
           "street": "Rua do Comércio",
           "number": "987",
-          "complement": "Casa",
-          "neighborhood": "Vila Madalena"
+          "complement": "Casa"
         },
         "available": true,
         "userType": "assistido"
@@ -182,8 +176,7 @@
           "zipCode": "21000-000",
           "street": "Rua das Palmeiras",
           "number": "432",
-          "complement": "Apt. 101",
-          "neighborhood": "Tijuca"
+          "complement": "Apt. 101"
         },
         "available": false,
         "userType": "assistido"
@@ -208,8 +201,7 @@
           "zipCode": "31000-000",
           "street": "Avenida Afonso Pena",
           "number": "765",
-          "complement": "",
-          "neighborhood": "Centro"
+          "complement": ""
         },
         "available": true,
         "userType": "assistido"
@@ -234,8 +226,7 @@
           "zipCode": "91000-000",
           "street": "Rua dos Jasmins",
           "number": "159",
-          "complement": "Casa 3",
-          "neighborhood": "Moinhos de Vento"
+          "complement": "Casa 3"
         },
         "available": false,
         "userType": "assistido"
@@ -260,8 +251,7 @@
           "zipCode": "41000-000",
           "street": "Rua do Pelourinho",
           "number": "357",
-          "complement": "Sobrado",
-          "neighborhood": "Centro Histórico"
+          "complement": "Sobrado"
         },
         "available": true,
         "userType": "assistido"

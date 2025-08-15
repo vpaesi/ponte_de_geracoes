@@ -13,6 +13,7 @@ interface DadosPessoaisSectionProps {
     cpf?: string;
     senha?: string;
     confirmarSenha?: string;
+    profileImage?: string; // URL da imagem atual
   };
   erros?: Record<string, boolean | string>;
   atualizarCampo: (campo: string, valor: string) => void;
@@ -20,6 +21,7 @@ interface DadosPessoaisSectionProps {
   showFileUpload?: boolean;
   onImageChange?: (file: File | null) => void;
   fileInputLabel?: string;
+  imagePreview?: string; // Para mostrar preview
 }
 
 export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
@@ -30,11 +32,29 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
   showFileUpload = false,
   onImageChange,
   fileInputLabel = "Foto de Perfil",
+  imagePreview,
 }) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const arquivo = e.target.files?.[0];
-    if (arquivo && onImageChange) {
-      onImageChange(arquivo);
+
+    if (arquivo) {
+      // Validação opcional de tamanho (5MB)
+      if (arquivo.size > 5 * 1024 * 1024) {
+        alert("Arquivo muito grande. Máximo 5MB.");
+        e.target.value = ""; // Limpar input
+        return;
+      }
+
+      // Validação opcional de tipo
+      if (!arquivo.type.startsWith("image/")) {
+        alert("Por favor, selecione apenas imagens.");
+        e.target.value = ""; // Limpar input
+        return;
+      }
+
+      if (onImageChange) {
+        onImageChange(arquivo);
+      }
     }
   };
 
@@ -45,7 +65,7 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
     return "";
   };
 
-  const nameField = dados.name ?? dados.name ?? "";
+  const nameField = dados.name ?? "";
   const emailField = dados.email ?? "";
   const nascimentoField = dados.birthDate ?? dados.dataNascimento ?? "";
   const telefoneField = dados.phone ?? dados.telefone ?? "";
@@ -65,12 +85,32 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
             <label className="block text-sm font-medium text-gray-700">
               {fileInputLabel}
             </label>
+
+            {/* Preview da imagem melhorado */}
+            {(imagePreview || dados.profileImage) && (
+              <div className="mb-4 text-center">
+                <img
+                  src={imagePreview || dados.profileImage}
+                  alt="Preview da foto de perfil"
+                  className="w-32 h-32 object-cover rounded-full mx-auto border-4 border-primary-200 shadow-lg"
+                />
+                <p className="text-sm text-gray-600 mt-2">
+                  {imagePreview ? "Nova imagem selecionada" : "Imagem atual"}
+                </p>
+              </div>
+            )}
+
             <input
               type="file"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full p-2 border border-accent-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full p-3 border border-accent-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
             />
+
+            {/* Instruções */}
+            <p className="text-xs text-gray-500">
+              Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 5MB
+            </p>
           </div>
         )}
 
@@ -80,9 +120,7 @@ export const DadosPessoaisSection: React.FC<DadosPessoaisSectionProps> = ({
             type="text"
             placeholder="Seu name completo"
             value={nameField}
-            onChange={(valor) =>
-              atualizarCampo(dados.name !== undefined ? "name" : "name", valor)
-            }
+            onChange={(valor) => atualizarCampo("name", valor)}
             error={getErrorMessage(
               dados.name !== undefined ? "name" : "name",
               "Nome é obrigatório"

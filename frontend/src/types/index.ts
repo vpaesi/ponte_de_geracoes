@@ -47,7 +47,6 @@ export interface Address {
   street: string;
   number: string;
   complement?: string;
-  neighborhood?: string;
 }
 
 export interface CarouselItem {
@@ -73,7 +72,6 @@ export interface FormData {
     complement?: string;
     zipCode: string;
     city: string;
-    neighborhood: string;
   };
   tipoUsuario: 'ajudante' | 'assistido';
   sobreMim: string;

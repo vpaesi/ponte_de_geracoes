@@ -8,7 +8,6 @@ interface EnderecoData {
   city: string;
   street: string;
   number: string;
-  neighborhood: string;
   complement: string;
 }
 
@@ -43,7 +42,6 @@ export const useFormularioCadastro = () => {
       city: '',
       street: '',
       number: '',
-      neighborhood: '',
       complement: ''
     },
     diasDisponiveis: [],
@@ -318,7 +316,6 @@ export const useFormularioCadastro = () => {
               ...prev.endereco,
               city: endereco.city || '',
               street: endereco.street || '',
-              neighborhood: endereco.neighborhood || '',
               zipCode: cepLimpo
             }
           }));

@@ -9,7 +9,6 @@ interface EnderecoSectionProps {
     complement?: string;
     zipCode: string;
     city: string;
-    neighborhood: string;
   };
   erros?: Record<string, boolean | string>;
   atualizarCampo: (campo: string, valor: string) => void;
@@ -35,28 +34,30 @@ export const EnderecoSection: React.FC<EnderecoSectionProps> = ({
         Endereço
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <InputsFormsFormatado
-          label="CEP"
-          type="text"
-          placeholder="00000-000"
-          value={endereco.zipCode}
-          onChange={(valor) => atualizarCampo("endereco.zipCode", valor)}
-          onBlur={onCepBlur}
-          error={getErrorMessage("endereco.zipCode", "CEP é obrigatório")}
-          formatter={formataCep}
-          required
-        />
+      <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputsFormsFormatado
+            label="CEP"
+            type="text"
+            placeholder="00000-000"
+            value={endereco.zipCode}
+            onChange={(valor) => atualizarCampo("endereco.zipCode", valor)}
+            onBlur={onCepBlur}
+            error={getErrorMessage("endereco.zipCode", "CEP é obrigatório")}
+            formatter={formataCep}
+            required
+          />
 
-        <InputsFormsFormatado
-          label="Cidade"
-          type="text"
-          placeholder="Sua cidade"
-          value={endereco.city}
-          onChange={(valor) => atualizarCampo("endereco.city", valor)}
-          error={getErrorMessage("endereco.city", "Cidade é obrigatória")}
-          required
-        />
+          <InputsFormsFormatado
+            label="Cidade"
+            type="text"
+            placeholder="Sua cidade"
+            value={endereco.city}
+            onChange={(valor) => atualizarCampo("endereco.city", valor)}
+            error={getErrorMessage("endereco.city", "Cidade é obrigatória")}
+            required
+          />
+        </div>
 
         <InputsFormsFormatado
           label="Logradouro"
@@ -68,33 +69,25 @@ export const EnderecoSection: React.FC<EnderecoSectionProps> = ({
           required
         />
 
-        <InputsFormsFormatado
-          label="Número"
-          type="text"
-          placeholder="123"
-          value={endereco.number}
-          onChange={(valor) => atualizarCampo("endereco.number", valor)}
-          error={getErrorMessage("endereco.number", "Número é obrigatório")}
-          required
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <InputsFormsFormatado
+            label="Número"
+            type="text"
+            placeholder="123"
+            value={endereco.number}
+            onChange={(valor) => atualizarCampo("endereco.number", valor)}
+            error={getErrorMessage("endereco.number", "Número é obrigatório")}
+            required
+          />
 
-        <InputsFormsFormatado
-          label="Bairro"
-          type="text"
-          placeholder="Seu bairro"
-          value={endereco.neighborhood}
-          onChange={(valor) => atualizarCampo("endereco.neighborhood", valor)}
-          error={getErrorMessage("endereco.neighborhood", "Bairro é obrigatório")}
-          required
-        />
-
-        <InputsFormsFormatado
-          label="Complemento (opcional)"
-          type="text"
-          placeholder="Apto, Bloco, etc."
-          value={endereco.complement || ""}
-          onChange={(valor) => atualizarCampo("endereco.complement", valor)}
-        />
+          <InputsFormsFormatado
+            label="Complemento (opcional)"
+            type="text"
+            placeholder="Apto, Bloco, etc."
+            value={endereco.complement || ""}
+            onChange={(valor) => atualizarCampo("endereco.complement", valor)}
+          />
+        </div>
       </div>
     </div>
   );

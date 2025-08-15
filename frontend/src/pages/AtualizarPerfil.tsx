@@ -27,15 +27,15 @@ const AtualizarPerfil: React.FC = () => {
       complement: "",
       zipCode: "",
       city: "",
-      neighborhood: "",
     },
     aboutYou: "",
-    skills: "",
-    needs: "",
+    needsAndSkills: [],
     availableDays: [],
   });
 
   const [carregando, setCarregando] = useState(false);
+  const [imagemSelecionada, setImagemSelecionada] = useState<File | null>(null);
+  const [previewImagem, setPreviewImagem] = useState<string>("");
 
   const atualizarCampo = (
     campo: keyof User | string,
@@ -82,10 +82,7 @@ const AtualizarPerfil: React.FC = () => {
         }
         if (endereco.localidade) {
           atualizarCampo("address.city", endereco.localidade);
-        }
-        if (endereco.bairro) {
-          atualizarCampo("address.neighborhood", endereco.bairro);
-        }
+        }        
       } catch (error) {
         console.error("Erro ao buscar CEP:", error);
       }
@@ -94,7 +91,41 @@ const AtualizarPerfil: React.FC = () => {
 
   const handleImageChange = (file: File | null) => {
     if (file) {
-      console.log("Imagem selecionada:", file);
+      setImagemSelecionada(file);
+      
+      // Criar preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImagem(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagemSelecionada(null);
+      setPreviewImagem("");
+    }
+  };
+
+  const uploadImagem = async (file: File): Promise<string | null> => {
+    try {
+      const formData = new FormData();
+      formData.append('image', file);        // ✅ Nome correto do campo
+      formData.append('userId', id!);
+      formData.append('userType', userType!);
+
+      const response = await fetch(`${URL_BASE_API}/users/upload/profile-image`, {  // ✅ URL correta
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data.imageUrl;  // ✅ Campo correto na resposta
+      }
+      
+      throw new Error('Erro no upload da imagem');
+    } catch (error) {
+      console.error('Erro ao fazer upload da imagem:', error);
+      return null;
     }
   };
 
@@ -118,7 +149,6 @@ const AtualizarPerfil: React.FC = () => {
               complement: "",
               zipCode: "",
               city: "",
-              neighborhood: "",
             },
           });
         }
@@ -137,15 +167,25 @@ const AtualizarPerfil: React.FC = () => {
 
     try {
       setCarregando(true);
-      const endpoint =
-        userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
+      
+      let dadosParaEnviar = { ...dadosUsuario };
+
+      // Upload da imagem se foi selecionada
+      if (imagemSelecionada) {
+        const imageUrl = await uploadImagem(imagemSelecionada);
+        if (imageUrl) {
+          dadosParaEnviar.profileImage = imageUrl;
+        }
+      }
+
+      const endpoint = userType === "ajudante" ? `/helper/${id}` : `/assisted/${id}`;
 
       const response = await fetch(`${URL_BASE_API}${endpoint}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dadosUsuario),
+        body: JSON.stringify(dadosParaEnviar),
       });
 
       if (response.ok) {
@@ -192,12 +232,12 @@ const AtualizarPerfil: React.FC = () => {
               showFileUpload={true}
               onImageChange={handleImageChange}
               fileInputLabel="Nova Foto de Perfil"
+              imagePreview={previewImagem}
             />
 
             <EnderecoSection
               endereco={{
                 ...dadosUsuario.address!,
-                neighborhood: dadosUsuario.address?.neighborhood ?? "",
               }}
               atualizarCampo={atualizarCampo}
               onCepBlur={handleCepBlur}

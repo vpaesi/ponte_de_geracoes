@@ -123,10 +123,24 @@ public class UserController {
         }
     }
 
-    @PostMapping("/upload-image/{userId}")
-    public ResponseEntity<?> uploadImage(@PathVariable Long userId, @RequestParam("file") MultipartFile file) {
-        String fileUrl = userService.uploadImage(userId, file);
-        return ResponseEntity.ok(Collections.singletonMap("url", fileUrl));
+    @PostMapping("/upload/profile-image")
+    @Operation(summary = "Upload de imagem de perfil", description = "Faz upload da imagem de perfil do usuário")
+    public ResponseEntity<?> uploadProfileImage(
+        @RequestParam("image") MultipartFile image,
+        @RequestParam("userId") String userId,
+        @RequestParam("userType") String userType) {
+        
+        try {
+            Long userIdLong = Long.valueOf(userId);
+            String imageUrl = userService.uploadImage(userIdLong, image);
+            return ResponseEntity.ok(Collections.singletonMap("imageUrl", imageUrl));
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest()
+                .body(Collections.singletonMap("error", "Invalid userId format"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Collections.singletonMap("error", "Upload failed: " + e.getMessage()));
+        }
     }
 
     @Operation(summary = "Atualiza um usuário", description = "Atualiza os dados de um usuário existente. Para testar, informe o ID do usuário no Parameters e envie um objeto User válido no corpo da requisição, incluindo o ID do usuário.")

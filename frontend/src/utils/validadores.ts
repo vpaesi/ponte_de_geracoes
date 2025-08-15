@@ -116,11 +116,6 @@ export const validarFormularioCadastro = (
     mensagens.push({ campo: 'endereco.city', mensagem: 'Cidade é obrigatória' });
   }
 
-  if (!validadores.campoPreenchido(dados.endereco.neighborhood)) {
-    erros['endereco.neighborhood'] = true;
-    mensagens.push({ campo: 'endereco.neighborhood', mensagem: 'Bairro é obrigatório' });
-  }
-
   if (!validadores.numeroValido(dados.endereco.number)) {
     erros['endereco.number'] = true;
     mensagens.push({ campo: 'endereco.number', mensagem: 'Número é obrigatório' });
@@ -157,15 +152,12 @@ export const validarFormularioCadastro = (
 
 export const buscarEnderecoPorCep = async (
   cep: string,
-  setLogradouro: (valor: string) => void,
-  setCidade: (valor: string) => void,
-  setBairro: (valor: string) => void
+  atualizarCampo: (campo: string, valor: string) => void
 ): Promise<void> => {
   try {
     const endereco = await cepService.fetchAddressByCep(cep);
-    if (endereco.logradouro) setLogradouro(endereco.logradouro);
-    if (endereco.localidade) setCidade(endereco.localidade);
-    if (endereco.bairro) setBairro(endereco.bairro);
+    if (endereco.logradouro) atualizarCampo("endereco.street", endereco.logradouro);
+    if (endereco.localidade) atualizarCampo("endereco.city", endereco.localidade);
   } catch (error) {
     console.error('Erro ao buscar CEP:', error);
   }

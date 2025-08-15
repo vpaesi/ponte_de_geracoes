@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { userService } from "../services/userService";
 import { useUser } from "../utils/UserContext";
 import {PageLayout} from "../components/PageLayout";
@@ -29,6 +29,7 @@ interface User {
 const Profile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { user: currentUser, logout } = useUser();
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);  
@@ -91,6 +92,11 @@ const Profile: React.FC = () => {
   }
 
   const isOwnProfile = currentUser && currentUser.id === user.id;
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <PageLayout>
@@ -215,13 +221,12 @@ const Profile: React.FC = () => {
                     </p>
                   </div>
                 )}
-
-                            <button
-              onClick={logout}
-              className="btn-outline"
-            >
-              Sair
-            </button>
+                <button
+                  onClick={handleLogout}
+                  className="btn-outline"
+                >
+                  Sair
+                </button>
               </div>
             </div>
           </div>
